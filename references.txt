@@ -1,0 +1,3 @@
+https://github.com/mikepenz/MaterialDrawer
+https://github.com/coldblade2000/TestingGrounds
+http://www.androidhive.info/2016/05/android-working-with-card-view-and-recycler-view/

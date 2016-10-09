@@ -4,10 +4,7 @@
     android:id="@+id/activity_main"
     android:layout_width="240dp"
     android:layout_height="144dp"
-    android:background="@drawable/header"
-    android:backgroundTint="#333333"
-    android:backgroundTintMode="screen"
-    android:alpha="0.8">
+    android:background="@drawable/header">
 
     <TextView
         android:text="TextView"

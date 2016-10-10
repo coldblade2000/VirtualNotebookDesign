@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <!-- 500 for normal color, 100 for light color, 700 for dark color. Use colors with an 'A' prefix for accents-->
+    <!-- Accent: normal will be A200, A100 for light and A400 for dark-->
+    <color name="colorPrimary">#03a9f4</color>
+    <color name="colorPrimaryDark">#0288d1</color>
+    <color name="colorPrimaryLight">#b3e5fc</color>
+    <color name="colorAccent">#ffab40</color>
 </resources>

@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         //==============
+
 
         /**rvMainMenu = (RecyclerView) findViewById(R.id.rvMainMenu);
 
@@ -149,13 +152,18 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         Glide.with(this).load(R.drawable.header2).into(accountHeader.getHeaderBackgroundView());
         /**Color.parseColor("#00FFFF")*/
-
+		DisplayMetrics displayMetrics = new DisplayMetrics();
+		FirstBookLightOffsetDecoration firstBookLightOffsetDecoration = new FirstBookLightOffsetDecoration((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, getResources().getDisplayMetrics()));
+   		BookLightRecyclerView.addItemDecoration(firstBookLightOffsetDecoration);
     }
     private void prepareBookLightList(){
         BookLight a = new BookLight("Spanish", "BLUE"); bookLightList.add(a);
         a = new BookLight("English", "RED"); bookLightList.add(a);
         a = new BookLight("Chemistry", "GREEN"); bookLightList.add(a);
         a = new BookLight("Art", "MAGENTA"); bookLightList.add(a);
+        a = new BookLight("ECL", "YELLOW"); bookLightList.add(a);
+        a = new BookLight("Design and Technology", "CYAN"); bookLightList.add(a);
+        a = new BookLight("Physics", "#555555"); bookLightList.add(a);
     }
 
     @Override

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">VirtualNotebookDesign</string>
+    <string name="title_activity_notebook_selection">NotebookSelection</string>
 </resources>

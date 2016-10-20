@@ -1,6 +1,7 @@
 package com.twotowerstudios.virtualnotebookdesign;
 
 import android.animation.ObjectAnimator;
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,11 +18,13 @@ import android.view.View;
 import com.bumptech.glide.Glide;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
+import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 import java.util.ArrayList;
@@ -117,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
         final IProfile h3 = new ProfileDrawerItem().withName("Header 3");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        PrimaryDrawerItem diNotebooks= new PrimaryDrawerItem().withName("Notebooks").withDescription("Full list of notebooks");
         accountHeader = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.header)
@@ -142,13 +146,37 @@ public class MainActivity extends AppCompatActivity {
                 .withToolbar(toolbar)
                 .withAccountHeader(accountHeader)
                 .addDrawerItems(
-                        new PrimaryDrawerItem().withName("I'm primary #1").withDescription("I'm black and very pronounced"),
+                        diNotebooks,
                         new PrimaryDrawerItem().withName("I'm primary #2").withDescription("I'm another black one"),
                         new DividerDrawerItem(),
                         new SecondaryDrawerItem().withName("I'm secondary #1").withDescription("I'm a bit more faded"),
                         new SecondaryDrawerItem().withName("I'm secondary #2").withDescription("I'm also just as faded as my brother, but I'm very long cause fuck it")
 
                 )
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        /**if (drawerItem != null) {
+                         Intent intent = null;
+                         if (drawerItem.getIdentifier() == 1) {
+                         intent = new Intent(DrawerActivity.this, CompactHeaderDrawerActivity.class);
+                         }*/
+                        if (drawerItem != null){
+                            Intent intent = null;
+                            if (position == 1){
+
+                            }else if (position == 2){
+                                intent = new Intent(MainActivity.this, NotebookSelection.class);
+                            }
+                            if (intent != null){
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                startActivity(intent);
+                            }
+                        }
+                        return false;
+                    }
+                })
+
                 .build();
         Glide.with(this).load(R.drawable.header2).into(accountHeader.getHeaderBackgroundView());
         /**Color.parseColor("#00FFFF")*/

@@ -1,5 +1,6 @@
 package com.twotowerstudios.virtualnotebookdesign;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -8,11 +9,13 @@ import android.view.View;
 import com.bumptech.glide.Glide;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
+import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 public class NotebookSelection extends AppCompatActivity {
@@ -60,6 +63,29 @@ public class NotebookSelection extends AppCompatActivity {
                         new SecondaryDrawerItem().withName("I'm secondary #2").withDescription("I'm also just as faded as my brother, but I'm very long cause fuck it")
 
                 )
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        /**if (drawerItem != null) {
+                         Intent intent = null;
+                         if (drawerItem.getIdentifier() == 1) {
+                         intent = new Intent(DrawerActivity.this, CompactHeaderDrawerActivity.class);
+                         }*/
+                        if (drawerItem != null){
+                            Intent intent = null;
+                            if (position == 1){
+                                intent = new Intent(NotebookSelection.this, MainActivity.class);
+                            }else if (position == 2){
+
+                            }
+                            if (intent != null){
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                startActivity(intent);
+                            }
+                        }
+                        return false;
+                    }
+                })
                 .build();
         Glide.with(this).load(R.drawable.header2).into(accountHeader.getHeaderBackgroundView());
 

@@ -7,6 +7,7 @@ package com.twotowerstudios.virtualnotebookdesign;
 public class NotebookSelectionCard {
     private String color, name, lastModified;
     private int numOfPages;
+
     public NotebookSelectionCard(){
 
     }
@@ -14,6 +15,38 @@ public class NotebookSelectionCard {
         this.color = color;
         this.name = name;
         this.lastModified = lastModified;
+        this.numOfPages = numOfPages;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getLastModified() {
+        return lastModified;
+    }
+
+    public void setLastModified(String lastModified) {
+        this.lastModified = lastModified;
+    }
+
+    public int getNumOfPages() {
+        return numOfPages;
+    }
+
+    public void setNumOfPages(int numOfPages) {
         this.numOfPages = numOfPages;
     }
 

@@ -7,35 +7,35 @@
     android:layout_width="match_parent"
     >
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/activity_main"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+	<RelativeLayout
+		android:id="@+id/activity_main"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            android:elevation="4dp" />
+		<android.support.v7.widget.Toolbar
+			android:id="@+id/toolbar"
+			android:layout_width="match_parent"
+			android:layout_height="?attr/actionBarSize"
+			android:background="?attr/colorPrimary"
+			android:elevation="4dp" />
 
-        <!--<android.support.v7.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+		<!--<android.support.v7.widget.RecyclerView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
 			android:id="@+id/rvMainMenu">
 
-        </android.support.v7.widget.RecyclerView>-->
+		</android.support.v7.widget.RecyclerView>-->
 		<android.support.design.widget.FloatingActionButton
 			android:id="@+id/fabMain"
 			android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:src="@mipmap/plus"
+			android:layout_height="56dp"
+			android:src="@mipmap/plus"
 			android:layout_marginRight="@dimen/fab_margin_right"
-            android:layout_marginEnd="@dimen/fab_margin_right"
-            android:layout_marginBottom="@dimen/fab_margin_bottom"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
+			android:layout_marginEnd="@dimen/fab_margin_right"
+			android:layout_marginBottom="@dimen/fab_margin_bottom"
+			android:layout_alignParentBottom="true"
+			android:layout_alignParentRight="true"
+			android:layout_alignParentEnd="true"
 			app:fabSize="normal" />
 
 		<android.support.design.widget.FloatingActionButton

@@ -29,7 +29,10 @@ public class NotebookSelectionCard {
     public String getName() {
         return name;
     }
-
+	/**TODO Finish this
+	 * public String getSub(){
+		return ;
+	}*/
     public void setName(String name) {
         this.name = name;
     }

@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="SUBJECT"
-            android:textSize="24sp"
+            android:textSize="18sp"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
@@ -35,7 +35,8 @@
             android:layout_alignTop="@+id/tvCardNameSel"
             android:layout_alignStart="@+id/tvCardNameSel"
             android:paddingTop="24dp"
-            android:layout_alignLeft="@+id/tvCardNameSel" />
+            android:layout_alignLeft="@+id/tvCardNameSel"
+            android:textSize="14sp" />
         <ImageView
             android:layout_width="36dp"
             android:layout_height="36dp"

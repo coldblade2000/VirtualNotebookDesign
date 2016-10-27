@@ -3,6 +3,8 @@ package com.twotowerstudios.virtualnotebookdesign;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
@@ -18,13 +20,34 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
+import java.util.List;
+
 public class NotebookSelection extends AppCompatActivity {
     private AccountHeader accountHeader;
+    private RecyclerView rvNotebookSelection;
+    private RecyclerView.Adapter rvNotebookSelectionAdapter;
+    private List<NotebookSelectionCard> notebookSelectionCardList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notebook_selection);
 
+        rvNotebookSelection = (RecyclerView) findViewById(R.id.rvnotebookselection);
+
+        final LinearLayoutManager rvNotebookSelectionManager = new LinearLayoutManager(this);
+        rvNotebookSelection.setLayoutManager(rvNotebookSelectionManager);
+        rvNotebookSelectionAdapter = new NotebookSelectionAdapter(this, notebookSelectionCardList);
+
+/**rvMainMenu = (RecyclerView) findViewById(R.id.rvMainMenu);
+
+ final LinearLayoutManager rvMainMenuLayoutManager = new LinearLayoutManager(this);
+ rvMainMenu.setLayoutManager(rvMainMenuLayoutManager);
+
+ rvMainMenuAdapter = new MainMenuAdapter(this, cardlist);
+ rvMainMenu.setAdapter(rvMainMenuAdapter);
+
+ cardlist = new ArrayList<>();
+ CommonBooksCard a = new CommonBooksCard(); cardlist.add(a);*/
 
         final IProfile h1 = new ProfileDrawerItem().withName("Header 1");
         final IProfile h2 = new ProfileDrawerItem().withName("Header 2");

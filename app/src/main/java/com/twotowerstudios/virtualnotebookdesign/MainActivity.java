@@ -36,8 +36,8 @@ public class MainActivity extends AppCompatActivity {
 
     private AccountHeader accountHeader;
     private FloatingActionButton fab1, fabShoot, fabImage, fabPage;
-    private RecyclerView BookLightRecyclerView, rvMainMenu;
-    private RecyclerView.Adapter BookLightAdapter, rvMainMenuAdapter;
+    private RecyclerView BookLightRecyclerView;
+    private RecyclerView.Adapter BookLightAdapter;
     //private RecyclerView.LayoutManager CommonBooksCardLayoutManager;
 
     private List<BookLight> bookLightList;

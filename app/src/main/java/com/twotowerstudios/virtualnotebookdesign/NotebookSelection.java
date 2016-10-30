@@ -20,6 +20,7 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NotebookSelection extends AppCompatActivity {
@@ -36,7 +37,11 @@ public class NotebookSelection extends AppCompatActivity {
 
         final LinearLayoutManager rvNotebookSelectionManager = new LinearLayoutManager(this);
         rvNotebookSelection.setLayoutManager(rvNotebookSelectionManager);
+
+        notebookSelectionCardList = new ArrayList<>();
+        prepareNotebookSelectionCards();
         rvNotebookSelectionAdapter = new NotebookSelectionAdapter(this, notebookSelectionCardList);
+        rvNotebookSelection.setAdapter(rvNotebookSelectionAdapter);
 
 /**rvMainMenu = (RecyclerView) findViewById(R.id.rvMainMenu);
 
@@ -112,6 +117,14 @@ public class NotebookSelection extends AppCompatActivity {
                 .build();
         Glide.with(this).load(R.drawable.header2).into(accountHeader.getHeaderBackgroundView());
 
+    }
+
+    private void prepareNotebookSelectionCards() {
+        //CommonBooksCard a = new CommonBooksCard(); cardlist.add(a);
+        //String color, String name, int numOfPages, String lastModified
+        NotebookSelectionCard a = new NotebookSelectionCard("RED", "Spanish", 27, "October 21"); notebookSelectionCardList.add(a);
+        a = new NotebookSelectionCard("BLUE", "Physics", 12, "October 23"); notebookSelectionCardList.add(a);
+        a = new NotebookSelectionCard("YELLOW", "DT", 41, "October 19"); notebookSelectionCardList.add(a);
     }
 
 }

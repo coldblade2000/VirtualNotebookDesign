@@ -1,6 +1,7 @@
 package com.twotowerstudios.virtualnotebookdesign;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,11 +21,11 @@ public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelec
 	public static class ViewHolder extends RecyclerView.ViewHolder{
 
 		public TextView tvCardNameSel, tvCardSub;
-		public ImageView tvCardImage;
+		public ImageView ivCardImage;
 
 		public ViewHolder(View view){
 			super(view);
-			tvCardImage = (ImageView) view.findViewById(R.id.tvCardImage);
+			ivCardImage = (ImageView) view.findViewById(R.id.tvCardImage);
 			tvCardNameSel = (TextView) view.findViewById(R.id.tvCardNameSel);
 			tvCardSub = (TextView) view.findViewById(R.id.tvCardSub);
 		}
@@ -45,11 +46,12 @@ public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelec
 	 public void onBindViewHolder(ViewHolder holder, int position){
 	 NotebookSelectionCard notebookSelection = notebookSelectionList.get(position);
 	 holder.tvCardNameSel.setText(notebookSelection.getName());
-	 holder.tvCardSub.setText(notebookSelection.getName());
-	 //holder.ivBook.setColorFilter(Color.parseColor(bookLight.getBookColor()));
+	 holder.tvCardSub.setText("Last modified on: "+ notebookSelection.getLastModified()+". "+ notebookSelection.getNumOfPages()+ " pages.");
+	 holder.ivCardImage.setColorFilter(Color.parseColor(notebookSelection.getColor()));
+
 	 }
 	 @Override
 	 public int getItemCount() {
-	 return notebookSelectionList.size();
+	 	return notebookSelectionList.size();
 	 }
 }

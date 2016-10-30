@@ -19,15 +19,15 @@ import java.util.List;
 
 public class BookLightAdapter  extends RecyclerView.Adapter<BookLightAdapter.ViewHolder>{
 
-	Context context;
-	List<BookLight> bookList;
+	protected Context context;
+	private List<BookLight> bookList;
 	public static class ViewHolder extends RecyclerView.ViewHolder {
 		// each data item is just a string in this case
 		public ImageView ivBook;
 		public TextView tvName;
 		/**public TextView cardHeader, cardSubtitle;
 		public ImageView imageView;
-		public View cardHeaderBarColored;*/
+		public Vie w cardHeaderBarColored;*/
 		public ViewHolder(View view) {
 			super(view);
 			ivBook = (ImageView) view.findViewById(R.id.ivBookLight);

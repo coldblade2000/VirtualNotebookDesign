@@ -1,4 +1,4 @@
-package com.twotowerstudios.virtualnotebookdesign;
+package com.twotowerstudios.virtualnotebookdesign.BookLight;
 
 /**
  * Created by Panther II on 09/10/2016.

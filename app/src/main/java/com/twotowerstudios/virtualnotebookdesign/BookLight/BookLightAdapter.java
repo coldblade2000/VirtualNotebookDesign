@@ -1,4 +1,4 @@
-package com.twotowerstudios.virtualnotebookdesign;
+package com.twotowerstudios.virtualnotebookdesign.BookLight;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.twotowerstudios.virtualnotebookdesign.R;
 
 import java.util.List;
 

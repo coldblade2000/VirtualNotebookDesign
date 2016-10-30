@@ -26,6 +26,10 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
+import com.twotowerstudios.virtualnotebookdesign.BookLight.BookLight;
+import com.twotowerstudios.virtualnotebookdesign.BookLight.BookLightAdapter;
+import com.twotowerstudios.virtualnotebookdesign.Misc.FirstBookLightOffsetDecoration;
+import com.twotowerstudios.virtualnotebookdesign.NotebookSelection.NotebookSelection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,8 +45,7 @@ public class MainActivity extends AppCompatActivity {
     //private RecyclerView.LayoutManager CommonBooksCardLayoutManager;
 
     private List<BookLight> bookLightList;
-    //TODO: This is broken, it will only display CommonBooksCard, it can't display any other card. Fix this
-    private List<CommonBooksCard> cardlist;
+
     boolean isMainfabOpen;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,9 +149,9 @@ public class MainActivity extends AppCompatActivity {
                 .withToolbar(toolbar)
                 .withAccountHeader(accountHeader)
                 .addDrawerItems(
-                        diNotebooks,
-                        new PrimaryDrawerItem().withName("I'm primary #2").withDescription("I'm another black one"),
-                        new DividerDrawerItem(),
+						new PrimaryDrawerItem().withName("Main Menu").withIdentifier(1),
+						new PrimaryDrawerItem().withName("Notebooks").withDescription("Full list of notebooks").withIdentifier(2),
+						new DividerDrawerItem(),
                         new SecondaryDrawerItem().withName("I'm secondary #1").withDescription("I'm a bit more faded"),
                         new SecondaryDrawerItem().withName("I'm secondary #2").withDescription("I'm also just as faded as my brother, but I'm very long cause fuck it")
 

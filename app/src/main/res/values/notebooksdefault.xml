@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<notebook name="Spanish" color="#2196f3" pages="27" lastUsed="October 21">
+
+	</notebook>
+	<notebook name="English" color="#f44336" pages="41" lastUsed="October 21">
+
+	</notebook>
+	<notebook name="Chemistry" color="RED" pages="27" lastUsed="October 21">
+
+	</notebook>
+	<notebook name="Art" color="RED" pages="27" lastUsed="October 21">
+
+	</notebook>
+	<notebook name="ECL" color="RED" pages="27" lastUsed="October 21">
+
+	</notebook>
+	<notebook name="DT" color="RED" pages="27" lastUsed="October 21">
+
+	</notebook>
+	<notebook name="Physics" color="RED" pages="27" lastUsed="October 21">
+
+	</notebook>
+</resources>

@@ -16,7 +16,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NotebookSelection"
+            android:name=".NotebookSelection.NotebookSelection"
             android:label="@string/title_activity_notebook_selection"></activity>
     </application>
 

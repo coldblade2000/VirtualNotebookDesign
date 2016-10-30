@@ -1,4 +1,4 @@
-package com.twotowerstudios.virtualnotebookdesign;
+package com.twotowerstudios.virtualnotebookdesign.Misc;
 
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
@@ -9,7 +9,7 @@ import android.view.View;
  */
 
 
-class FirstBookLightOffsetDecoration extends RecyclerView.ItemDecoration {
+public class FirstBookLightOffsetDecoration extends RecyclerView.ItemDecoration {
 	private int firstItemOffset;
 
 	public FirstBookLightOffsetDecoration(int beginningOffset) {

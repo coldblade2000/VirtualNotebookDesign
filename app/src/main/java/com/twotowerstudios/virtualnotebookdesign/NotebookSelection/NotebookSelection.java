@@ -1,4 +1,4 @@
-package com.twotowerstudios.virtualnotebookdesign;
+package com.twotowerstudios.virtualnotebookdesign.NotebookSelection;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,6 +19,8 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
+import com.twotowerstudios.virtualnotebookdesign.MainActivity;
+import com.twotowerstudios.virtualnotebookdesign.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,13 +81,14 @@ public class NotebookSelection extends AppCompatActivity {
                     }
                 })
                 .build();
-        new DrawerBuilder()
+        Drawer drawer = new DrawerBuilder()
                 .withActivity(this)
                 .withToolbar(toolbar)
+
                 .withAccountHeader(accountHeader)
                 .addDrawerItems(
-                        new PrimaryDrawerItem().withName("I'm primary #1").withDescription("I'm black and very pronounced"),
-                        new PrimaryDrawerItem().withName("I'm primary #2").withDescription("I'm another black one"),
+                        new PrimaryDrawerItem().withName("Main Menu").withIdentifier(1),
+                        new PrimaryDrawerItem().withName("Notebooks").withDescription("Full list of notebooks").withIdentifier(2),
                         new DividerDrawerItem(),
                         new SecondaryDrawerItem().withName("I'm secondary #1").withDescription("I'm a bit more faded"),
                         new SecondaryDrawerItem().withName("I'm secondary #2").withDescription("I'm also just as faded as my brother, but I'm very long cause fuck it")
@@ -115,6 +118,7 @@ public class NotebookSelection extends AppCompatActivity {
                     }
                 })
                 .build();
+		drawer.setSelection(2);
         Glide.with(this).load(R.drawable.header2).into(accountHeader.getHeaderBackgroundView());
 
     }

@@ -1,4 +1,4 @@
-package com.twotowerstudios.virtualnotebookdesign;
+package com.twotowerstudios.virtualnotebookdesign.NotebookSelection;
 
 /**
  * Created by coldblade2000 on 20/10/16.
@@ -29,10 +29,7 @@ public class NotebookSelectionCard {
     public String getName() {
         return name;
     }
-	/**TODO Finish this
-	 * public String getSub(){
-		return ;
-	}*/
+
     public void setName(String name) {
         this.name = name;
     }

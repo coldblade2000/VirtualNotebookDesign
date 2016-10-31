@@ -1,4 +1,4 @@
-package com.twotowerstudios.virtualnotebookdesign;
+package com.twotowerstudios.virtualnotebookdesign.MainMenu;
 
 import android.animation.ObjectAnimator;
 import android.content.Intent;
@@ -30,6 +30,7 @@ import com.twotowerstudios.virtualnotebookdesign.BookLight.BookLight;
 import com.twotowerstudios.virtualnotebookdesign.BookLight.BookLightAdapter;
 import com.twotowerstudios.virtualnotebookdesign.Misc.FirstBookLightOffsetDecoration;
 import com.twotowerstudios.virtualnotebookdesign.NotebookSelection.NotebookSelection;
+import com.twotowerstudios.virtualnotebookdesign.R;
 
 import java.util.ArrayList;
 import java.util.List;

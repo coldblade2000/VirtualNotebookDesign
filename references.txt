@@ -1,4 +1,7 @@
 https://github.com/mikepenz/MaterialDrawer
 https://github.com/coldblade2000/
-http://www.androidhive.info/2016/05/android-working-with-card-view-and-recycler-view/
+http://www.androidhive.info/2016/05/android-working-with-card-view-and-recycler-view/ Important
 https://github.com/bumptech/glide
+http://www.developer.com/ws/android/storing-app-related-data-in-your-android-apps.html Important
+http://stackoverflow.com/questions/7363112/best-way-to-work-with-dates-in-android-sqlite
+http://stackoverflow.com/questions/9671085/convert-date-to-miliseconds

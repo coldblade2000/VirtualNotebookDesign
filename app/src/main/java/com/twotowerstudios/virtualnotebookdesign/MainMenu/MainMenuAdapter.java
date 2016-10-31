@@ -1,10 +1,13 @@
-package com.twotowerstudios.virtualnotebookdesign;
+package com.twotowerstudios.virtualnotebookdesign.MainMenu;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.twotowerstudios.virtualnotebookdesign.CommonBooksCard;
+import com.twotowerstudios.virtualnotebookdesign.R;
 
 import java.util.List;
 

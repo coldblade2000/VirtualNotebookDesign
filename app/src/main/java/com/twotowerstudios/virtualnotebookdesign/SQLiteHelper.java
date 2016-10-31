@@ -2,11 +2,29 @@ package com.twotowerstudios.virtualnotebookdesign;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
+
 /**
  * Source: http://www.developer.com/ws/android/storing-app-related-data-in-your-android-apps.html
+ */
+
+/**
+ * Alright Diego, this is how you will use this table.
+ *
+ * To save data:
+ * First you will initialize a new SQLiteHelper.
+        SQLiteHelper db = new SQLiteHelper(this);
+ *After initializing, you will create a notebook in the following manner:
+        db.addNotebook(new Notebook("Spanish", "#2196f3", 27, Helpers.stringDataToMillis("2016/10/21")));
+ * The parameters of Notebook are (String name, String color, int pages, long lastModified).
+ * To use lastModified, you need a long data type. To convert a date to a long, you can use
+ * the Helpers.stringDataToMillis("yyyy/MM/dd, HH:mm") method to get the number of milliseconds
+ * correspondent to the date written in there. You can also use the "yyyy/MM/dd" format if you dont want
+ * to bother with minutes and hours
  */
 
 public class SQLiteHelper extends SQLiteOpenHelper {
@@ -50,11 +68,11 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public Gamer getGamer(int id){
+    public Notebook getNotebook(int id){
         SQLiteDatabase db = this.getReadableDatabase();
 
-        Cursor cursor = db.query(TABLE_GAMERS,
-                new String[]{"id", "name", "ratings"},
+        Cursor cursor = db.query(TABLE_NOTEBOOKS,
+                new String[]{"id", "name", "color", "pages", "lastdate"},
                 " id = ?", new String[]{ String.valueOf(id) },
                 null, null, null, null);
 
@@ -63,12 +81,13 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         else
             return null;
 
-        Gamer gamer = new Gamer();
-        gamer.id = Integer.parseInt(cursor.getString(0));
-        gamer.name = cursor.getString(1);
-        gamer.ratings =
-                Integer.parseInt(cursor.getString(2));
+        Notebook notebook = new Notebook();
+        notebook.id = Integer.parseInt(cursor.getString(0));
+        notebook.name = cursor.getString(1);
+        notebook.color = cursor.getString(2);
+        notebook.pages = cursor.getInt(3);
+        notebook.lastModified = Helpers.stringDataToMillis(cursor.getString(4));
 
-        return gamer;
+        return notebook;
     }
 }

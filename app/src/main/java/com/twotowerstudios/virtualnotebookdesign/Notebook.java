@@ -6,7 +6,7 @@ package com.twotowerstudios.virtualnotebookdesign;
 
 public class Notebook {
 	public String name,color;
-	public int pages;
+	public int pages,id;
 	public long lastModified;
 
 

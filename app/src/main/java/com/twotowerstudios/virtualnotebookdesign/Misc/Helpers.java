@@ -10,11 +10,19 @@ import java.util.Date;
 
 public class Helpers {
 
-    public long stringDataToMillis(String date){
+    public static long stringDataToMillis(String date){
         //source: http://stackoverflow.com/questions/9671085/convert-date-to-miliseconds
         long millis;
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd, HH:mm");
-        formatter.setLenient(false);
+        SimpleDateFormat formatter;
+
+        if (date.length() == 10){
+            //If there is only year, month and day values, use a shortened date format
+            formatter = new SimpleDateFormat("yyyy/MM/dd");
+            formatter.setLenient(false);
+        }else{
+            formatter = new SimpleDateFormat("yyyy/MM/dd, HH:mm:ss");
+            formatter.setLenient(false);
+        }
 
         try {
             Date tempDate = formatter.parse(date);
@@ -35,7 +43,7 @@ public class Helpers {
         return millis;
     }
     public String millisDateToString(Long millis){
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd, HH:mm");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd, HH:mm:ss");
         formatter.setLenient(false);
 
         Calendar calendar = Calendar.getInstance();

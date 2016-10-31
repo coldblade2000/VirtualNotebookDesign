@@ -1,7 +1,5 @@
 package com.twotowerstudios.virtualnotebookdesign;
 
-import java.util.Date;
-
 /**
  * Created by Panther II on 30/10/2016.
  */
@@ -9,13 +7,13 @@ import java.util.Date;
 public class Notebook {
 	public String name,color;
 	public int pages;
-	public Date lastModified;
+	public long lastModified;
 
 
 	public Notebook(String name,
 					String color,
 					int pages,
-					Date lastModified
+					long lastModified
 					){
 		this.name = name;
 		this.lastModified = lastModified;

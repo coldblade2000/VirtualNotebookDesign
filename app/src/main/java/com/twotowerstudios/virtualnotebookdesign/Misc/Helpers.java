@@ -1,6 +1,7 @@
 package com.twotowerstudios.virtualnotebookdesign.Misc;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -37,8 +38,9 @@ public class Helpers {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd, HH:mm");
         formatter.setLenient(false);
 
-
-        return dateString;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(millis);
+        return formatter.format(calendar.getTime());
     }
     /**public static String formatDateTime(Context context, String timeToFormat) {
      //Source http://stackoverflow.com/questions/7363112/best-way-to-work-with-dates-in-android-sqlite

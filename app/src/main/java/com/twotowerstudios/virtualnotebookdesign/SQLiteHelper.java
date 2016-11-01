@@ -80,8 +80,12 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             cursor.moveToFirst();
         else
             return null;
-
-        Notebook notebook = new Notebook();
+		//Integer.parseInt(cursor.getString(0)),
+        Notebook notebook = new Notebook(
+				cursor.getString(cursor.getColumnIndex("name")),
+				cursor.getString(cursor.getColumnIndex("color")),
+				cursor.getInt(cursor.getColumnIndex("pages")),
+				Helpers.stringDataToMillis(cursor.getString(cursor.getColumnIndex("date"))));
         notebook.id = Integer.parseInt(cursor.getString(0));
         notebook.name = cursor.getString(1);
         notebook.color = cursor.getString(2);

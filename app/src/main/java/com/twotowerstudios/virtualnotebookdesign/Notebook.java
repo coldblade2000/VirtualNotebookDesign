@@ -20,4 +20,8 @@ public class Notebook {
 		this.color = color;
 		this.pages = pages;
 	}
+
+	public Notebook() {
+
+	}
 }

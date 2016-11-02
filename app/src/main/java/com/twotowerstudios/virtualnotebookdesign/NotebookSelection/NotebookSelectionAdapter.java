@@ -3,12 +3,14 @@ package com.twotowerstudios.virtualnotebookdesign.NotebookSelection;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 import com.twotowerstudios.virtualnotebookdesign.R;
 
 import java.util.List;
@@ -47,11 +49,15 @@ public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelec
 
 	 @Override
 	 public void onBindViewHolder(ViewHolder holder, int position){
-	 NotebookSelectionCard notebookSelection = notebookSelectionList.get(position);
-	 holder.tvCardNameSel.setText(notebookSelection.getName());
-	 holder.tvCardSub.setText("Last modified on: "+ notebookSelection.getLastModified()+".");
-		 holder.tvPageCount.setText("" +notebookSelection.getNumOfPages()+ " pages");
-	 holder.ivCardImage.setColorFilter(Color.parseColor(notebookSelection.getColor()));
+		 Helpers help = new Helpers();
+	 	 NotebookSelectionCard notebookSelection = notebookSelectionList.get(position);
+	 	 holder.tvCardNameSel.setText(""+notebookSelection.getName()+" - "+notebookSelection.getId());
+		 Log.d("notebookselectadapter","notebookselection.getLastModified() is: "+notebookSelection.getLastModified());
+		 Log.d("notebookselectadapter","help.millisDateToString(notebookSelection.getLastModified()) "+help.millisDateToString(notebookSelection.getLastModified()));
+	 	 holder.tvCardSub.setText("Last modified on: "+
+				 help.millisDateToString(notebookSelection.getLastModified()));
+	 	 holder.tvPageCount.setText("" +notebookSelection.getNumOfPages()+ " pages");
+	 	 holder.ivCardImage.setColorFilter(Color.parseColor(notebookSelection.getColor()));
 
 	 }
 	 @Override

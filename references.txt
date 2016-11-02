@@ -5,3 +5,5 @@ https://github.com/bumptech/glide
 http://www.developer.com/ws/android/storing-app-related-data-in-your-android-apps.html Important
 http://stackoverflow.com/questions/7363112/best-way-to-work-with-dates-in-android-sqlite
 http://stackoverflow.com/questions/9671085/convert-date-to-miliseconds
+https://github.com/coldblade2000/Clickr/blob/master/app/src/main/java/com/twotowerstudios/clickr/SharedPrefs.java
+http://stackoverflow.com/questions/12436596/how-to-count-number-of-records-in-sqlite-in-android

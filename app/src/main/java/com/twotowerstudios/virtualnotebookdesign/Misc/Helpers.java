@@ -1,5 +1,7 @@
 package com.twotowerstudios.virtualnotebookdesign.Misc;
 
+import android.util.Log;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -14,8 +16,9 @@ public class Helpers {
         //source: http://stackoverflow.com/questions/9671085/convert-date-to-miliseconds
         long millis;
         SimpleDateFormat formatter;
-
-        if (date.length() == 10){
+		formatter = new SimpleDateFormat("yyyy/MM/dd");
+		formatter.setLenient(true);
+        /**if (date.length() == 10){
             //If there is only year, month and day values, use a shortened date format
             formatter = new SimpleDateFormat("yyyy/MM/dd");
             formatter.setLenient(false);
@@ -23,10 +26,11 @@ public class Helpers {
             formatter = new SimpleDateFormat("yyyy/MM/dd, HH:mm:ss");
             formatter.setLenient(false);
         }
-
+*/		Log.d("string2millis","Date is: "+date);
         try {
             Date tempDate = formatter.parse(date);
             millis = tempDate.getTime();
+			Log.d("string2millis","Millis is: "+millis);
         } catch (java.text.ParseException e) {
             return 0;
         }
@@ -42,6 +46,7 @@ public class Helpers {
 
         return millis;
     }
+
     public String millisDateToString(Long millis){
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd, HH:mm:ss");
         formatter.setLenient(false);

@@ -29,9 +29,9 @@
 			/>
 
 		<TextView
-			android:layout_width="250dp"
+			android:layout_width="200dp"
 			android:layout_height="wrap_content"
-			android:text="Amount of pages"
+			android:text="Last modified of 1969/12/31, 19:00:00"
 			android:id="@+id/tvCardSub"
 			android:layout_alignTop="@+id/tvCardNameSel"
 			android:layout_alignStart="@+id/tvCardNameSel"

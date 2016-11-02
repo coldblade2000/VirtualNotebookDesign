@@ -3,8 +3,10 @@ package com.twotowerstudios.virtualnotebookdesign;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 
@@ -43,7 +45,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "name TEXT, " +
                 "color TEXT, " +
-                "pages INTEGER " +
+                "pages INTEGER, " +
                 "lastdate TEXT)";
         db.execSQL(CREATE_NOTEBOOKS_TABLE);
     }
@@ -57,12 +59,12 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     public void addNotebook(Notebook notebook){
         SQLiteDatabase db = this.getWritableDatabase();
-
+		Helpers help = new Helpers();
         ContentValues values = new ContentValues();
         values.put("name", notebook.name);
         values.put("color", notebook.color);
         values.put("pages", notebook.pages);
-        values.put("date", notebook.lastModified);
+        values.put("lastdate", help.millisDateToString(notebook.lastModified));
 
         db.insert(TABLE_NOTEBOOKS, null, values);
         db.close();
@@ -70,7 +72,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     public Notebook getNotebook(int id){
         SQLiteDatabase db = this.getReadableDatabase();
-
+		Helpers help = new Helpers();
         Cursor cursor = db.query(TABLE_NOTEBOOKS,
                 new String[]{"id", "name", "color", "pages", "lastdate"},
                 " id = ?", new String[]{ String.valueOf(id) },
@@ -85,13 +87,21 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 				cursor.getString(cursor.getColumnIndex("name")),
 				cursor.getString(cursor.getColumnIndex("color")),
 				cursor.getInt(cursor.getColumnIndex("pages")),
-				Helpers.stringDataToMillis(cursor.getString(cursor.getColumnIndex("date"))));
+				Helpers.stringDataToMillis(cursor.getString(cursor.getColumnIndex("lastdate"))));
         notebook.id = Integer.parseInt(cursor.getString(0));
         notebook.name = cursor.getString(1);
         notebook.color = cursor.getString(2);
         notebook.pages = cursor.getInt(3);
-        notebook.lastModified = Helpers.stringDataToMillis(cursor.getString(4));
-
+        notebook.lastModified = Helpers.stringDataToMillis(cursor.getString(cursor.getColumnIndex("lastdate")));
+		Log.d("getNotebook", "The date in millis should be: "+Helpers.stringDataToMillis(cursor.getString(cursor.getColumnIndex("lastdate"))));
         return notebook;
     }
+	public int getNumberOfNotebooks(){
+		int number = 0;
+		SQLiteDatabase db = this.getReadableDatabase();
+		number = (int) DatabaseUtils.queryNumEntries(db, "notebooks");
+		Log.d("SQLiteHelper", "Number of notebooks detected = "+number);
+		return number;
+	}
+
 }

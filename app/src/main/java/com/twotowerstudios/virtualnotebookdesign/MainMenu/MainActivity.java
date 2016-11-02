@@ -29,6 +29,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.twotowerstudios.virtualnotebookdesign.BookLight.BookLight;
 import com.twotowerstudios.virtualnotebookdesign.BookLight.BookLightAdapter;
 import com.twotowerstudios.virtualnotebookdesign.Misc.FirstBookLightOffsetDecoration;
+import com.twotowerstudios.virtualnotebookdesign.Misc.SharedPrefs;
 import com.twotowerstudios.virtualnotebookdesign.NotebookSelection.NotebookSelection;
 import com.twotowerstudios.virtualnotebookdesign.R;
 
@@ -53,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+		SharedPrefs.setBoolean(getApplicationContext(), "debug", true);
         //==============
 
 
@@ -98,17 +99,17 @@ public class MainActivity extends AppCompatActivity {
                     fabImage.show();
                     fabPage.show();
                     isMainfabOpen = true;
-                    ObjectAnimator openFirstSubfab = ObjectAnimator.ofFloat(fabShoot, fabShoot.TRANSLATION_Y, 200,0); openFirstSubfab.start();
-                    ObjectAnimator openSecondSubfab = ObjectAnimator.ofFloat(fabImage, fabImage.TRANSLATION_Y, 400,0); openSecondSubfab.start();
-                    ObjectAnimator openThirdSubfab = ObjectAnimator.ofFloat(fabPage, fabPage.TRANSLATION_Y, 600, 0); openThirdSubfab.start();
-                    ObjectAnimator rotateMainfab = ObjectAnimator.ofFloat(fab1, fab1.ROTATION, 0, 135); rotateMainfab.start();
+                    ObjectAnimator openFirstSubfab = ObjectAnimator.ofFloat(fabShoot, View.TRANSLATION_Y, 200,0); openFirstSubfab.start();
+                    ObjectAnimator openSecondSubfab = ObjectAnimator.ofFloat(fabImage, View.TRANSLATION_Y, 400,0); openSecondSubfab.start();
+                    ObjectAnimator openThirdSubfab = ObjectAnimator.ofFloat(fabPage, View.TRANSLATION_Y, 600, 0); openThirdSubfab.start();
+                    ObjectAnimator rotateMainfab = ObjectAnimator.ofFloat(fab1, View.ROTATION, 0, 135); rotateMainfab.start();
 
                 } else if(isMainfabOpen){
                     isMainfabOpen = false;
-                    ObjectAnimator rotateMainfab = ObjectAnimator.ofFloat(fab1, fab1.ROTATION, 135, 270); rotateMainfab.start();
-                    ObjectAnimator closeFirstSubfab = ObjectAnimator.ofFloat(fabShoot, fabShoot.TRANSLATION_Y, 0,200); closeFirstSubfab.start();
-                    ObjectAnimator closeSecondSubfab = ObjectAnimator.ofFloat(fabImage, fabImage.TRANSLATION_Y, 0,400); closeSecondSubfab.start();
-                    ObjectAnimator closeThirdSubfab = ObjectAnimator.ofFloat(fabPage, fabPage.TRANSLATION_Y, 0,600); closeThirdSubfab.start();
+                    ObjectAnimator rotateMainfab = ObjectAnimator.ofFloat(fab1, View.ROTATION, 135, 270); rotateMainfab.start();
+                    ObjectAnimator closeFirstSubfab = ObjectAnimator.ofFloat(fabShoot, View.TRANSLATION_Y, 0,200); closeFirstSubfab.start();
+                    ObjectAnimator closeSecondSubfab = ObjectAnimator.ofFloat(fabImage, View.TRANSLATION_Y, 0,400); closeSecondSubfab.start();
+                    ObjectAnimator closeThirdSubfab = ObjectAnimator.ofFloat(fabPage, View.TRANSLATION_Y, 0,600); closeThirdSubfab.start();
                     fabShoot.hide();
                     fabImage.hide();
                     fabPage.hide();

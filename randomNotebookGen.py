@@ -22,12 +22,12 @@ def generate():
     randDay = random.randint(1,30)
     randMonth = random.randint(1,12)
 
-    if randDay >=1 and randDay <= 9:
+    if 1 <= randDay <= 9:
         randDay = "0%s" % randDay
     else:
         randDay = "%s" % randDay
 
-    if randMonth >=1 and randMonth <= 9:
+    if 1 <= randMonth <= 9:
         randMonth = "0%s" % randMonth
     else:
         randMonth = "%s" % randMonth

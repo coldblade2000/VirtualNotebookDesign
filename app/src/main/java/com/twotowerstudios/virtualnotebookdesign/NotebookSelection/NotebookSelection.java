@@ -127,7 +127,8 @@ public class NotebookSelection extends AppCompatActivity {
                 .build();
 		drawer.setSelection(2);
         Glide.with(this).load(R.drawable.header2).into(accountHeader.getHeaderBackgroundView());
-
+        SQLiteHelper sql = new SQLiteHelper(getApplicationContext());
+        int x = sql.getEarliestEmptyId();
     }
 
     private void prepareNotebookSelectionCards() {

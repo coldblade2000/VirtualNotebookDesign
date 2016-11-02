@@ -3,6 +3,7 @@ package com.twotowerstudios.virtualnotebookdesign;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -70,38 +71,58 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public Notebook getNotebook(int id){
+    public Notebook getNotebook(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
-		Helpers help = new Helpers();
+        Helpers help = new Helpers();
         Cursor cursor = db.query(TABLE_NOTEBOOKS,
                 new String[]{"id", "name", "color", "pages", "lastdate"},
-                " id = ?", new String[]{ String.valueOf(id) },
+                " id = ?", new String[]{String.valueOf(id)},
                 null, null, null, null);
 
         if (cursor != null)
             cursor.moveToFirst();
         else
             return null;
-		//Integer.parseInt(cursor.getString(0)),
-        Notebook notebook = new Notebook(
-				cursor.getString(cursor.getColumnIndex("name")),
-				cursor.getString(cursor.getColumnIndex("color")),
-				cursor.getInt(cursor.getColumnIndex("pages")),
-				Helpers.stringDataToMillis(cursor.getString(cursor.getColumnIndex("lastdate"))));
-        notebook.id = Integer.parseInt(cursor.getString(0));
-        notebook.name = cursor.getString(1);
-        notebook.color = cursor.getString(2);
-        notebook.pages = cursor.getInt(3);
-        notebook.lastModified = Helpers.stringDataToMillis(cursor.getString(cursor.getColumnIndex("lastdate")));
-		Log.d("getNotebook", "The date in millis should be: "+Helpers.stringDataToMillis(cursor.getString(cursor.getColumnIndex("lastdate"))));
-        return notebook;
+        //Integer.parseInt(cursor.getString(0)),
+        try {
+            Notebook notebook = new Notebook(
+                    cursor.getString(cursor.getColumnIndex("name")),
+                    cursor.getString(cursor.getColumnIndex("color")),
+                    cursor.getInt(cursor.getColumnIndex("pages")),
+                    Helpers.stringDataToMillis(cursor.getString(cursor.getColumnIndex("lastdate"))));
+
+
+            notebook.id = Integer.parseInt(cursor.getString(0));
+            notebook.name = cursor.getString(1);
+            notebook.color = cursor.getString(2);
+            notebook.pages = cursor.getInt(3);
+            notebook.lastModified = Helpers.stringDataToMillis(cursor.getString(cursor.getColumnIndex("lastdate")));
+            Log.d("getNotebook", "The date in millis should be: " + Helpers.stringDataToMillis(cursor.getString(cursor.getColumnIndex("lastdate"))));
+            return notebook;
+        }catch(CursorIndexOutOfBoundsException e){
+            Notebook notebook = new Notebook("outofbounds", "#666666", 901, 0);
+            return notebook;
+        }
     }
 	public int getNumberOfNotebooks(){
 		int number = 0;
 		SQLiteDatabase db = this.getReadableDatabase();
 		number = (int) DatabaseUtils.queryNumEntries(db, "notebooks");
-		Log.d("SQLiteHelper", "Number of notebooks detected = "+number);
 		return number;
 	}
+    public int getEarliestEmptyId(){
+        int number = 0;
+        //Notebook notebook = getNotebook(9987);
+        for(int i=1; i <getNumberOfNotebooks()+2;i++) {
+            Notebook notebook = getNotebook(i);
+            if (notebook.name == "outofbounds" || notebook.pages == 901) {
+                Log.d("getEarliestId", "The earliest empty id is: "+i);
+                return i;
+            }
+        }
+
+        return 902;
+
+    }
 
 }

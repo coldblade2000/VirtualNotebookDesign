@@ -2,12 +2,16 @@ package com.twotowerstudios.virtualnotebookdesign.NotebookSelection;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -20,6 +24,7 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
+import com.twotowerstudios.virtualnotebookdesign.DeleteNotebookFragment;
 import com.twotowerstudios.virtualnotebookdesign.Initialization.InitNotebooks;
 import com.twotowerstudios.virtualnotebookdesign.MainMenu.MainActivity;
 import com.twotowerstudios.virtualnotebookdesign.R;
@@ -28,7 +33,7 @@ import com.twotowerstudios.virtualnotebookdesign.SQLiteHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NotebookSelection extends AppCompatActivity {
+public class NotebookSelection extends AppCompatActivity implements DeleteNotebookFragment.DeleteNotebookDialogListener {
     private AccountHeader accountHeader;
     private RecyclerView rvNotebookSelection;
     private RecyclerView.Adapter rvNotebookSelectionAdapter;
@@ -131,6 +136,46 @@ public class NotebookSelection extends AppCompatActivity {
         int x = sql.getEarliestEmptyId();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_delete) {
+            showEditDialog();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    @Override
+    public void onFinishEditDialog(String inputText) {
+        try{
+            SQLiteHelper sql = new SQLiteHelper(getApplicationContext());
+            sql.deleteNotebook(Integer.parseInt(inputText));
+            Log.d("DeleteBook", "Succeded to delete book");
+        }catch (Exception e){
+            e.printStackTrace();
+            Log.d("DeleteBook", "Failed to delete book");
+        }
+        Toast.makeText(this, "Hi, " + inputText, Toast.LENGTH_SHORT).show();
+
+    }
+    private void showEditDialog(){
+        FragmentManager fm = getSupportFragmentManager();
+
+        DeleteNotebookFragment deleteNotebookFragment = DeleteNotebookFragment.newInstance("Delete Notebook");
+
+        deleteNotebookFragment.show(fm, "fragment_delete_notebook");
+    }
     private void prepareNotebookSelectionCards() {
 		NotebookSelectionCard a;
 		SQLiteHelper sql = new SQLiteHelper(getApplicationContext());

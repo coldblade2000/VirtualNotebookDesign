@@ -70,7 +70,12 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         db.insert(TABLE_NOTEBOOKS, null, values);
         db.close();
     }
-
+    public void deleteNotebook(int id){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String whereClause = "id=?";
+        String[] whereArgs = new String[] { String.valueOf(id) };
+        db.delete(TABLE_NOTEBOOKS, whereClause, whereArgs);
+    }
     public Notebook getNotebook(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Helpers help = new Helpers();
@@ -120,7 +125,6 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 return i;
             }
         }
-
         return 902;
 
     }

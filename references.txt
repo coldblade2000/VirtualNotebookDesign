@@ -7,3 +7,6 @@ http://stackoverflow.com/questions/7363112/best-way-to-work-with-dates-in-androi
 http://stackoverflow.com/questions/9671085/convert-date-to-miliseconds
 https://github.com/coldblade2000/Clickr/blob/master/app/src/main/java/com/twotowerstudios/clickr/SharedPrefs.java
 http://stackoverflow.com/questions/12436596/how-to-count-number-of-records-in-sqlite-in-android
+http://stackoverflow.com/questions/31231609/creating-a-button-in-android-toolbar
+https://guides.codepath.com/android/Using-the-App-ToolBar
+https://guides.codepath.com/android/Using-DialogFragment

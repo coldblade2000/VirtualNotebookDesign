@@ -97,7 +97,6 @@ public class DeleteNotebookFragment extends DialogFragment implements TextView.O
             DeleteNotebookDialogListener listener = (DeleteNotebookDialogListener) getActivity();
 
             listener.onFinishEditDialog(idToDelete.getText().toString());
-
             // Close the dialog and return back to the parent activity
 
             dismiss();

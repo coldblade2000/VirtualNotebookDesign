@@ -10,7 +10,7 @@
     <EditText
         android:id="@+id/idToDelete"
         android:layout_width="match_parent"  android:layout_height="wrap_content"
-        android:inputType="number"
+        android:inputType="text"
         android:imeOptions="actionDone"
         android:hint="87"/>
 

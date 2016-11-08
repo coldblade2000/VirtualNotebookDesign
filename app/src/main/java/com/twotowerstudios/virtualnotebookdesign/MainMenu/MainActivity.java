@@ -55,19 +55,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 		SharedPrefs.setBoolean(getApplicationContext(), "debug", true);
-        //==============
-
-
-        /**rvMainMenu = (RecyclerView) findViewById(R.id.rvMainMenu);
-
-        final LinearLayoutManager rvMainMenuLayoutManager = new LinearLayoutManager(this);
-        rvMainMenu.setLayoutManager(rvMainMenuLayoutManager);
-
-        rvMainMenuAdapter = new MainMenuAdapter(this, cardlist);
-        rvMainMenu.setAdapter(rvMainMenuAdapter);
-
-        cardlist = new ArrayList<>();
-        CommonBooksCard a = new CommonBooksCard(); cardlist.add(a);*/
 
            //    ============================
 

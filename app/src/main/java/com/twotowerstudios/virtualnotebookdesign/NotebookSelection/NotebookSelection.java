@@ -1,7 +1,9 @@
 package com.twotowerstudios.virtualnotebookdesign.NotebookSelection;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,46 +29,72 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.twotowerstudios.virtualnotebookdesign.DeleteNotebookFragment;
 import com.twotowerstudios.virtualnotebookdesign.Initialization.InitNotebooks;
 import com.twotowerstudios.virtualnotebookdesign.MainMenu.MainActivity;
+import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
+import com.twotowerstudios.virtualnotebookdesign.Notebook;
 import com.twotowerstudios.virtualnotebookdesign.R;
-import com.twotowerstudios.virtualnotebookdesign.SQLiteHelper;
 
+import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 public class NotebookSelection extends AppCompatActivity implements DeleteNotebookFragment.DeleteNotebookDialogListener {
     private AccountHeader accountHeader;
     private RecyclerView rvNotebookSelection;
     private RecyclerView.Adapter rvNotebookSelectionAdapter;
-    private List<NotebookSelectionCard> notebookSelectionCardList;
+    private ArrayList<Notebook> notebookSelectionCardList;
+	private FloatingActionButton fabSelection, fabAddBook;
+	boolean isMainfabOpen;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notebook_selection);
-
+		if(new Helpers().getStringFromFile("Notebooks.json", getApplicationContext())==null
+				|| new Helpers().getStringFromFile("Notebooks.json", getApplicationContext())==""){
+			File file = new File(getFilesDir(),"Notebooks.json");
+		}
 		if(InitNotebooks.isDebug(getApplicationContext())){
 			Log.d("isDebugNoteSelect", "DEBUG MODE = true;");
 			InitNotebooks.populateDebugBooks(getApplicationContext(), InitNotebooks.isDebug(getApplicationContext()));
 		}
         rvNotebookSelection = (RecyclerView) findViewById(R.id.rvnotebookselection);
 
+		//================================================
+		isMainfabOpen = false;
+		fabSelection = (FloatingActionButton) findViewById(R.id.fabSelection);
+		fabAddBook = (FloatingActionButton) findViewById(R.id.fabAddBlock);
+		fabSelection.setOnClickListener(new View.OnClickListener(){
+			@Override
+			public void onClick(View view) {
+				if (!isMainfabOpen) {
+
+					fabAddBook.show();
+
+					isMainfabOpen = true;
+					ObjectAnimator openAddBookfab = ObjectAnimator.ofFloat(fabAddBook, View.TRANSLATION_Y, 200,0); openAddBookfab.start();
+					ObjectAnimator rotateMainfab = ObjectAnimator.ofFloat(fabSelection, View.ROTATION, 0, 135); rotateMainfab.start();
+
+				} else if(isMainfabOpen){
+					isMainfabOpen = false;
+					ObjectAnimator rotateMainfab = ObjectAnimator.ofFloat(fabSelection, View.ROTATION, 135, 270); rotateMainfab.start();
+					ObjectAnimator closeFirstSubfab = ObjectAnimator.ofFloat(fabAddBook, View.TRANSLATION_Y, 0,200); closeFirstSubfab.start();
+					fabAddBook.hide();
+				}
+			}
+
+
+		});
+		fabAddBook.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+
+			}
+		});
+		//============================================
         final LinearLayoutManager rvNotebookSelectionManager = new LinearLayoutManager(this);
         rvNotebookSelection.setLayoutManager(rvNotebookSelectionManager);
-
-        notebookSelectionCardList = new ArrayList<>();
-        prepareNotebookSelectionCards();
+		notebookSelectionCardList = new Helpers().getNotebookList(getApplicationContext());
+        //prepareNotebookSelectionCards();
         rvNotebookSelectionAdapter = new NotebookSelectionAdapter(this, notebookSelectionCardList);
         rvNotebookSelection.setAdapter(rvNotebookSelectionAdapter);
-
-/**rvMainMenu = (RecyclerView) findViewById(R.id.rvMainMenu);
-
- final LinearLayoutManager rvMainMenuLayoutManager = new LinearLayoutManager(this);
- rvMainMenu.setLayoutManager(rvMainMenuLayoutManager);
-
- rvMainMenuAdapter = new MainMenuAdapter(this, cardlist);
- rvMainMenu.setAdapter(rvMainMenuAdapter);
-
- cardlist = new ArrayList<>();
- CommonBooksCard a = new CommonBooksCard(); cardlist.add(a);*/
 
         final IProfile h1 = new ProfileDrawerItem().withName("Header 1");
         final IProfile h2 = new ProfileDrawerItem().withName("Header 2");
@@ -132,8 +160,7 @@ public class NotebookSelection extends AppCompatActivity implements DeleteNotebo
                 .build();
 		drawer.setSelection(2);
         Glide.with(this).load(R.drawable.header2).into(accountHeader.getHeaderBackgroundView());
-        SQLiteHelper sql = new SQLiteHelper(getApplicationContext());
-        int x = sql.getEarliestEmptyId();
+
     }
 
     @Override
@@ -151,23 +178,26 @@ public class NotebookSelection extends AppCompatActivity implements DeleteNotebo
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_delete) {
-            showEditDialog();
+            //showEditDialog();
+			getApplicationContext().deleteFile("Notebooks.json");
+			notebookSelectionCardList.clear();
+			rvNotebookSelectionAdapter.notifyDataSetChanged();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
     @Override
     public void onFinishEditDialog(String inputText) {
+		Toast.makeText(getApplicationContext(), "Deleted book", Toast.LENGTH_SHORT);
         try{
-            SQLiteHelper sql = new SQLiteHelper(getApplicationContext());
-            sql.deleteNotebook(Integer.parseInt(inputText));
-            Log.d("DeleteBook", "Succeded to delete book");
+            new Helpers().deleteNotebookByName(inputText, getApplicationContext());
+			Log.d("DeleteBook", "Deleted book");
+
         }catch (Exception e){
             e.printStackTrace();
             Log.d("DeleteBook", "Failed to delete book");
+			Toast.makeText(getApplicationContext(), "Failed to delete book", Toast.LENGTH_SHORT);
         }
-        Toast.makeText(this, "Hi, " + inputText, Toast.LENGTH_SHORT).show();
-
     }
     private void showEditDialog(){
         FragmentManager fm = getSupportFragmentManager();
@@ -176,17 +206,7 @@ public class NotebookSelection extends AppCompatActivity implements DeleteNotebo
 
         deleteNotebookFragment.show(fm, "fragment_delete_notebook");
     }
-    private void prepareNotebookSelectionCards() {
-		NotebookSelectionCard a;
-		SQLiteHelper sql = new SQLiteHelper(getApplicationContext());
-		for(int i = 0; i< sql.getNumberOfNotebooks();i++){
-			a = new NotebookSelectionCard(sql.getNotebook(i+1));notebookSelectionCardList.add(a);
-		}
-        //CommonBooksCard a = new CommonBooksCard(); cardlist.add(a);
-        //String color, String name, int numOfPages, String lastModified
-        /**NotebookSelectionCard a = new NotebookSelectionCard("RED", "Spanish", 27, "October 21"); notebookSelectionCardList.add(a);
-        a = new NotebookSelectionCard("BLUE", "Physics", 12, "October 23"); notebookSelectionCardList.add(a);
-        a = new NotebookSelectionCard("YELLOW", "DT", 41, "October 19"); notebookSelectionCardList.add(a);*/
-    }
+
+
 
 }

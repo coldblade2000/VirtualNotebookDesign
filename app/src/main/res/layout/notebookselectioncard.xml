@@ -43,7 +43,7 @@
 			android:contentDescription="notebook"
 			android:layout_width="36dp"
 			android:layout_height="36dp"
-			android:src="@drawable/ic_book_black_36px"
+			app:srcCompat="@drawable/ic_book_black_36px"
 			android:id="@+id/tvCardImage"
 			android:layout_centerVertical="true"
 			android:layout_alignParentRight="true"

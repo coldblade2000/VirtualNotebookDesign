@@ -3,66 +3,90 @@ package com.twotowerstudios.virtualnotebookdesign.Initialization;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 import com.twotowerstudios.virtualnotebookdesign.Misc.SharedPrefs;
 import com.twotowerstudios.virtualnotebookdesign.Notebook;
-import com.twotowerstudios.virtualnotebookdesign.SQLiteHelper;
+
+import java.util.ArrayList;
 
 /**
  * Created by Panther II on 30/10/2016.
  */
 
 public class InitNotebooks {
-//TODO make a class that will initialize the Notebooks based on an SQL file
+
 
 	public static boolean isDebug(Context context){
 		return SharedPrefs.getBoolean(context, "debug");
 	}
 	public static boolean doDebugBooksExist(Context context){
-		SQLiteHelper helper = new SQLiteHelper(context);
 		try {
-			Notebook debugNotebook = helper.getNotebook(1);
-			Log.d("DebugBook", "Name of book with id 1 is: "+debugNotebook.name);
-			if (debugNotebook.name.equalsIgnoreCase("debug")){
-				Log.d("DebugBook", "Debug book exists");
-				return true;
-			}else{
-				Log.d("DebugBook", "Debug book doesnt exist GRACE");
-				return false;
+			Helpers help = new Helpers();
+			ArrayList<Notebook> list = help.getNotebookList(context);
+			for(int i=0; i<=list.size();i++){
+				if(list.get(i).getName().equalsIgnoreCase("debug")){
+					Log.d("DebugBook", "Debug book exists");
+					return true;
+				}
 			}
 		} catch (Exception e) {
-			Log.d("DebugBook", "Debug book doesnt exist EXCEPTION");
 			e.printStackTrace();
 			return false;
 		}
+		Log.d("DebugBook", "Debug book doesnt exist GRACE");
+		return false;
 	}
 	public static void populateDebugBooks(Context context, boolean isDebugTrue){
 		if (isDebugTrue && !doDebugBooksExist(context)){
-			/**
-			 * db.addNotebook(new Notebook("Spanish", "#2196f3", 27, Helpers.stringDataToMillis("2016/10/21")));
-			 -        db.addNotebook(new Notebook("English", "#f44336", 41, Helpers.stringDataToMillis("2016/10/14")));
-			 -        db.addNotebook(new Notebook("Chemistry", "RED", 22, Helpers.stringDataToMillis("2016/10/18")));
-			 */
 
-			SQLiteHelper sql = new SQLiteHelper(context);
-			Notebook a = new Notebook("debug", "#999999", 404, Helpers.stringDataToMillis("2016/01/01")); sql.addNotebook(a);
-			a = new Notebook("Spanish", "#2196f3", 27, Helpers.stringDataToMillis("2016/10/21")); sql.addNotebook(a);
-			a = new Notebook("Art", "#3f51b5", 57, Helpers.stringDataToMillis("2016/10/08") ); sql.addNotebook(a);
-			a = new Notebook("English", "#ffc107", 14, Helpers.stringDataToMillis("2016/09/28") ); sql.addNotebook(a);
-			a = new Notebook("ECL", "#e91e63", 91, Helpers.stringDataToMillis("2016/08/01") ); sql.addNotebook(a);
-			a = new Notebook("Chemistry", "#ff0000", 22, Helpers.stringDataToMillis("2016/10/18")); sql.addNotebook(a);
-			a = new Notebook("DT","#607d8b", 31, Helpers.stringDataToMillis("2016/011/30")); sql.addNotebook(a);
-			a = new Notebook("Biology","#4caf50", 39, Helpers.stringDataToMillis("2016/04/07")); sql.addNotebook(a);
-			a = new Notebook("Math","#ffc107", 65, Helpers.stringDataToMillis("2016/12/22")); sql.addNotebook(a);
-			a = new Notebook("Physics","#ff5722", 30, Helpers.stringDataToMillis("2016/08/23")); sql.addNotebook(a);
-			a = new Notebook("PE","#009688", 88, Helpers.stringDataToMillis("2016/07/12")); sql.addNotebook(a);
-			a = new Notebook("I.C.T.","#ffeb3b", 50, Helpers.stringDataToMillis("2016/06/11")); sql.addNotebook(a);
-			a = new Notebook("Robotics","#ffc107", 77, Helpers.stringDataToMillis("2016/06/18")); sql.addNotebook(a);
-			a = new Notebook("Economy","#03a9f4", 7, Helpers.stringDataToMillis("2016/09/14")); sql.addNotebook(a);
-			a = new Notebook("Philosphy","#ff5722", 45, Helpers.stringDataToMillis("2016/06/01")); sql.addNotebook(a);
-			a = new Notebook("Politics","#9c27b0", 11, Helpers.stringDataToMillis("2016/05/20")); sql.addNotebook(a);
-			a = new Notebook("Geography","#e91e63", 3, Helpers.stringDataToMillis("2016/04/26")); sql.addNotebook(a);
-			Log.d("populateDebugBooks", "successfully wrote all debug books");
+			try {
+				ArrayList<Notebook> list = new Helpers().getNotebookList(context);
+
+				Notebook a = new Notebook("debug", "#999999", 404, Helpers.stringDataToMillis("2016/01/01"));list.add(a);
+				a = new Notebook("Science","#795548", 29, Helpers.stringDataToMillis("2016/11/10"));list.add(a);
+				a = new Notebook("ECL","#607d8b", 18, Helpers.stringDataToMillis("2016/12/26"));list.add(a);
+				a = new Notebook("Art","#3f51b5", 32, Helpers.stringDataToMillis("2016/08/15"));list.add(a);
+				a = new Notebook("Science","#00bcd4", 22, Helpers.stringDataToMillis("2016/01/20"));list.add(a);
+				a = new Notebook("Science","#8bc34a", 44, Helpers.stringDataToMillis("2016/12/07"));list.add(a);
+				a = new Notebook("Biology","#009688", 65, Helpers.stringDataToMillis("2016/04/29"));list.add(a);
+				a = new Notebook("Robotics","#795548", 11, Helpers.stringDataToMillis("2016/06/06"));list.add(a);
+				a = new Notebook("English","#e91e63", 65, Helpers.stringDataToMillis("2016/07/18"));list.add(a);
+				a = new Notebook("Biology","#9c27b0", 83, Helpers.stringDataToMillis("2016/01/15"));list.add(a);
+				a = new Notebook("Economy","#607d8b", 47, Helpers.stringDataToMillis("2016/11/04"));list.add(a);
+				a = new Notebook("Politics","#ff9800", 50, Helpers.stringDataToMillis("2016/05/22"));list.add(a);
+				a = new Notebook("Politics","#ffc107", 28, Helpers.stringDataToMillis("2016/12/27"));list.add(a);
+				a = new Notebook("Politics","#00bcd4", 95, Helpers.stringDataToMillis("2016/11/02"));list.add(a);
+				a = new Notebook("Science","#ffeb3b", 30, Helpers.stringDataToMillis("2016/07/21"));list.add(a);
+				a = new Notebook("Robotics","#ff9800", 78, Helpers.stringDataToMillis("2016/10/29"));list.add(a);Log.d("populateDebugBooks", "successfully wrote all debug books");
+				Gson gson = new Gson();
+
+				new Helpers().writeStringToFile(gson.toJson(list), context, "Notebooks.json");
+			} catch (Exception e) {
+				ArrayList<Notebook> list = new ArrayList<>();
+
+				Notebook a = new Notebook("debug", "#999999", 404, Helpers.stringDataToMillis("2016/01/01"));list.add(a);
+				a = new Notebook("Science","#795548", 29, Helpers.stringDataToMillis("2016/11/10"));list.add(a);
+				a = new Notebook("ECL","#607d8b", 18, Helpers.stringDataToMillis("2016/12/26"));list.add(a);
+				a = new Notebook("Art","#3f51b5", 32, Helpers.stringDataToMillis("2016/08/15"));list.add(a);
+				a = new Notebook("Science","#00bcd4", 22, Helpers.stringDataToMillis("2016/01/20"));list.add(a);
+				a = new Notebook("Science","#8bc34a", 44, Helpers.stringDataToMillis("2016/12/07"));list.add(a);
+				a = new Notebook("Biology","#009688", 65, Helpers.stringDataToMillis("2016/04/29"));list.add(a);
+				a = new Notebook("Robotics","#795548", 11, Helpers.stringDataToMillis("2016/06/06"));list.add(a);
+				a = new Notebook("English","#e91e63", 65, Helpers.stringDataToMillis("2016/07/18"));list.add(a);
+				a = new Notebook("Biology","#9c27b0", 83, Helpers.stringDataToMillis("2016/01/15"));list.add(a);
+				a = new Notebook("Economy","#607d8b", 47, Helpers.stringDataToMillis("2016/11/04"));list.add(a);
+				a = new Notebook("Politics","#ff9800", 50, Helpers.stringDataToMillis("2016/05/22"));list.add(a);
+				a = new Notebook("Politics","#ffc107", 28, Helpers.stringDataToMillis("2016/12/27"));list.add(a);
+				a = new Notebook("Politics","#00bcd4", 95, Helpers.stringDataToMillis("2016/11/02"));list.add(a);
+				a = new Notebook("Science","#ffeb3b", 30, Helpers.stringDataToMillis("2016/07/21"));list.add(a);
+				a = new Notebook("Robotics","#ff9800", 78, Helpers.stringDataToMillis("2016/10/29"));list.add(a);Log.d("populateDebugBooks", "successfully wrote all debug books");
+
+				Log.d("populateDebugBooks", "successfully wrote all debug books");
+				Gson gson = new Gson();
+
+				new Helpers().writeStringToFile(gson.toJson(list), context, "Notebooks.json");
+			}
 		}
 	}
 }

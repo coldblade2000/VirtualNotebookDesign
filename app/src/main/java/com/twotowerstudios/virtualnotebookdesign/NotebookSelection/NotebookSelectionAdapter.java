@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
+import com.twotowerstudios.virtualnotebookdesign.Notebook;
 import com.twotowerstudios.virtualnotebookdesign.R;
 
 import java.util.List;
@@ -21,7 +22,7 @@ import java.util.List;
 
 public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelectionAdapter.ViewHolder>{
 	Context context;
-	List<NotebookSelectionCard> notebookSelectionList;
+	List<Notebook> notebookList;
 	public static class ViewHolder extends RecyclerView.ViewHolder{
 
 		public TextView tvCardNameSel, tvCardSub, tvPageCount;
@@ -35,9 +36,9 @@ public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelec
 			tvPageCount = (TextView) view.findViewById(R.id.tvPageCount);
 		}
 	}
-	public NotebookSelectionAdapter(Context context, List<NotebookSelectionCard> list){
+	public NotebookSelectionAdapter(Context context, List<Notebook> list){
 		this.context = context;
-		this.notebookSelectionList = list;
+		this.notebookList = list;
 	}
 	@Override
 	public NotebookSelectionAdapter.ViewHolder onCreateViewHolder (ViewGroup parent, int viewType){
@@ -50,18 +51,17 @@ public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelec
 	 @Override
 	 public void onBindViewHolder(ViewHolder holder, int position){
 		 Helpers help = new Helpers();
-	 	 NotebookSelectionCard notebookSelection = notebookSelectionList.get(position);
-	 	 holder.tvCardNameSel.setText(""+notebookSelection.getName()+" - "+notebookSelection.getId());
+	 	 Notebook notebookSelection = notebookList.get(position);
+	 	 holder.tvCardNameSel.setText(""+notebookSelection.getName());
 		 Log.d("notebookselectadapter","notebookselection.getLastModified() is: "+notebookSelection.getLastModified());
 		 Log.d("notebookselectadapter","help.millisDateToString(notebookSelection.getLastModified()) "+help.millisDateToString(notebookSelection.getLastModified()));
 	 	 holder.tvCardSub.setText("Last modified on: "+
 				 help.millisDateToString(notebookSelection.getLastModified()));
 	 	 holder.tvPageCount.setText("" +notebookSelection.getNumOfPages()+ " pages");
 	 	 holder.ivCardImage.setColorFilter(Color.parseColor(notebookSelection.getColor()));
-
 	 }
 	 @Override
 	 public int getItemCount() {
-	 	return notebookSelectionList.size();
+	 	return notebookList.size();
 	 }
 }

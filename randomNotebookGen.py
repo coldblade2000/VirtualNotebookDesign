@@ -31,9 +31,15 @@ def generate():
         randMonth = "0%s" % randMonth
     else:
         randMonth = "%s" % randMonth
-    print "\n\n a = new Notebook(\"%s\",\"%s\", %s, Helpers.stringDataToMillis(\"2016/%s/%s\")); sql.addNotebook(a);" % (randName,randColor,randPages,randMonth,randDay)
-generate()
-goOn = raw_input("\nAnother number? write x to quit:  ")
-while goOn != "x":
-    generate()
+    return "a = new Notebook(\"%s\",\"%s\", %s, Helpers.stringDataToMillis(\"2016/%s/%s\"));list.add(a);" % (randName,randColor,randPages,randMonth,randDay)
+#generate()
+#goOn = raw_input("\nAnother number? write x to quit:  ")
+while True:
+    for x in range (0,15):
+        output = []
+        output.append(generate())
+        print '\n'.join(output)
+        
     goOn = raw_input("\nAnother number? write x to quit:  ")
+    if goOn == 'x':
+        break

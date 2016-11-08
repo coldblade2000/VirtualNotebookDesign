@@ -10,3 +10,5 @@ http://stackoverflow.com/questions/12436596/how-to-count-number-of-records-in-sq
 http://stackoverflow.com/questions/31231609/creating-a-button-in-android-toolbar
 https://guides.codepath.com/android/Using-the-App-ToolBar
 https://guides.codepath.com/android/Using-DialogFragment
+https://futurestud.io/tutorials/gson-getting-started-with-java-json-serialization-deserialization
+https://github.com/google/gson

@@ -12,3 +12,4 @@ https://guides.codepath.com/android/Using-the-App-ToolBar
 https://guides.codepath.com/android/Using-DialogFragment
 https://futurestud.io/tutorials/gson-getting-started-with-java-json-serialization-deserialization
 https://github.com/google/gson
+http://www.truiton.com/2015/04/android-action-bar-dialog-using-toolbar/

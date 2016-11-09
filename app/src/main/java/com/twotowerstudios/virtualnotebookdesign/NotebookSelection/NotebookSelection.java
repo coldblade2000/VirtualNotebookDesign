@@ -4,7 +4,9 @@ import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,6 +32,7 @@ import com.twotowerstudios.virtualnotebookdesign.DeleteNotebookFragment;
 import com.twotowerstudios.virtualnotebookdesign.Initialization.InitNotebooks;
 import com.twotowerstudios.virtualnotebookdesign.MainMenu.MainActivity;
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
+import com.twotowerstudios.virtualnotebookdesign.NewNotebookFragment;
 import com.twotowerstudios.virtualnotebookdesign.Notebook;
 import com.twotowerstudios.virtualnotebookdesign.R;
 
@@ -85,7 +88,7 @@ public class NotebookSelection extends AppCompatActivity implements DeleteNotebo
 		fabAddBook.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-
+                showDialog();
 			}
 		});
 		//============================================
@@ -163,6 +166,22 @@ public class NotebookSelection extends AppCompatActivity implements DeleteNotebo
 
     }
 
+    private void showDialog() {
+
+        // DialogFragment.show() will take care of adding the fragment
+        // in a transaction.  We also want to remove any currently showing
+        // dialog, so make our own transaction and take care of that here.
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        NewNotebookFragment newFragment = NewNotebookFragment.newInstance();
+        newFragment.show(ft, "dialog");
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -179,9 +198,9 @@ public class NotebookSelection extends AppCompatActivity implements DeleteNotebo
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_delete) {
             //showEditDialog();
-			getApplicationContext().deleteFile("Notebooks.json");
-			notebookSelectionCardList.clear();
-			rvNotebookSelectionAdapter.notifyDataSetChanged();
+            getApplicationContext().deleteFile("Notebooks.json");
+            notebookSelectionCardList.clear();
+            rvNotebookSelectionAdapter.notifyDataSetChanged();
             return true;
         }
         return super.onOptionsItemSelected(item);

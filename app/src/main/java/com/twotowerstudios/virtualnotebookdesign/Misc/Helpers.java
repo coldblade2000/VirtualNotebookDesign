@@ -121,4 +121,26 @@ public class Helpers {
 			}
 		}
 	}
+	public static ArrayList<String> getPossibleColors(){
+		ArrayList<String> colors = new ArrayList<>();
+		colors.add("#f44336");
+		colors.add("#e91e63");
+		colors.add("#9c27b0");
+		colors.add("#673ab7");
+		colors.add("#3f51b5");
+		colors.add("#2196f3");
+		colors.add("#03a9f4");
+		colors.add("#00bcd4");
+		colors.add("#009688");
+		colors.add("#4caf50");
+		colors.add("#8bc34a");
+		colors.add("#cddc39");
+		colors.add("#ffeb3b");
+		colors.add("#ffc107");
+		colors.add("#ff9800");
+		colors.add("#ff5722");
+		colors.add("#795548");
+		colors.add("#607d8b");
+		return colors;
+	}
 }

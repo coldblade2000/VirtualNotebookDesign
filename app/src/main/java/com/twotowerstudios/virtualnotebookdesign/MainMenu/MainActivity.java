@@ -66,11 +66,8 @@ public class MainActivity extends AppCompatActivity {
 
         bookLightList = new ArrayList<>();
         prepareBookLightList();
-
         BookLightAdapter = new BookLightAdapter(this, bookLightList);
         BookLightRecyclerView.setAdapter(BookLightAdapter);
-
-
         //==================
         isMainfabOpen = false;
         fab1 = (FloatingActionButton) findViewById(R.id.fabMain);

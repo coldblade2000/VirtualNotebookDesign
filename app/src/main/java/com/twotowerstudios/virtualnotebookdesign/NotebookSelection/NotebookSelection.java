@@ -32,7 +32,7 @@ import com.twotowerstudios.virtualnotebookdesign.DeleteNotebookFragment;
 import com.twotowerstudios.virtualnotebookdesign.Initialization.InitNotebooks;
 import com.twotowerstudios.virtualnotebookdesign.MainMenu.MainActivity;
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
-import com.twotowerstudios.virtualnotebookdesign.NewNotebookFragment;
+import com.twotowerstudios.virtualnotebookdesign.NewNotebookDialog.NewNotebookFragment;
 import com.twotowerstudios.virtualnotebookdesign.Notebook;
 import com.twotowerstudios.virtualnotebookdesign.R;
 
@@ -58,7 +58,7 @@ public class NotebookSelection extends AppCompatActivity implements DeleteNotebo
 			Log.d("isDebugNoteSelect", "DEBUG MODE = true;");
 			InitNotebooks.populateDebugBooks(getApplicationContext(), InitNotebooks.isDebug(getApplicationContext()));
 		}
-        rvNotebookSelection = (RecyclerView) findViewById(R.id.rvnotebookselection);
+
 
 		//================================================
 		isMainfabOpen = false;
@@ -92,13 +92,14 @@ public class NotebookSelection extends AppCompatActivity implements DeleteNotebo
 			}
 		});
 		//============================================
+		rvNotebookSelection = (RecyclerView) findViewById(R.id.rvnotebookselection);
         final LinearLayoutManager rvNotebookSelectionManager = new LinearLayoutManager(this);
         rvNotebookSelection.setLayoutManager(rvNotebookSelectionManager);
 		notebookSelectionCardList = new Helpers().getNotebookList(getApplicationContext());
         //prepareNotebookSelectionCards();
         rvNotebookSelectionAdapter = new NotebookSelectionAdapter(this, notebookSelectionCardList);
         rvNotebookSelection.setAdapter(rvNotebookSelectionAdapter);
-
+		//===================================================================
         final IProfile h1 = new ProfileDrawerItem().withName("Header 1");
         final IProfile h2 = new ProfileDrawerItem().withName("Header 2");
         final IProfile h3 = new ProfileDrawerItem().withName("Header 3");
@@ -162,6 +163,7 @@ public class NotebookSelection extends AppCompatActivity implements DeleteNotebo
                 })
                 .build();
 		drawer.setSelection(2);
+		//=========================================================
         Glide.with(this).load(R.drawable.header2).into(accountHeader.getHeaderBackgroundView());
 
     }

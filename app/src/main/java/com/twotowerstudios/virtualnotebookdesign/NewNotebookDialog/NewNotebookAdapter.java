@@ -24,10 +24,14 @@ public class NewNotebookAdapter extends RecyclerView.Adapter<NewNotebookAdapter.
 	Context context;
 	ArrayList<String> colors = new ArrayList<>();
 	int activeColor;
+	AdapterInterface clickListener;
 	public NewNotebookAdapter(){
 
 	}
 
+	public interface AdapterInterface{
+		void clickListener(int color);
+	}
 	public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 		public ImageView ivSwatch;
 		public Toolbar toolbar;
@@ -35,7 +39,6 @@ public class NewNotebookAdapter extends RecyclerView.Adapter<NewNotebookAdapter.
 			super(itemView);
 			ivSwatch = (ImageView) itemView.findViewById(R.id.ivSwatch);
 			toolbar = (Toolbar) itemView.findViewById(R.id.newnotebooktoolbar);
-			ivSwatch.setOnClickListener(this);
 		}
 
 
@@ -45,12 +48,14 @@ public class NewNotebookAdapter extends RecyclerView.Adapter<NewNotebookAdapter.
 			final int adapterPosition = ViewHolder.this.getAdapterPosition();
 			Log.d("OnClick. Adapter", "getAdapterPosition: "+adapterPosition);
 			newNotebookFragment.changeColor(adapterPosition);
+
 		}
 	}
-	public NewNotebookAdapter(Context context, ArrayList<String> colors, int activeColor){
+	public NewNotebookAdapter(Context context, ArrayList<String> colors, int activeColor, AdapterInterface clickListener){
 		this.context=context;
 		this.colors=colors;
 		this.activeColor=activeColor;
+		this.clickListener = clickListener;
 	}
 
 	@Override
@@ -61,7 +66,7 @@ public class NewNotebookAdapter extends RecyclerView.Adapter<NewNotebookAdapter.
 
 
 	@Override
-	public void onBindViewHolder(ViewHolder holder, int position) {
+	public void onBindViewHolder(ViewHolder holder, final int position) {
 
 		Drawable drawablefull = ContextCompat.getDrawable(context,R.drawable.colorcircle);
 		Drawable drawableHollow = ContextCompat.getDrawable(context,R.drawable.coloroutlinecircle);
@@ -72,6 +77,14 @@ public class NewNotebookAdapter extends RecyclerView.Adapter<NewNotebookAdapter.
 		}
 		holder.ivSwatch.setColorFilter(Color.parseColor(colors.get(position)));
 
+		holder.ivSwatch.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				clickListener.clickListener(position);
+				notifyDataSetChanged();
+				activeColor=position;
+			}
+		});
 	}
 	/**
 	 * Returns the total number of items in the data set held by the adapter.

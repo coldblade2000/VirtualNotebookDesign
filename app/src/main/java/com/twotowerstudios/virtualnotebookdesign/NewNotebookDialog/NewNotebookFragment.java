@@ -24,7 +24,7 @@ import java.util.Random;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NewNotebookFragment extends DialogFragment {
+public class NewNotebookFragment extends DialogFragment implements NewNotebookAdapter.AdapterInterface{
 
 	RecyclerView rvNewNotebook;
 	int activeColor;
@@ -56,9 +56,9 @@ public class NewNotebookFragment extends DialogFragment {
 			toolbar.setTitleTextColor(getResources().getColor(R.color.md_light_primary_text));
 		}
 		rvNewNotebook = (RecyclerView) v.findViewById(R.id.rvNewNotebook);
-		final GridLayoutManager rvNotebookManager = new GridLayoutManager(getContext(),6);
+		GridLayoutManager rvNotebookManager = new GridLayoutManager(getContext(),6);
 		rvNewNotebook.setLayoutManager(rvNotebookManager);
-		NewNotebookAdapter adapter= new NewNotebookAdapter(getContext(), Helpers.getPossibleColors(), activeColor);
+		NewNotebookAdapter adapter= new NewNotebookAdapter(getContext(), Helpers.getPossibleColors(), activeColor, this);
 
 		toolbar.setBackgroundColor(Color.parseColor(Helpers.getPossibleColors().get(activeColor)));
 		rvNewNotebook.setAdapter(adapter);
@@ -86,5 +86,10 @@ public class NewNotebookFragment extends DialogFragment {
 			toolbar.setTitleTextColor(getResources().getColor(R.color.md_light_primary_text));
 		}
 		toolbar.setBackgroundColor(Color.parseColor(Helpers.getPossibleColors().get(position)));
+	}
+
+	@Override
+	public void clickListener(int color) {
+		changeColor(color);
 	}
 }

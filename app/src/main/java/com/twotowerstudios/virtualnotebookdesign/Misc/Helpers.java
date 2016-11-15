@@ -1,6 +1,7 @@
 package com.twotowerstudios.virtualnotebookdesign.Misc;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -142,5 +143,33 @@ public class Helpers {
 		colors.add("#795548");
 		colors.add("#607d8b");
 		return colors;
+	}
+	/**
+	This isColorDark method was copied word for word from the "Spectrum" library, written by
+	Nathan Walters (and 5 other contributors), published to GitHub with an explicit MIT
+	license, which has no restrictions, except that the creater is not liable for anything,
+	and both the license and copyright notices must be written somewhere. This will be done
+	 in the journal, references.txt and report.
+	 */
+	/**
+	 The MIT License (MIT)
+
+	 Copyright (c) 2016 The Blue Alliance
+
+	 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+	 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+	 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+	/**
+	 *
+	 * Walters, N. (2016). the-blue-alliance/spectrum. GitHub. Retrieved 15 November 2016, from https://github.com/the-blue-alliance/spectrum/blob/master/spectrum/src/main/java/com/thebluealliance/spectrum/internal/ColorUtil.java
+	 */
+	 public static boolean isColorDark(int color){
+		double brightness = Color.red(color) * 0.299 +
+				Color.green(color) * 0.587 +
+				Color.blue(color) * 0.114;
+		return brightness < 160;
 	}
 }

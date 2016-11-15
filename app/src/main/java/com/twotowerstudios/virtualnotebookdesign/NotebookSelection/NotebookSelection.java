@@ -182,7 +182,9 @@ public class NotebookSelection extends AppCompatActivity implements DeleteNotebo
 
         // Create and show the dialog.
         NewNotebookFragment newFragment = NewNotebookFragment.newInstance();
+
         newFragment.show(ft, "dialog");
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -13,3 +13,6 @@ https://guides.codepath.com/android/Using-DialogFragment
 https://futurestud.io/tutorials/gson-getting-started-with-java-json-serialization-deserialization
 https://github.com/google/gson
 http://www.truiton.com/2015/04/android-action-bar-dialog-using-toolbar/
+https://github.com/chiuki/android-recyclerview/blob/master/app/src/main/java/com/sqisland/android/recyclerview/GridLayoutVariableSpanSizeActivity.java
+https://github.com/the-blue-alliance/spectrum/blob/master/spectrum/src/main/java/com/thebluealliance/spectrum/internal/ColorUtil.java
+Walters, N. (2016). the-blue-alliance/spectrum. GitHub. Retrieved 15 November 2016, from https://github.com/the-blue-alliance/spectrum/blob/master/spectrum/src/main/java/com/thebluealliance/spectrum/internal/ColorUtil.java

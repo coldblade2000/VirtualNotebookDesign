@@ -57,6 +57,7 @@
 		android:layout_height="56dp"
 		app:fabSize="normal"
 		android:elevation="8dp"
+		app:layout_behavior="com.twotowerstudios.virtualnotebookdesign.NotebookSelection.ScrollAwareFABBehavior"
 		android:layout_marginRight="@dimen/fab_margin_right"
 		android:layout_marginEnd="@dimen/fab_margin_right"
 		android:layout_marginBottom="@dimen/fab_margin_bottom_2nd"

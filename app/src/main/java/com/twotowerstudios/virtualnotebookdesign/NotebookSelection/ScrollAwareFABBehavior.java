@@ -7,6 +7,8 @@ import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.twotowerstudios.virtualnotebookdesign.R;
+
 /**
  * Created by Panther II on 15/11/2016.
  */
@@ -29,8 +31,18 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
 
 		if (dyConsumed > 0 && child.getVisibility() == View.VISIBLE) {
 			child.hide();
+
 		} else if (dyConsumed < 0 && child.getVisibility() != View.VISIBLE) {
-			child.show();
+			if (child.getId()== R.id.fabAddBlock){
+				if(NotebookSelection.isMainfabOpen()){
+					child.show();
+				}else{
+
+				}
+			}else{
+				child.show();
+			}
+
 		}
 	}
 	public ScrollAwareFABBehavior(Context context, AttributeSet attrs) {

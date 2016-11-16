@@ -45,7 +45,7 @@ public class NotebookSelection extends AppCompatActivity implements DeleteNotebo
     private RecyclerView.Adapter rvNotebookSelectionAdapter;
     private ArrayList<Notebook> notebookSelectionCardList;
 	private FloatingActionButton fabSelection, fabAddBook;
-	boolean isMainfabOpen;
+	static boolean isMainfabOpen;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -232,7 +232,7 @@ public class NotebookSelection extends AppCompatActivity implements DeleteNotebo
         deleteNotebookFragment.show(fm, "fragment_delete_notebook");
     }
 
-	public boolean isMainfabOpen(){
+	public static boolean isMainfabOpen(){
 		return isMainfabOpen;
 	}
 

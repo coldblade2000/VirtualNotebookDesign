@@ -39,7 +39,7 @@ import com.twotowerstudios.virtualnotebookdesign.R;
 import java.io.File;
 import java.util.ArrayList;
 
-public class NotebookSelection extends AppCompatActivity implements DeleteNotebookFragment.DeleteNotebookDialogListener {
+public class NotebookSelection extends AppCompatActivity implements DeleteNotebookFragment.DeleteNotebookDialogListener{
     private AccountHeader accountHeader;
     private RecyclerView rvNotebookSelection;
     private RecyclerView.Adapter rvNotebookSelectionAdapter;
@@ -89,6 +89,7 @@ public class NotebookSelection extends AppCompatActivity implements DeleteNotebo
 			@Override
 			public void onClick(View view) {
                 showDialog();
+
 			}
 		});
 		//============================================
@@ -185,6 +186,7 @@ public class NotebookSelection extends AppCompatActivity implements DeleteNotebo
 
         newFragment.show(ft, "dialog");
 
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -230,6 +232,13 @@ public class NotebookSelection extends AppCompatActivity implements DeleteNotebo
         deleteNotebookFragment.show(fm, "fragment_delete_notebook");
     }
 
+	public boolean isMainfabOpen(){
+		return isMainfabOpen;
+	}
 
-
+	public void refreshData(Notebook newNotebook) {
+		notebookSelectionCardList.add(newNotebook);
+		rvNotebookSelectionAdapter.notifyDataSetChanged();
+		rvNotebookSelection.getLayoutManager().scrollToPosition(notebookSelectionCardList.size());
+	}
 }

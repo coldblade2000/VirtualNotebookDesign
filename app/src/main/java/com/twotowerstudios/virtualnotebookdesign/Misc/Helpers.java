@@ -18,7 +18,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by coldblade2000 on 31/10/16.
@@ -43,7 +42,7 @@ public class Helpers {
 		return millis;
 	}
 
-	public String millisDateToString(Long millis) {
+	public static String millisDateToString(Long millis) {
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd, HH:mm:ss");
 		formatter.setLenient(false);
 
@@ -51,8 +50,12 @@ public class Helpers {
 		calendar.setTimeInMillis(millis);
 		return formatter.format(calendar.getTime());
 	}
+	public static long getCurrentTimeInMillis(){
+		Calendar cal = Calendar.getInstance();
 
-	public void writeStringToFile(String input, Context context, String name) {
+		return cal.getTimeInMillis();
+	}
+	public static void writeStringToFile(String input, Context context, String name) {
 		FileOutputStream outputStream;
 		try {
 			outputStream = context.openFileOutput(name, Context.MODE_PRIVATE);
@@ -84,7 +87,7 @@ public class Helpers {
 		return buffer.toString();
 
 	}
-	public ArrayList<Notebook> getNotebookList(Context context){
+	public  ArrayList<Notebook> getNotebookList(Context context){
 		ArrayList<Notebook> notebookList = new ArrayList<Notebook>();
 		Gson gson = new Gson();
 
@@ -94,22 +97,23 @@ public class Helpers {
 
 		return notebookList;
 	}
-	public void writeListToFile(Context context, List<Notebook> notebookList){
+	public static void writeListToFile(Context context, ArrayList<Notebook> notebookList){
 		Gson gson = new Gson();
 		String outputString = gson.toJson(notebookList);
 		writeStringToFile(outputString, context, "Notebooks.json");
 	}
 	public void addToNotebookList(Notebook notebook, Context context){
 		ArrayList<Notebook> list = getNotebookList(context);
-		for(int i=0; i<=list.size(); i++){
+		for(int i=0; i<list.size(); i++){
 			if(list.get(i).name.equalsIgnoreCase(notebook.name.toLowerCase())){
-				Toast.makeText(context, "Can't add notebook, already exists", Toast.LENGTH_SHORT);
-				list.add(notebook);
+				Toast.makeText(context, "Can't add notebook, already exists", Toast.LENGTH_SHORT).show();
 				break;
 			}
 		}
+		list.add(notebook);
+		writeListToFile(context,list);
 	}
-	public void deleteNotebookByName(String name, Context context){
+	public static void deleteNotebookByName(String name, Context context){
 		Toast.makeText(context, "deleteNotebookByName invoked", Toast.LENGTH_SHORT);
 		ArrayList<Notebook> list = new Helpers().getNotebookList(context);
 		for(int i = 0; i <= list.size(); i++){

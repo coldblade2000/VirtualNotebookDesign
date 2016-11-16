@@ -6,7 +6,6 @@ import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,15 +23,15 @@ public class NewNotebookAdapter extends RecyclerView.Adapter<NewNotebookAdapter.
 	Context context;
 	ArrayList<String> colors = new ArrayList<>();
 	int activeColor;
-	AdapterInterface clickListener;
+	FromAdapterInterface clickListener;
 	public NewNotebookAdapter(){
 
 	}
 
-	public interface AdapterInterface{
+	public interface FromAdapterInterface {
 		void clickListener(int color);
 	}
-	public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+	public static class ViewHolder extends RecyclerView.ViewHolder{
 		public ImageView ivSwatch;
 		public Toolbar toolbar;
 		public ViewHolder(View itemView) {
@@ -40,18 +39,8 @@ public class NewNotebookAdapter extends RecyclerView.Adapter<NewNotebookAdapter.
 			ivSwatch = (ImageView) itemView.findViewById(R.id.ivSwatch);
 			toolbar = (Toolbar) itemView.findViewById(R.id.newnotebooktoolbar);
 		}
-
-
-		@Override
-		public void onClick(View view) {
-			NewNotebookFragment newNotebookFragment = new NewNotebookFragment();
-			final int adapterPosition = ViewHolder.this.getAdapterPosition();
-			Log.d("OnClick. Adapter", "getAdapterPosition: "+adapterPosition);
-			newNotebookFragment.changeColor(adapterPosition);
-
-		}
 	}
-	public NewNotebookAdapter(Context context, ArrayList<String> colors, int activeColor, AdapterInterface clickListener){
+	public NewNotebookAdapter(Context context, ArrayList<String> colors, int activeColor, FromAdapterInterface clickListener){
 		this.context=context;
 		this.colors=colors;
 		this.activeColor=activeColor;

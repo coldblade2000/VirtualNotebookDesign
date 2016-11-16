@@ -1,5 +1,7 @@
 package com.twotowerstudios.virtualnotebookdesign;
 
+import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
+
 /**
  * Created by Panther II on 30/10/2016.
  */
@@ -18,6 +20,12 @@ public class Notebook {
 		this.lastModified = lastModified;
 		this.color = color;
 		this.pages = pages;
+	}
+	public Notebook(String name, String color){
+		this.name=name;
+		this.color=color;
+		this.lastModified=Helpers.getCurrentTimeInMillis();
+		this.pages=0;
 	}
 	public Notebook() {}
 

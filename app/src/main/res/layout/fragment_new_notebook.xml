@@ -5,8 +5,9 @@
 			  android:layout_width="wrap_content"
 			  android:layout_height="wrap_content"
 			  android:layout_gravity="center"
-			  android:background="#dfdfdf"
+			  android:background="#ffffff"
 			  android:elevation="24dp"
+			  android:animateLayoutChanges="true"
 	>
 
 	<android.support.v7.widget.Toolbar
@@ -27,7 +28,8 @@
 		android:layout_marginLeft="24dp"
 		android:layout_marginRight="20dp"
 		android:layout_marginTop="12dp"
-		android:layout_marginBottom="12dp">
+		android:layout_marginBottom="12dp"
+		>
 
 		<android.support.design.widget.TextInputLayout
 			android:layout_width="match_parent"
@@ -38,7 +40,7 @@
 				android:layout_height="wrap_content"
 				android:inputType="textPersonName"
 				android:ems="10"
-				android:id="@+id/editText"
+				android:id="@+id/etNewName"
 				android:hint="Name"
 				android:selectAllOnFocus="false"
 				android:layout_weight="1"
@@ -49,7 +51,8 @@
 		<LinearLayout
 			android:orientation="horizontal"
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content">
+			android:layout_height="wrap_content"
+			>
 
 			<TextView
 				android:text="Custom Color"
@@ -70,13 +73,14 @@
 				android:layout_height="wrap_content"
 				android:id="@+id/switch1"
 				android:layout_weight="1"
+
 				android:layout_gravity="center_vertical"/>
 
 		</LinearLayout>
 
 		<android.support.v7.widget.RecyclerView
 			android:layout_width="match_parent"
-			android:layout_height="match_parent"
+			android:layout_height="wrap_content"
 			android:id="@+id/rvNewNotebook"
 			android:overScrollMode="never"
 			>

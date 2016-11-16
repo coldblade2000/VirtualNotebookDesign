@@ -5,12 +5,14 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:id="@+id/activity_notebook_selection"
 	android:layout_width="match_parent"
+
 	android:layout_height="match_parent"
 	tools:context="com.twotowerstudios.virtualnotebookdesign.NotebookSelection.NotebookSelection">
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:id="@+id/relativeLayout">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -18,35 +20,8 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             android:elevation="4dp" />
-		<android.support.design.widget.FloatingActionButton
-			android:id="@+id/fabSelection"
-			android:layout_width="56dp"
-			android:layout_height="56dp"
-			android:src="@mipmap/plus"
-			android:elevation="8dp"
-			android:layout_marginRight="@dimen/fab_margin_right"
-			android:layout_marginEnd="@dimen/fab_margin_right"
-			android:layout_marginBottom="@dimen/fab_margin_bottom"
-			android:layout_alignParentBottom="true"
-			android:layout_alignParentRight="true"
-			android:layout_alignParentEnd="true"
-			app:fabSize="normal" />
-		<android.support.design.widget.FloatingActionButton
-			android:id="@+id/fabAddBlock"
-			android:layout_width="56dp"
-			android:layout_height="56dp"
-			app:fabSize="normal"
-			android:elevation="8dp"
-			app:srcCompat="@drawable/ic_note_add_white_24px"
-			android:tint="@android:color/white"
-			app:backgroundTint="@color/colorPrimary"
-			android:layout_marginBottom="20dp"
-			android:layout_above="@+id/fabSelection"
-			android:layout_alignLeft="@+id/fabSelection"
-			android:layout_alignStart="@+id/fabSelection"
-			android:translationY="60dp"
-			android:visibility="gone"
-			/>
+
+
 
 		<android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
@@ -56,6 +31,40 @@
             android:id="@+id/rvnotebookselection">
 
         </android.support.v7.widget.RecyclerView>
+
     </RelativeLayout>
 
+	<android.support.design.widget.FloatingActionButton
+		android:id="@+id/fabSelection"
+		android:layout_width="56dp"
+		android:layout_height="56dp"
+		android:src="@mipmap/plus"
+		android:elevation="8dp"
+		android:layout_marginRight="@dimen/fab_margin_right"
+		android:layout_marginEnd="@dimen/fab_margin_right"
+		android:layout_marginBottom="@dimen/fab_margin_bottom"
+		android:layout_alignParentBottom="true"
+		android:layout_alignParentRight="true"
+		android:layout_alignParentEnd="true"
+		app:fabSize="normal"
+		app:layout_behavior="com.twotowerstudios.virtualnotebookdesign.NotebookSelection.ScrollAwareFABBehavior"
+		app:layout_anchor="@id/rvnotebookselection"
+		app:layout_anchorGravity="bottom|right"/>
+
+	<android.support.design.widget.FloatingActionButton
+		android:id="@+id/fabAddBlock"
+		android:layout_width="56dp"
+		android:layout_height="56dp"
+		app:fabSize="normal"
+		android:elevation="8dp"
+		android:layout_marginRight="@dimen/fab_margin_right"
+		android:layout_marginEnd="@dimen/fab_margin_right"
+		android:layout_marginBottom="@dimen/fab_margin_bottom_2nd"
+		app:srcCompat="@drawable/ic_note_add_white_24px"
+		android:tint="@android:color/white"
+		app:backgroundTint="@color/colorPrimary"
+		android:translationY="60dp"
+		android:visibility="gone"
+		app:layout_anchor="@id/rvnotebookselection"
+		app:layout_anchorGravity="bottom|right"/>
 </android.support.design.widget.CoordinatorLayout>

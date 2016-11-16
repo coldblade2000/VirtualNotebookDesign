@@ -20,9 +20,12 @@ import java.util.List;
  * Created by Panther II on 22/10/2016.
  */
 
-public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelectionAdapter.ViewHolder>{
+public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelectionAdapter.ViewHolder> /*implements NewNotebookFragment.ToAdapterInterface*/{
 	Context context;
 	List<Notebook> notebookList;
+
+
+
 	public static class ViewHolder extends RecyclerView.ViewHolder{
 
 		public TextView tvCardNameSel, tvCardSub, tvPageCount;
@@ -54,9 +57,9 @@ public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelec
 	 	 Notebook notebookSelection = notebookList.get(position);
 	 	 holder.tvCardNameSel.setText(""+notebookSelection.getName());
 		 Log.d("notebookselectadapter","notebookselection.getLastModified() is: "+notebookSelection.getLastModified());
-		 Log.d("notebookselectadapter","help.millisDateToString(notebookSelection.getLastModified()) "+help.millisDateToString(notebookSelection.getLastModified()));
+		 Log.d("notebookselectadapter","help.millisDateToString(notebookSelection.getLastModified()) "+ Helpers.millisDateToString(notebookSelection.getLastModified()));
 	 	 holder.tvCardSub.setText("Last modified on: "+
-				 help.millisDateToString(notebookSelection.getLastModified()));
+				 Helpers.millisDateToString(notebookSelection.getLastModified()));
 	 	 holder.tvPageCount.setText("" +notebookSelection.getNumOfPages()+ " pages");
 	 	 holder.ivCardImage.setColorFilter(Color.parseColor(notebookSelection.getColor()));
 	 }
@@ -64,4 +67,8 @@ public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelec
 	 public int getItemCount() {
 	 	return notebookList.size();
 	 }
+	/**@Override
+	public void refreshData() {
+		notifyDataSetChanged();
+	}*/
 }

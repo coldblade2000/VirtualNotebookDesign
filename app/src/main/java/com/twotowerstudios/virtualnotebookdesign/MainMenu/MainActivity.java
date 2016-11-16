@@ -29,7 +29,9 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.twotowerstudios.virtualnotebookdesign.BookLight.BookLight;
 import com.twotowerstudios.virtualnotebookdesign.BookLight.BookLightAdapter;
 import com.twotowerstudios.virtualnotebookdesign.Misc.FirstBookLightOffsetDecoration;
+import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 import com.twotowerstudios.virtualnotebookdesign.Misc.SharedPrefs;
+import com.twotowerstudios.virtualnotebookdesign.Notebook;
 import com.twotowerstudios.virtualnotebookdesign.NotebookSelection.NotebookSelection;
 import com.twotowerstudios.virtualnotebookdesign.R;
 
@@ -63,10 +65,8 @@ public class MainActivity extends AppCompatActivity {
         final LinearLayoutManager BookLightLayoutManager = new LinearLayoutManager(this);
         BookLightLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         BookLightRecyclerView.setLayoutManager(BookLightLayoutManager);
-
-        bookLightList = new ArrayList<>();
-        prepareBookLightList();
-        BookLightAdapter = new BookLightAdapter(this, bookLightList);
+        ArrayList<Notebook> notebookList = new Helpers().getNotebookList(getApplicationContext());
+        BookLightAdapter = new BookLightAdapter(this, notebookList);
         BookLightRecyclerView.setAdapter(BookLightAdapter);
         //==================
         isMainfabOpen = false;
@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         });
+
         /**PrimaryDrawerItem item1 = new PrimaryDrawerItem().withIdentifier(1).withName("Primary one");
         SecondaryDrawerItem item2 = new SecondaryDrawerItem().withIdentifier(2).withName("Secondary One");*/
         final IProfile h1 = new ProfileDrawerItem().withName("Header 1");

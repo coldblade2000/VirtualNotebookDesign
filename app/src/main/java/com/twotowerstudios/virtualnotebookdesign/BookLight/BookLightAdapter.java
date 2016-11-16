@@ -9,9 +9,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.twotowerstudios.virtualnotebookdesign.Notebook;
 import com.twotowerstudios.virtualnotebookdesign.R;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by Panther II on 10/10/2016.
@@ -20,7 +21,7 @@ import java.util.List;
 public class BookLightAdapter  extends RecyclerView.Adapter<BookLightAdapter.ViewHolder>{
 
 	protected Context context;
-	private List<BookLight> bookList;
+	private ArrayList<Notebook> bookList;
 	public static class ViewHolder extends RecyclerView.ViewHolder {
 		// each data item is just a string in this case
 		public ImageView ivBook;
@@ -39,7 +40,7 @@ public class BookLightAdapter  extends RecyclerView.Adapter<BookLightAdapter.Vie
 
 		}
 	}
-	public BookLightAdapter (Context context, List<BookLight> bookList){
+	public BookLightAdapter (Context context, ArrayList<Notebook> bookList){
 		this.bookList = bookList;
 		this.context = context;
 	}
@@ -51,9 +52,8 @@ public class BookLightAdapter  extends RecyclerView.Adapter<BookLightAdapter.Vie
 	}
 	@Override
 	public void onBindViewHolder(ViewHolder holder, int position){
-		BookLight bookLight = bookList.get(position);
-		holder.tvName.setText(bookLight.getName());
-		holder.ivBook.setColorFilter(Color.parseColor(bookLight.getBookColor()));
+		holder.tvName.setText(bookList.get(position).getName());
+		holder.ivBook.setColorFilter(Color.parseColor(bookList.get(position).getColor()));
 	}
 
 	@Override

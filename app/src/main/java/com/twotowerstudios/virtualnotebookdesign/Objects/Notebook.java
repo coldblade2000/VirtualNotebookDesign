@@ -1,5 +1,7 @@
 package com.twotowerstudios.virtualnotebookdesign.Objects;
 
+import android.content.Context;
+
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 
 import org.parceler.Parcel;
@@ -9,28 +11,34 @@ import org.parceler.Parcel;
  */
 @Parcel
 public class Notebook {
-	public String name,color;
-	public int numOfPages;
+	public String name;
+	public int numOfPages,color,accentColor;
 	public long lastModified;
 	//public ArrayList<Page> pages;
 	
-	public Notebook(String name, String color,
-					int numOfPages, long lastModified ){
+	public Notebook(String name, int color,
+					int numOfPages, long lastModified, Context context){
 		this.name = name;
 		this.lastModified = lastModified;
 		this.color = color;
 		this.numOfPages = numOfPages;
+		this.accentColor=Helpers.getSingleColorAccent(context,color);
 	}
-	public Notebook(String name, String color){
+	public Notebook(String name, int color, int accentColor){
 		this.name=name;
 		this.color=color;
 		this.lastModified=Helpers.getCurrentTimeInMillis();
 		this.numOfPages=0;
+		this.accentColor=accentColor;
 	}
 	public Notebook(){}
-	public String getColor() {return  color;}
+	public int getColor() {return  color;}
 
-	public void setColor(String color) {this.color = color;}
+	public void setColor(int color) {this.color = color;}
+
+	public int getAccentColor() {return accentColor;}
+
+	public void setAccentColor(int accentColor) {this.accentColor = accentColor;}
 
 	public String getName() {return  name;}
 

@@ -1,12 +1,14 @@
 package com.twotowerstudios.virtualnotebookdesign.Initialization;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 import com.twotowerstudios.virtualnotebookdesign.Misc.SharedPrefs;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
+import com.twotowerstudios.virtualnotebookdesign.R;
 
 import java.util.ArrayList;
 
@@ -43,44 +45,44 @@ public class InitNotebooks {
 			try {
 				ArrayList<Notebook> list = new Helpers().getNotebookList(context);
 
-				Notebook a = new Notebook("debug", "#999999", 404, Helpers.stringDataToMillis("2016/01/01"));list.add(a);
-				a = new Notebook("Science","#795548", 29, Helpers.stringDataToMillis("2016/11/10"));list.add(a);
-				a = new Notebook("ECL","#607d8b", 18, Helpers.stringDataToMillis("2016/12/26"));list.add(a);
-				a = new Notebook("Art","#3f51b5", 32, Helpers.stringDataToMillis("2016/08/15"));list.add(a);
-				a = new Notebook("Science","#00bcd4", 22, Helpers.stringDataToMillis("2016/01/20"));list.add(a);
-				a = new Notebook("Science","#8bc34a", 44, Helpers.stringDataToMillis("2016/12/07"));list.add(a);
-				a = new Notebook("Biology","#009688", 65, Helpers.stringDataToMillis("2016/04/29"));list.add(a);
-				a = new Notebook("Robotics","#795548", 11, Helpers.stringDataToMillis("2016/06/06"));list.add(a);
-				a = new Notebook("English","#e91e63", 65, Helpers.stringDataToMillis("2016/07/18"));list.add(a);
-				a = new Notebook("Biology","#9c27b0", 83, Helpers.stringDataToMillis("2016/01/15"));list.add(a);
-				a = new Notebook("Economy","#607d8b", 47, Helpers.stringDataToMillis("2016/11/04"));list.add(a);
-				a = new Notebook("Politics","#ff9800", 50, Helpers.stringDataToMillis("2016/05/22"));list.add(a);
-				a = new Notebook("Politics","#ffc107", 28, Helpers.stringDataToMillis("2016/12/27"));list.add(a);
-				a = new Notebook("Politics","#00bcd4", 95, Helpers.stringDataToMillis("2016/11/02"));list.add(a);
-				a = new Notebook("Science","#ffeb3b", 30, Helpers.stringDataToMillis("2016/07/21"));list.add(a);
-				a = new Notebook("Robotics","#ff9800", 78, Helpers.stringDataToMillis("2016/10/29"));list.add(a);Log.d("populateDebugBooks", "successfully wrote all debug books");
+				Notebook a = new Notebook("debug", ContextCompat.getColor(context, R.color.md_grey_500), 404, Helpers.stringDataToMillis("2016/01/01"),context);list.add(a);
+				a = new Notebook("Science",ContextCompat.getColor(context, R.color.md_brown_500), 29, Helpers.stringDataToMillis("2016/11/10"),context);list.add(a);
+				a = new Notebook("ECL",ContextCompat.getColor(context, R.color.md_blue_grey_500), 18, Helpers.stringDataToMillis("2016/12/26"),context);list.add(a);
+				a = new Notebook("Art",ContextCompat.getColor(context, R.color.md_indigo_500), 32, Helpers.stringDataToMillis("2016/08/15"),context);list.add(a);
+				a = new Notebook("Science",ContextCompat.getColor(context, R.color.md_cyan_500), 22, Helpers.stringDataToMillis("2016/01/20"),context);list.add(a);
+				a = new Notebook("Science",ContextCompat.getColor(context, R.color.md_lime_500), 44, Helpers.stringDataToMillis("2016/12/07"),context);list.add(a);
+				a = new Notebook("Biology",ContextCompat.getColor(context, R.color.md_teal_500), 65, Helpers.stringDataToMillis("2016/04/29"),context);list.add(a);
+				a = new Notebook("Robotics",ContextCompat.getColor(context, R.color.md_brown_500), 11, Helpers.stringDataToMillis("2016/06/06"),context);list.add(a);
+				a = new Notebook("English",ContextCompat.getColor(context, R.color.md_pink_500), 65, Helpers.stringDataToMillis("2016/07/18"),context);list.add(a);
+				a = new Notebook("Biology",ContextCompat.getColor(context, R.color.md_purple_500), 83, Helpers.stringDataToMillis("2016/01/15"),context);list.add(a);
+				a = new Notebook("Economy",ContextCompat.getColor(context, R.color.md_blue_grey_500), 47, Helpers.stringDataToMillis("2016/11/04"),context);list.add(a);
+				a = new Notebook("Politics",ContextCompat.getColor(context, R.color.md_orange_500), 50, Helpers.stringDataToMillis("2016/05/22"),context);list.add(a);
+				a = new Notebook("Politics",ContextCompat.getColor(context, R.color.md_amber_500), 28, Helpers.stringDataToMillis("2016/12/27"),context);list.add(a);
+				a = new Notebook("Politics",ContextCompat.getColor(context, R.color.md_cyan_500), 95, Helpers.stringDataToMillis("2016/11/02"),context);list.add(a);
+				a = new Notebook("Science",ContextCompat.getColor(context, R.color.md_yellow_500), 30, Helpers.stringDataToMillis("2016/07/21"),context);list.add(a);
+				a = new Notebook("Robotics",ContextCompat.getColor(context, R.color.md_orange_500), 78, Helpers.stringDataToMillis("2016/10/29"),context);list.add(a);Log.d("populateDebugBooks", "successfully wrote all debug books");
 				Gson gson = new Gson();
 
 				new Helpers().writeStringToFile(gson.toJson(list), context, "Notebooks.json");
 			} catch (Exception e) {
 				ArrayList<Notebook> list = new ArrayList<>();
 
-				Notebook a = new Notebook("debug", "#999999", 404, Helpers.stringDataToMillis("2016/01/01"));list.add(a);
-				a = new Notebook("Science","#795548", 29, Helpers.stringDataToMillis("2016/11/10"));list.add(a);
-				a = new Notebook("ECL","#607d8b", 18, Helpers.stringDataToMillis("2016/12/26"));list.add(a);
-				a = new Notebook("Art","#3f51b5", 32, Helpers.stringDataToMillis("2016/08/15"));list.add(a);
-				a = new Notebook("Science","#00bcd4", 22, Helpers.stringDataToMillis("2016/01/20"));list.add(a);
-				a = new Notebook("Science","#8bc34a", 44, Helpers.stringDataToMillis("2016/12/07"));list.add(a);
-				a = new Notebook("Biology","#009688", 65, Helpers.stringDataToMillis("2016/04/29"));list.add(a);
-				a = new Notebook("Robotics","#795548", 11, Helpers.stringDataToMillis("2016/06/06"));list.add(a);
-				a = new Notebook("English","#e91e63", 65, Helpers.stringDataToMillis("2016/07/18"));list.add(a);
-				a = new Notebook("Biology","#9c27b0", 83, Helpers.stringDataToMillis("2016/01/15"));list.add(a);
-				a = new Notebook("Economy","#607d8b", 47, Helpers.stringDataToMillis("2016/11/04"));list.add(a);
-				a = new Notebook("Politics","#ff9800", 50, Helpers.stringDataToMillis("2016/05/22"));list.add(a);
-				a = new Notebook("Politics","#ffc107", 28, Helpers.stringDataToMillis("2016/12/27"));list.add(a);
-				a = new Notebook("Politics","#00bcd4", 95, Helpers.stringDataToMillis("2016/11/02"));list.add(a);
-				a = new Notebook("Science","#ffeb3b", 30, Helpers.stringDataToMillis("2016/07/21"));list.add(a);
-				a = new Notebook("Robotics","#ff9800", 78, Helpers.stringDataToMillis("2016/10/29"));list.add(a);Log.d("populateDebugBooks", "successfully wrote all debug books");
+				Notebook a = new Notebook("debug", ContextCompat.getColor(context, R.color.md_grey_500), 404, Helpers.stringDataToMillis("2016/01/01"),context);list.add(a);
+				a = new Notebook("Science",ContextCompat.getColor(context, R.color.md_brown_500), 29, Helpers.stringDataToMillis("2016/11/10"),context);list.add(a);
+				a = new Notebook("ECL",ContextCompat.getColor(context, R.color.md_blue_grey_500), 18, Helpers.stringDataToMillis("2016/12/26"),context);list.add(a);
+				a = new Notebook("Art",ContextCompat.getColor(context, R.color.md_indigo_500), 32, Helpers.stringDataToMillis("2016/08/15"),context);list.add(a);
+				a = new Notebook("Science",ContextCompat.getColor(context, R.color.md_cyan_500), 22, Helpers.stringDataToMillis("2016/01/20"),context);list.add(a);
+				a = new Notebook("Science",ContextCompat.getColor(context, R.color.md_lime_500), 44, Helpers.stringDataToMillis("2016/12/07"),context);list.add(a);
+				a = new Notebook("Biology",ContextCompat.getColor(context, R.color.md_teal_500), 65, Helpers.stringDataToMillis("2016/04/29"),context);list.add(a);
+				a = new Notebook("Robotics",ContextCompat.getColor(context, R.color.md_brown_500), 11, Helpers.stringDataToMillis("2016/06/06"),context);list.add(a);
+				a = new Notebook("English",ContextCompat.getColor(context, R.color.md_pink_500), 65, Helpers.stringDataToMillis("2016/07/18"),context);list.add(a);
+				a = new Notebook("Biology",ContextCompat.getColor(context, R.color.md_purple_500), 83, Helpers.stringDataToMillis("2016/01/15"),context);list.add(a);
+				a = new Notebook("Economy",ContextCompat.getColor(context, R.color.md_blue_grey_500), 47, Helpers.stringDataToMillis("2016/11/04"),context);list.add(a);
+				a = new Notebook("Politics",ContextCompat.getColor(context, R.color.md_orange_500), 50, Helpers.stringDataToMillis("2016/05/22"),context);list.add(a);
+				a = new Notebook("Politics",ContextCompat.getColor(context, R.color.md_amber_500), 28, Helpers.stringDataToMillis("2016/12/27"),context);list.add(a);
+				a = new Notebook("Politics",ContextCompat.getColor(context, R.color.md_cyan_500), 95, Helpers.stringDataToMillis("2016/11/02"),context);list.add(a);
+				a = new Notebook("Science",ContextCompat.getColor(context, R.color.md_yellow_500), 30, Helpers.stringDataToMillis("2016/07/21"),context);list.add(a);
+				a = new Notebook("Robotics",ContextCompat.getColor(context, R.color.md_orange_500), 78, Helpers.stringDataToMillis("2016/10/29"),context);list.add(a);Log.d("populateDebugBooks", "successfully wrote all debug books");
 
 				Log.d("populateDebugBooks", "successfully wrote all debug books");
 				Gson gson = new Gson();

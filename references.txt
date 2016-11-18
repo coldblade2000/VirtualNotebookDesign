@@ -18,3 +18,4 @@ https://github.com/the-blue-alliance/spectrum/blob/master/spectrum/src/main/java
 Walters, N. (2016). the-blue-alliance/spectrum. GitHub. Retrieved 15 November 2016, from https://github.com/the-blue-alliance/spectrum/blob/master/spectrum/src/main/java/com/thebluealliance/spectrum/internal/ColorUtil.java
 http://stackoverflow.com/questions/40601129/how-to-change-colors-of-parent-fragment-and-views-of-recyclerview-depending-on-o
 http://saulmm.github.io/mastering-coordinator
+http://stackoverflow.com/questions/32655342/how-to-randomly-receive-a-material-design-color

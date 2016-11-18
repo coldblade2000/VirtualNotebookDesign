@@ -22,9 +22,19 @@
 			app:layout_scrollFlags="scroll|exitUntilCollapsed"
 			android:fitsSystemWindows="true"
 			app:expandedTitleMarginStart="48dp"
-			app:expandedTitleMarginEnd="64dp"
-			>
+			app:expandedTitleMarginEnd="40dp"
+			app:expandedTitleMarginBottom="60dp"
 
+			>
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="48dp"
+				android:id="@+id/tvSub"
+				android:layout_marginRight="64dp"
+				android:text="Last modified: 5 hours ago"
+				android:layout_gravity="bottom"
+				android:layout_marginBottom="20dp"/>
 			<android.support.v7.widget.Toolbar
 				android:id="@+id/toolbarNotebook"
 				android:layout_height="?android:attr/actionBarSize"
@@ -49,14 +59,15 @@
 			<TextView
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:text="@string/large_text"/>
+				android:text="@string/large_text"
+				/>
 		</android.support.v4.widget.NestedScrollView>
 	</LinearLayout>
 	<android.support.design.widget.FloatingActionButton
 		android:id="@+id/fabnotebookmain"
-		android:layout_width="40dp"
-		android:layout_height="40dp"
-		app:fabSize="mini"
+		android:layout_width="56dp"
+		android:layout_height="56dp"
+		app:fabSize="normal"
 		android:src="@drawable/ic_note_add_white_24px"
 		android:tint="@android:color/white"
 		app:backgroundTint="@color/colorPrimary"

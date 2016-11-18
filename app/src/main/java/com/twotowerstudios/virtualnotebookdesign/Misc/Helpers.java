@@ -2,12 +2,14 @@ package com.twotowerstudios.virtualnotebookdesign.Misc;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
+import com.twotowerstudios.virtualnotebookdesign.R;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -18,10 +20,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-
-/**
- * Created by coldblade2000 on 31/10/16.
- */
 
 public class Helpers {
 
@@ -142,27 +140,58 @@ public class Helpers {
 			}
 		}
 	}
-	public static ArrayList<String> getPossibleColors(){
-		ArrayList<String> colors = new ArrayList<>();
-		colors.add("#f44336");
-		colors.add("#e91e63");
-		colors.add("#9c27b0");
-		colors.add("#673ab7");
-		colors.add("#3f51b5");
-		colors.add("#2196f3");
-		colors.add("#03a9f4");
-		colors.add("#00bcd4");
-		colors.add("#009688");
-		colors.add("#4caf50");
-		colors.add("#8bc34a");
-		colors.add("#cddc39");
-		colors.add("#ffeb3b");
-		colors.add("#ffc107");
-		colors.add("#ff9800");
-		colors.add("#ff5722");
-		colors.add("#795548");
-		colors.add("#607d8b");
+
+	public static ArrayList<Integer> getPossibleColors(Context context){
+		ArrayList<Integer> colors = new ArrayList<>();
+		colors.add(ContextCompat.getColor(context,R.color.md_red_500));
+		colors.add(ContextCompat.getColor(context,R.color.md_pink_500));
+		colors.add(ContextCompat.getColor(context,R.color.md_purple_500));
+		colors.add(ContextCompat.getColor(context,R.color.md_deep_purple_500));
+		colors.add(ContextCompat.getColor(context,R.color.md_indigo_500));
+		colors.add(ContextCompat.getColor(context,R.color.md_blue_500));
+		colors.add(ContextCompat.getColor(context,R.color.md_light_blue_500));
+		colors.add(ContextCompat.getColor(context,R.color.md_cyan_500));
+		colors.add(ContextCompat.getColor(context,R.color.md_teal_500));
+		colors.add(ContextCompat.getColor(context,R.color.md_green_500));
+		colors.add(ContextCompat.getColor(context,R.color.md_light_green_500));
+		colors.add(ContextCompat.getColor(context,R.color.md_lime_500));
+		colors.add(ContextCompat.getColor(context,R.color.md_yellow_500));
+		colors.add(ContextCompat.getColor(context,R.color.md_amber_500));
+		colors.add(ContextCompat.getColor(context,R.color.md_orange_500));
+		colors.add(ContextCompat.getColor(context,R.color.md_deep_orange_500));
+		colors.add(ContextCompat.getColor(context,R.color.md_brown_500));
+		colors.add(ContextCompat.getColor(context,R.color.md_blue_grey_500));
+
 		return colors;
+	}
+
+	public static ArrayList<Integer> getColorAccents(Context context){
+		ArrayList<Integer> colors = new ArrayList<>();
+		colors.add(ContextCompat.getColor(context,R.color.md_light_blue_A200));
+		colors.add(ContextCompat.getColor(context,R.color.md_green_A200));
+		colors.add(ContextCompat.getColor(context,R.color.md_green_A200));
+		colors.add(ContextCompat.getColor(context,R.color.md_orange_A200));
+		colors.add(ContextCompat.getColor(context,R.color.md_amber_A200));
+		colors.add(ContextCompat.getColor(context,R.color.md_amber_A200));
+		colors.add(ContextCompat.getColor(context,R.color.md_pink_A200));
+		colors.add(ContextCompat.getColor(context,R.color.md_orange_A200));
+		colors.add(ContextCompat.getColor(context,R.color.md_deep_orange_A200));
+		colors.add(ContextCompat.getColor(context,R.color.md_deep_orange_A200));
+		colors.add(ContextCompat.getColor(context,R.color.md_pink_A200));
+		colors.add(ContextCompat.getColor(context,R.color.md_red_A200));
+		colors.add(ContextCompat.getColor(context,R.color.md_purple_A200));
+		colors.add(ContextCompat.getColor(context,R.color.md_blue_A200));
+		colors.add(ContextCompat.getColor(context,R.color.md_light_blue_A200));
+		colors.add(ContextCompat.getColor(context,R.color.md_deep_orange_A200));
+		colors.add(ContextCompat.getColor(context,R.color.md_indigo_A200));
+		colors.add(ContextCompat.getColor(context,R.color.md_pink_A200));
+
+		return colors;
+	}
+	public static int getSingleColorAccent(Context context, int color){
+		ArrayList<Integer> colors = getPossibleColors(context);
+		int accentColor = getColorAccents(context).get(colors.indexOf(color));
+		return accentColor;
 	}
 	/**
 	This isColorDark method was copied word for word from the "Spectrum" library, written by
@@ -170,8 +199,7 @@ public class Helpers {
 	license, which has no restrictions, except that the creater is not liable for anything,
 	and both the license and copyright notices must be written somewhere. This will be done
 	 in the journal, references.txt and report.
-	 */
-	/**
+
 	 The MIT License (MIT)
 
 	 Copyright (c) 2016 The Blue Alliance
@@ -181,8 +209,7 @@ public class Helpers {
 	 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 	 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
-	/**
+
 	 *
 	 * Walters, N. (2016). the-blue-alliance/spectrum. GitHub. Retrieved 15 November 2016, from https://github.com/the-blue-alliance/spectrum/blob/master/spectrum/src/main/java/com/thebluealliance/spectrum/internal/ColorUtil.java
 	 */

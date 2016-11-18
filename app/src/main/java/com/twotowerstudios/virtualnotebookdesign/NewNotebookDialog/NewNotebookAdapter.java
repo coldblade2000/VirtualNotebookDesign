@@ -1,7 +1,6 @@
 package com.twotowerstudios.virtualnotebookdesign.NewNotebookDialog;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -21,7 +20,7 @@ import java.util.ArrayList;
 
 public class NewNotebookAdapter extends RecyclerView.Adapter<NewNotebookAdapter.ViewHolder>{
 	Context context;
-	ArrayList<String> colors = new ArrayList<>();
+	ArrayList<Integer> colors = new ArrayList<>();
 	int activeColor;
 	FromAdapterInterface clickListener;
 	public NewNotebookAdapter(){
@@ -40,7 +39,7 @@ public class NewNotebookAdapter extends RecyclerView.Adapter<NewNotebookAdapter.
 			toolbar = (Toolbar) itemView.findViewById(R.id.newnotebooktoolbar);
 		}
 	}
-	public NewNotebookAdapter(Context context, ArrayList<String> colors, int activeColor, FromAdapterInterface clickListener){
+	public NewNotebookAdapter(Context context, ArrayList<Integer> colors, int activeColor, FromAdapterInterface clickListener){
 		this.context=context;
 		this.colors=colors;
 		this.activeColor=activeColor;
@@ -64,7 +63,7 @@ public class NewNotebookAdapter extends RecyclerView.Adapter<NewNotebookAdapter.
 		}else if (position!=activeColor){
 			holder.ivSwatch.setImageDrawable(drawableHollow.mutate());
 		}
-		holder.ivSwatch.setColorFilter(Color.parseColor(colors.get(position)));
+		holder.ivSwatch.setColorFilter(colors.get(position));
 
 		holder.ivSwatch.setOnClickListener(new View.OnClickListener() {
 			@Override

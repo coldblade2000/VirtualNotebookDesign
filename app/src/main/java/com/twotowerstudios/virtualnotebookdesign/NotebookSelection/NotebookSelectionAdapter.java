@@ -1,7 +1,6 @@
 package com.twotowerstudios.virtualnotebookdesign.NotebookSelection;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
@@ -67,7 +66,7 @@ public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelec
 	 	 holder.tvCardSub.setText("Last modified: "+
 				 DateUtils.getRelativeTimeSpanString(notebookSelection.getLastModified(), Helpers.getCurrentTimeInMillis(), DateUtils.SECOND_IN_MILLIS));
 	 	 holder.tvPageCount.setText("" +notebookSelection.numOfPages+ " Pages");
-	 	 holder.ivCardImage.setColorFilter(Color.parseColor(notebookSelection.getColor()));
+	 	 holder.ivCardImage.setColorFilter(notebookSelection.getColor());
 		 holder.card.setOnClickListener(new View.OnClickListener() {
 			 @Override
 			 public void onClick(View view) {

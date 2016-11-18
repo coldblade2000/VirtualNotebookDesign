@@ -1,7 +1,6 @@
 package com.twotowerstudios.virtualnotebookdesign.MainMenu;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,7 +44,7 @@ public class BookLightAdapter  extends RecyclerView.Adapter<BookLightAdapter.Vie
 	@Override
 	public void onBindViewHolder(ViewHolder holder, int position){
 		holder.tvName.setText(bookList.get(position).getName());
-		holder.ivBook.setColorFilter(Color.parseColor(bookList.get(position).getColor()));
+		holder.ivBook.setColorFilter(bookList.get(position).getColor());
 	}
 
 	@Override

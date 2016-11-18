@@ -12,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 
@@ -26,17 +27,16 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
-import com.twotowerstudios.virtualnotebookdesign.BookLight.BookLight;
-import com.twotowerstudios.virtualnotebookdesign.BookLight.BookLightAdapter;
+import com.twotowerstudios.virtualnotebookdesign.Initialization.InitNotebooks;
 import com.twotowerstudios.virtualnotebookdesign.Misc.FirstBookLightOffsetDecoration;
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 import com.twotowerstudios.virtualnotebookdesign.Misc.SharedPrefs;
-import com.twotowerstudios.virtualnotebookdesign.Notebook;
 import com.twotowerstudios.virtualnotebookdesign.NotebookSelection.NotebookSelection;
+import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
 import com.twotowerstudios.virtualnotebookdesign.R;
 
+import java.io.File;
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView.Adapter BookLightAdapter;
     //private RecyclerView.LayoutManager CommonBooksCardLayoutManager;
 
-    private List<BookLight> bookLightList;
 
     boolean isMainfabOpen;
     @Override
@@ -58,6 +57,14 @@ public class MainActivity extends AppCompatActivity {
 
 		SharedPrefs.setBoolean(getApplicationContext(), "debug", true);
 
+		if(new Helpers().getStringFromFile("Notebooks.json", getApplicationContext())==null
+		|| new Helpers().getStringFromFile("Notebooks.json", getApplicationContext())==""){
+			File file = new File(getFilesDir(),"Notebooks.json");
+		}
+		if(InitNotebooks.isDebug(getApplicationContext())){
+			Log.d("isDebugNoteSelect", "DEBUG MODE = true;");
+			InitNotebooks.populateDebugBooks(getApplicationContext(), InitNotebooks.isDebug(getApplicationContext()));
+		}
            //    ============================
 
         BookLightRecyclerView = (RecyclerView) findViewById(R.id.rvCommonBooks);
@@ -159,8 +166,9 @@ public class MainActivity extends AppCompatActivity {
                                 intent = new Intent(MainActivity.this, NotebookSelection.class);
                             }
                             if (intent != null){
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                //intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                                 startActivity(intent);
+								finish();
                             }
                         }
                         return false;
@@ -174,16 +182,6 @@ public class MainActivity extends AppCompatActivity {
 		FirstBookLightOffsetDecoration firstBookLightOffsetDecoration = new FirstBookLightOffsetDecoration((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, getResources().getDisplayMetrics()));
    		BookLightRecyclerView.addItemDecoration(firstBookLightOffsetDecoration);
     }
-    private void prepareBookLightList(){
-        BookLight a = new BookLight("Spanish", "BLUE"); bookLightList.add(a);
-        a = new BookLight("English", "RED"); bookLightList.add(a);
-        a = new BookLight("Chemistry", "GREEN"); bookLightList.add(a);
-        a = new BookLight("Art", "MAGENTA"); bookLightList.add(a);
-        a = new BookLight("ECL", "YELLOW"); bookLightList.add(a);
-        a = new BookLight("Design and Technology", "CYAN"); bookLightList.add(a);
-        a = new BookLight("Physics", "#555555"); bookLightList.add(a);
-    }
-
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         accountHeader.getHeaderBackgroundView().setColorFilter(ContextCompat.getColor(this, R.color.colorAccent), PorterDuff.Mode.MULTIPLY);

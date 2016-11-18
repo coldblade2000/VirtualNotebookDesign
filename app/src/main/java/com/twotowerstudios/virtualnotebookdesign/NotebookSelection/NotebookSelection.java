@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,7 +14,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -28,18 +26,20 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
-import com.twotowerstudios.virtualnotebookdesign.DeleteNotebookFragment;
 import com.twotowerstudios.virtualnotebookdesign.Initialization.InitNotebooks;
 import com.twotowerstudios.virtualnotebookdesign.MainMenu.MainActivity;
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 import com.twotowerstudios.virtualnotebookdesign.NewNotebookDialog.NewNotebookFragment;
-import com.twotowerstudios.virtualnotebookdesign.Notebook;
+import com.twotowerstudios.virtualnotebookdesign.NotebookMain.NotebookMainActivity;
+import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
 import com.twotowerstudios.virtualnotebookdesign.R;
+
+import org.parceler.Parcels;
 
 import java.io.File;
 import java.util.ArrayList;
 
-public class NotebookSelection extends AppCompatActivity implements DeleteNotebookFragment.DeleteNotebookDialogListener{
+public class NotebookSelection extends AppCompatActivity implements NotebookSelectionAdapter.SelectionToNotebookInterface {
     private AccountHeader accountHeader;
     private RecyclerView rvNotebookSelection;
     private RecyclerView.Adapter rvNotebookSelectionAdapter;
@@ -98,7 +98,7 @@ public class NotebookSelection extends AppCompatActivity implements DeleteNotebo
         rvNotebookSelection.setLayoutManager(rvNotebookSelectionManager);
 		notebookSelectionCardList = new Helpers().getNotebookList(getApplicationContext());
         //prepareNotebookSelectionCards();
-        rvNotebookSelectionAdapter = new NotebookSelectionAdapter(this, notebookSelectionCardList);
+        rvNotebookSelectionAdapter = new NotebookSelectionAdapter(this, notebookSelectionCardList, this);
         rvNotebookSelection.setAdapter(rvNotebookSelectionAdapter);
 		//===================================================================
         final IProfile h1 = new ProfileDrawerItem().withName("Header 1");
@@ -155,8 +155,9 @@ public class NotebookSelection extends AppCompatActivity implements DeleteNotebo
 
                             }
                             if (intent != null){
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                //intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
                                 startActivity(intent);
+								finish();
                             }
                         }
                         return false;
@@ -211,26 +212,6 @@ public class NotebookSelection extends AppCompatActivity implements DeleteNotebo
         }
         return super.onOptionsItemSelected(item);
     }
-    @Override
-    public void onFinishEditDialog(String inputText) {
-		Toast.makeText(getApplicationContext(), "Deleted book", Toast.LENGTH_SHORT);
-        try{
-            new Helpers().deleteNotebookByName(inputText, getApplicationContext());
-			Log.d("DeleteBook", "Deleted book");
-
-        }catch (Exception e){
-            e.printStackTrace();
-            Log.d("DeleteBook", "Failed to delete book");
-			Toast.makeText(getApplicationContext(), "Failed to delete book", Toast.LENGTH_SHORT);
-        }
-    }
-    private void showEditDialog(){
-        FragmentManager fm = getSupportFragmentManager();
-
-        DeleteNotebookFragment deleteNotebookFragment = DeleteNotebookFragment.newInstance("Delete Notebook");
-
-        deleteNotebookFragment.show(fm, "fragment_delete_notebook");
-    }
 
 	public static boolean isMainfabOpen(){
 		return isMainfabOpen;
@@ -240,5 +221,12 @@ public class NotebookSelection extends AppCompatActivity implements DeleteNotebo
 		notebookSelectionCardList.add(newNotebook);
 		rvNotebookSelectionAdapter.notifyDataSetChanged();
 		rvNotebookSelection.getLayoutManager().scrollToPosition(notebookSelectionCardList.size());
+	}
+
+	@Override
+	public void openNotebookActivity(int position) {
+		Intent intent = new Intent(this, NotebookMainActivity.class);
+		intent.putExtra("notebook", Parcels.wrap(notebookSelectionCardList.get(position)));
+		startActivity(intent);
 	}
 }

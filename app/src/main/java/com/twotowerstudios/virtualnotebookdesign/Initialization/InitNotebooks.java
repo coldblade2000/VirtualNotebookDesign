@@ -6,7 +6,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 import com.twotowerstudios.virtualnotebookdesign.Misc.SharedPrefs;
-import com.twotowerstudios.virtualnotebookdesign.Notebook;
+import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
 
 import java.util.ArrayList;
 

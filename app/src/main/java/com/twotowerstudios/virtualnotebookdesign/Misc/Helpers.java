@@ -7,7 +7,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.twotowerstudios.virtualnotebookdesign.Notebook;
+import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -42,8 +42,24 @@ public class Helpers {
 		return millis;
 	}
 
-	public static String millisDateToString(Long millis) {
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd, HH:mm:ss");
+	/**
+	 * Format meanings
+	 * 1: yyyy/MM/dd, HH:mm:ss
+	 * 2:
+	 */
+	public static String millisDateToString(Long millis, int format) {
+		SimpleDateFormat formatter;
+		switch(format){
+			case 1:
+				formatter = new SimpleDateFormat("yyyy/MM/dd, HH:mm:ss");
+				break;
+			case 2:
+				formatter = new SimpleDateFormat("yyyy/MM/dd, HH:mm");
+				break;
+			default:
+				formatter = new SimpleDateFormat("yyyy/MM/dd, HH:mm:ss");
+		}
+
 		formatter.setLenient(false);
 
 		Calendar calendar = Calendar.getInstance();

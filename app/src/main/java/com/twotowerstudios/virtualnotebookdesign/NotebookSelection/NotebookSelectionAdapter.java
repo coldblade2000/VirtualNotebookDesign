@@ -2,6 +2,7 @@ package com.twotowerstudios.virtualnotebookdesign.NotebookSelection;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
-import com.twotowerstudios.virtualnotebookdesign.Notebook;
+import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
 import com.twotowerstudios.virtualnotebookdesign.R;
 
 import java.util.List;
@@ -24,12 +25,17 @@ public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelec
 	Context context;
 	List<Notebook> notebookList;
 
+	SelectionToNotebookInterface Interface;
 
+	public interface SelectionToNotebookInterface{
+		void openNotebookActivity(int position);
+	}
 
 	public static class ViewHolder extends RecyclerView.ViewHolder{
 
 		public TextView tvCardNameSel, tvCardSub, tvPageCount;
 		public ImageView ivCardImage;
+		public CardView card;
 
 		public ViewHolder(View view){
 			super(view);
@@ -37,11 +43,13 @@ public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelec
 			tvCardNameSel = (TextView) view.findViewById(R.id.tvCardNameSel);
 			tvCardSub = (TextView) view.findViewById(R.id.tvCardSub);
 			tvPageCount = (TextView) view.findViewById(R.id.tvPageCount);
+			card = (CardView) view.findViewById(R.id.notebookSelectionCard);
 		}
 	}
-	public NotebookSelectionAdapter(Context context, List<Notebook> list){
+	public NotebookSelectionAdapter(Context context, List<Notebook> list, SelectionToNotebookInterface Interface){
 		this.context = context;
 		this.notebookList = list;
+		this.Interface=Interface;
 	}
 	@Override
 	public NotebookSelectionAdapter.ViewHolder onCreateViewHolder (ViewGroup parent, int viewType){
@@ -52,16 +60,22 @@ public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelec
 
 
 	 @Override
-	 public void onBindViewHolder(ViewHolder holder, int position){
-		 Helpers help = new Helpers();
+	 public void onBindViewHolder(ViewHolder holder,  int position){
 	 	 Notebook notebookSelection = notebookList.get(position);
+		 final int position2 = position;
 	 	 holder.tvCardNameSel.setText(""+notebookSelection.getName());
 		 Log.d("notebookselectadapter","notebookselection.getLastModified() is: "+notebookSelection.getLastModified());
-		 Log.d("notebookselectadapter","help.millisDateToString(notebookSelection.getLastModified()) "+ Helpers.millisDateToString(notebookSelection.getLastModified()));
+		 Log.d("notebookselectadapter","help.millisDateToString(notebookSelection.getLastModified()) "+ Helpers.millisDateToString(notebookSelection.getLastModified(), 1));
 	 	 holder.tvCardSub.setText("Last modified on: "+
-				 Helpers.millisDateToString(notebookSelection.getLastModified()));
-	 	 holder.tvPageCount.setText("" +notebookSelection.getNumOfPages()+ " pages");
+				 Helpers.millisDateToString(notebookSelection.getLastModified(), 1));
+	 	 holder.tvPageCount.setText("" +notebookSelection.numOfPages+ " Pages");
 	 	 holder.ivCardImage.setColorFilter(Color.parseColor(notebookSelection.getColor()));
+		 holder.card.setOnClickListener(new View.OnClickListener() {
+			 @Override
+			 public void onClick(View view) {
+				 Interface.openNotebookActivity(position2);
+			 }
+		 });
 	 }
 	 @Override
 	 public int getItemCount() {

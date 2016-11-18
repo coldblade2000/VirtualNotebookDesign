@@ -21,8 +21,8 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
-import com.twotowerstudios.virtualnotebookdesign.Notebook;
 import com.twotowerstudios.virtualnotebookdesign.NotebookSelection.NotebookSelection;
+import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
 import com.twotowerstudios.virtualnotebookdesign.R;
 
 import java.util.ArrayList;

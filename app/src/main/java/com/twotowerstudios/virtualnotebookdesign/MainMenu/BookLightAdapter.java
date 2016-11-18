@@ -1,4 +1,4 @@
-package com.twotowerstudios.virtualnotebookdesign.BookLight;
+package com.twotowerstudios.virtualnotebookdesign.MainMenu;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.twotowerstudios.virtualnotebookdesign.Notebook;
+import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
 import com.twotowerstudios.virtualnotebookdesign.R;
 
 import java.util.ArrayList;
@@ -26,18 +26,10 @@ public class BookLightAdapter  extends RecyclerView.Adapter<BookLightAdapter.Vie
 		// each data item is just a string in this case
 		public ImageView ivBook;
 		public TextView tvName;
-		/**public TextView cardHeader, cardSubtitle;
-		public ImageView imageView;
-		public Vie w cardHeaderBarColored;*/
 		public ViewHolder(View view) {
 			super(view);
 			ivBook = (ImageView) view.findViewById(R.id.ivBookLight);
 			tvName = (TextView) view.findViewById(R.id.tvName);
-			/**cardHeader = (TextView) view.findViewById(R.id.cardHeader);
-			cardSubtitle = (TextView) view.findViewById(R.id.cardSubtitle);
-			imageView = (ImageView) view.findViewById(R.id.imageView);
-			cardHeaderBarColored = (View) view.findViewById(R.id.cardHeaderBarColored);*/
-
 		}
 	}
 	public BookLightAdapter (Context context, ArrayList<Notebook> bookList){

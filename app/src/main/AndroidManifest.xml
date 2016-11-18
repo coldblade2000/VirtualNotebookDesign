@@ -17,10 +17,13 @@
         </activity>
         <activity
             android:name=".NotebookSelection.NotebookSelection"
+			android:launchMode="singleTask"
             android:label="@string/title_activity_notebook_selection" />
         <activity
-            android:name=".NotebookMainActivity"
-            android:label="@string/title_activity_notebook_main"></activity>
+            android:name=".NotebookMain.NotebookMainActivity"
+            android:label="@string/title_activity_notebook_main"
+			android:parentActivityName=".NotebookSelection.NotebookSelection"
+			></activity>
     </application>
 
 </manifest>

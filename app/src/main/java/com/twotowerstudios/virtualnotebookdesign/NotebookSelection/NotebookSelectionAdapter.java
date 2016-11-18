@@ -4,7 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,10 +64,8 @@ public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelec
 	 	 Notebook notebookSelection = notebookList.get(position);
 		 final int position2 = position;
 	 	 holder.tvCardNameSel.setText(""+notebookSelection.getName());
-		 Log.d("notebookselectadapter","notebookselection.getLastModified() is: "+notebookSelection.getLastModified());
-		 Log.d("notebookselectadapter","help.millisDateToString(notebookSelection.getLastModified()) "+ Helpers.millisDateToString(notebookSelection.getLastModified(), 1));
-	 	 holder.tvCardSub.setText("Last modified on: "+
-				 Helpers.millisDateToString(notebookSelection.getLastModified(), 1));
+	 	 holder.tvCardSub.setText("Last modified: "+
+				 DateUtils.getRelativeTimeSpanString(notebookSelection.getLastModified(), Helpers.getCurrentTimeInMillis(), DateUtils.SECOND_IN_MILLIS));
 	 	 holder.tvPageCount.setText("" +notebookSelection.numOfPages+ " Pages");
 	 	 holder.ivCardImage.setColorFilter(Color.parseColor(notebookSelection.getColor()));
 		 holder.card.setOnClickListener(new View.OnClickListener() {

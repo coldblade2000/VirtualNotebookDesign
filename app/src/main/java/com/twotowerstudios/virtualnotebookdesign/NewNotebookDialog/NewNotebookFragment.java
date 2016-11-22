@@ -31,7 +31,7 @@ import java.util.Random;
 public class NewNotebookFragment extends DialogFragment implements NewNotebookAdapter.FromAdapterInterface {
 
 	RecyclerView rvNewNotebook;
-	int activeColor;
+	int activeColorIndex, activeColor;
 	Helpers help = new Helpers();
 	ArrayList<Integer> colors;
 	ArrayList<Notebook> notebookList;
@@ -54,7 +54,8 @@ public class NewNotebookFragment extends DialogFragment implements NewNotebookAd
 	public void onViewCreated(View v, Bundle savedInstanceState){
 
 		colors= Helpers.getPossibleColors(getContext());
-		activeColor=new Random().nextInt(colors.size());
+		activeColorIndex =new Random().nextInt(colors.size());
+		activeColor = colors.get(activeColorIndex);
 		swColors = (Switch) v.findViewById(R.id.switch1);
 
 		etNewName = (EditText) v.findViewById(R.id.etNewName);
@@ -80,7 +81,7 @@ public class NewNotebookFragment extends DialogFragment implements NewNotebookAd
 					}
 					if (!notebookExists){
 						Toast.makeText(getContext(),"Created notebook called: \""+nameReal+"\"", Toast.LENGTH_SHORT).show();
-						((NotebookSelection)getActivity()).refreshData(new Notebook(nameReal,colors.get(activeColor), Helpers.getSingleColorAccent(getContext(),activeColor)));
+						((NotebookSelection)getActivity()).refreshData(new Notebook(nameReal,colors.get(activeColorIndex), Helpers.getSingleColorAccent(getContext(), activeColor)));
 						dismiss();
 						//refresh.refreshData();
 					}
@@ -92,7 +93,7 @@ public class NewNotebookFragment extends DialogFragment implements NewNotebookAd
 		toolbar.inflateMenu(R.menu.newnotebook);
 		toolbar.setTitle("Create new Notebook");
 
-		if(Helpers.isColorDark(colors.get(activeColor))){
+		if(Helpers.isColorDark(activeColor)){
 			toolbar.setTitleTextColor(getResources().getColor(R.color.md_dark_primary_text));
 		}else{
 			toolbar.setTitleTextColor(getResources().getColor(R.color.md_light_primary_text));
@@ -100,9 +101,9 @@ public class NewNotebookFragment extends DialogFragment implements NewNotebookAd
 		rvNewNotebook = (RecyclerView) v.findViewById(R.id.rvNewNotebook);
 		final GridLayoutManager rvNotebookManager = new GridLayoutManager(getContext(),6);
 		rvNewNotebook.setLayoutManager(rvNotebookManager);
-		NewNotebookAdapter adapter= new NewNotebookAdapter(getContext(), Helpers.getPossibleColors(getContext()), activeColor, this);
+		NewNotebookAdapter adapter= new NewNotebookAdapter(getContext(), Helpers.getPossibleColors(getContext()), activeColorIndex, this);
 		rvNewNotebook.setVisibility(View.GONE);
-		toolbar.setBackgroundColor(Helpers.getPossibleColors(getContext()).get(activeColor));
+		toolbar.setBackgroundColor(activeColor);
 		rvNewNotebook.setAdapter(adapter);
 		Log.d("onViewCreated", ""+rvNewNotebook.getWidth());
 
@@ -147,7 +148,8 @@ public class NewNotebookFragment extends DialogFragment implements NewNotebookAd
 			toolbar.setTitleTextColor(getResources().getColor(R.color.md_light_primary_text));
 		}
 		toolbar.setBackgroundColor(colors.get(position));
-		this.activeColor=position;
+		this.activeColorIndex =position;
+		this.activeColor= colors.get(activeColorIndex);
 	}
 
 	@Override

@@ -33,7 +33,7 @@ public class NewNotebookFragment extends DialogFragment implements NewNotebookAd
 	RecyclerView rvNewNotebook;
 	int activeColor;
 	Helpers help = new Helpers();
-	ArrayList<Integer> colors= Helpers.getPossibleColors(getContext());
+	ArrayList<Integer> colors;
 	ArrayList<Notebook> notebookList;
 	Toolbar toolbar;
 	Switch swColors;
@@ -53,6 +53,7 @@ public class NewNotebookFragment extends DialogFragment implements NewNotebookAd
 	@Override
 	public void onViewCreated(View v, Bundle savedInstanceState){
 
+		colors= Helpers.getPossibleColors(getContext());
 		activeColor=new Random().nextInt(colors.size());
 		swColors = (Switch) v.findViewById(R.id.switch1);
 

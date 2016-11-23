@@ -35,6 +35,7 @@ public class NotebookMainActivity extends AppCompatActivity {
 		notebook = Parcels.unwrap(getIntent().getParcelableExtra("notebook"));
 
 		tvSub = (TextView) findViewById(R.id.tvSub);
+		tvSub.setText("Last Modified: "+ DateUtils.getRelativeTimeSpanString(notebook.getLastModified(), Helpers.getCurrentTimeInMillis(), DateUtils.SECOND_IN_MILLIS));
 
 		AppBarLayout appbarlayoutNotebook = (AppBarLayout) findViewById(R.id.appbarlayoutNotebook);
 		appbarlayoutNotebook.setBackgroundColor(notebook.color);

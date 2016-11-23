@@ -6,30 +6,34 @@ import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 
 import org.parceler.Parcel;
 
+import java.util.ArrayList;
+
 /**
  * Created by Panther II on 30/10/2016.
  */
 @Parcel
 public class Notebook {
 	public String name;
-	public int numOfPages,color,accentColor;
+	public int debugNumOfPages,color,accentColor;
 	public long lastModified;
-	//public ArrayList<Page> pages;
+	public ArrayList<Page> pages;
 	
 	public Notebook(String name, int color,
-					int numOfPages, long lastModified, Context context){
+					int debugNumOfPages, long lastModified, Context context){
 		this.name = name;
 		this.lastModified = lastModified;
 		this.color = color;
-		this.numOfPages = numOfPages;
+		this.debugNumOfPages = debugNumOfPages;
 		this.accentColor=Helpers.getSingleColorAccent(context,color);
+		this.pages = new ArrayList<>();
 	}
 	public Notebook(String name, int color, int accentColor){
 		this.name=name;
 		this.color=color;
 		this.lastModified=Helpers.getCurrentTimeInMillis();
-		this.numOfPages=0;
+		this.debugNumOfPages =0;
 		this.accentColor=accentColor;
+		this.pages = new ArrayList<>();
 	}
 	public Notebook(){}
 	public int getColor() {return  color;}
@@ -50,9 +54,11 @@ public class Notebook {
 		this.lastModified = lastModified;
 	}
 
-	public int getNumOfPages() {return numOfPages;}
+	public int getDebugNumOfPages() {return debugNumOfPages;}
 
-	public void setNumOfPages(int numOfPages) {
-		 this.numOfPages = numOfPages;
+	public int getNumberOfPages(){return pages.size();}
+
+	public void setDebugNumOfPages(int debugNumOfPages) {
+		 this.debugNumOfPages = debugNumOfPages;
 	}
 }

@@ -65,7 +65,7 @@ public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelec
 	 	 holder.tvCardNameSel.setText(""+notebookSelection.getName());
 	 	 holder.tvCardSub.setText("Last modified: "+
 				 DateUtils.getRelativeTimeSpanString(notebookSelection.getLastModified(), Helpers.getCurrentTimeInMillis(), DateUtils.SECOND_IN_MILLIS));
-	 	 holder.tvPageCount.setText("" +notebookSelection.numOfPages+ " Pages");
+	 	 holder.tvPageCount.setText("" +notebookSelection.debugNumOfPages + " Pages");
 	 	 holder.ivCardImage.setColorFilter(notebookSelection.getColor());
 		 holder.card.setOnClickListener(new View.OnClickListener() {
 			 @Override

@@ -52,7 +52,7 @@
 			android:layout_marginEnd="16dp" />
 
 		<TextView
-			android:text="44 numOfPages"
+			android:text="44 debugNumOfPages"
 			android:layout_width="55dp"
 			android:layout_height="40dp"
 			android:id="@+id/tvPageCount"

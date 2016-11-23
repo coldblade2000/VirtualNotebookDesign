@@ -102,7 +102,7 @@ public class Helpers {
 
 	}
 	public  ArrayList<Notebook> getNotebookList(Context context){
-		ArrayList<Notebook> notebookList = new ArrayList<Notebook>();
+		ArrayList<Notebook> notebookList;
 		Gson gson = new Gson();
 
 		String fileString = getStringFromFile("Notebooks.json", context);

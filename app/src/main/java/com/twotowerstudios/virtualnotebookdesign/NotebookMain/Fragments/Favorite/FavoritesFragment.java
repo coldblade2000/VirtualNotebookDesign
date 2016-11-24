@@ -1,4 +1,4 @@
-package com.twotowerstudios.virtualnotebookdesign.NotebookMain.Fragments;
+package com.twotowerstudios.virtualnotebookdesign.NotebookMain.Fragments.Favorite;
 
 
 import android.os.Bundle;

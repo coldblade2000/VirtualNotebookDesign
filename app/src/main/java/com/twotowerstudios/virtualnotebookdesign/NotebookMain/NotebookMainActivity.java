@@ -13,7 +13,9 @@ import android.support.v7.widget.Toolbar;
 import android.text.format.DateUtils;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.twotowerstudios.virtualnotebookdesign.MainMenu.MainActivity;
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 import com.twotowerstudios.virtualnotebookdesign.NotebookSelection.NotebookSelection;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
@@ -27,13 +29,15 @@ public class NotebookMainActivity extends AppCompatActivity {
 	Notebook notebook;
 	FloatingActionButton fab;
 	CollapsingToolbarLayout collapsingToolbarLayout;
+	String parent;
 	TextView tvSub;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notebook_main);
 		notebook = Parcels.unwrap(getIntent().getParcelableExtra("notebook"));
-
+		parent = getIntent().getExtras().getString("parent");
+		Toast.makeText(getApplicationContext(), "Parent is: "+ parent, Toast.LENGTH_SHORT).show();
 		tvSub = (TextView) findViewById(R.id.tvSub);
 		tvSub.setText("Last Modified: "+ DateUtils.getRelativeTimeSpanString(notebook.getLastModified(), Helpers.getCurrentTimeInMillis(), DateUtils.SECOND_IN_MILLIS));
 
@@ -67,11 +71,20 @@ public class NotebookMainActivity extends AppCompatActivity {
 			// Respond to the action bar's Up/Home button
 			case android.R.id.home:
 				// Launch the correct Activity here
-				Intent intent = new Intent(this, NotebookSelection.class);
-				intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-				startActivity(intent);
-				finish();
-				return true;
+				if (parent.equals("MainActivity")){
+					Intent intent = new Intent(this, NotebookSelection.class);
+					intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+					startActivity(intent);
+					finish();
+					return true;
+				}else if(parent.equals("NotebookSelection")){
+					Intent intent = new Intent(this, MainActivity.class);
+					intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+					startActivity(intent);
+					finish();
+					return true;
+				}
+
 		}
 		return super.onOptionsItemSelected(item);
 	}

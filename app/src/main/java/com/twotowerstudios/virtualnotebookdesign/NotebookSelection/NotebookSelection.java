@@ -227,6 +227,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 	public void openNotebookActivity(int position) {
 		Intent intent = new Intent(this, NotebookMainActivity.class);
 		intent.putExtra("notebook", Parcels.wrap(notebookSelectionCardList.get(position)));
+        intent.putExtra("parent","NotebookSelection");
 		startActivity(intent);
 	}
 }

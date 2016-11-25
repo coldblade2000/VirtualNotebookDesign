@@ -31,14 +31,17 @@ import com.twotowerstudios.virtualnotebookdesign.Initialization.InitNotebooks;
 import com.twotowerstudios.virtualnotebookdesign.Misc.FirstBookLightOffsetDecoration;
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 import com.twotowerstudios.virtualnotebookdesign.Misc.SharedPrefs;
+import com.twotowerstudios.virtualnotebookdesign.NotebookMain.NotebookMainActivity;
 import com.twotowerstudios.virtualnotebookdesign.NotebookSelection.NotebookSelection;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
 import com.twotowerstudios.virtualnotebookdesign.R;
 
+import org.parceler.Parcels;
+
 import java.io.File;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements BookLightAdapter.MainMenuToNotebook{
 
     //https://github.com/mikepenz/MaterialDrawer
 
@@ -186,5 +189,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         accountHeader.getHeaderBackgroundView().setColorFilter(ContextCompat.getColor(this, R.color.colorAccent), PorterDuff.Mode.MULTIPLY);
         super.onPostCreate(savedInstanceState);
+    }
+
+    @Override
+    public void openNotebook(Notebook notebook) {
+        Intent intent = new Intent(this, NotebookMainActivity.class);
+        intent.putExtra("notebook", Parcels.wrap(notebook));
+        intent.putExtra("parent", "MainActivity");
+        startActivity(intent);
+
     }
 }

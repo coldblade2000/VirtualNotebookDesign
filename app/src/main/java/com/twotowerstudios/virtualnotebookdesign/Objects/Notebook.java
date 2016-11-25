@@ -17,6 +17,7 @@ public class Notebook {
 	public int debugNumOfPages,color,accentColor;
 	public long lastModified;
 	public ArrayList<Page> pages;
+	public ArrayList<Integer> favoritePages;
 	
 	public Notebook(String name, int color,
 					int debugNumOfPages, long lastModified, Context context){
@@ -60,5 +61,17 @@ public class Notebook {
 
 	public void setDebugNumOfPages(int debugNumOfPages) {
 		 this.debugNumOfPages = debugNumOfPages;
+	}
+
+	public void addToFavorites(int index){
+		favoritePages.add(index);
+	}
+
+	public ArrayList<Integer> getFavoritePages() {
+		return favoritePages;
+	}
+
+	public ArrayList<Page> getPages() {
+		return pages;
 	}
 }

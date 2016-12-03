@@ -160,7 +160,7 @@ public class Helpers {
 		colors.add(ContextCompat.getColor(context,R.color.md_orange_500));
 		colors.add(ContextCompat.getColor(context,R.color.md_deep_orange_500));
 		colors.add(ContextCompat.getColor(context,R.color.md_brown_500));
-		colors.add(ContextCompat.getColor(context,R.color.md_blue_grey_500));
+		colors.add(ContextCompat.getColor(context,R.color.md_grey_500));
 
 		return colors;
 	}
@@ -190,6 +190,8 @@ public class Helpers {
 	}
 	public static int getSingleColorAccent(Context context, int color){
 		ArrayList<Integer> colors = getPossibleColors(context);
+		String TAG = "getSingleColorAccent";
+		Log.d(TAG, "colors.size()== "+colors.size());
 		int accentColor = getColorAccents(context).get(colors.indexOf(color));
 		return accentColor;
 	}

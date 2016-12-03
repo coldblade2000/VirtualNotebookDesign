@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateUtils;
@@ -19,9 +21,12 @@ import com.twotowerstudios.virtualnotebookdesign.MainMenu.MainActivity;
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 import com.twotowerstudios.virtualnotebookdesign.NotebookSelection.NotebookSelection;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
+import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
 import com.twotowerstudios.virtualnotebookdesign.R;
 
 import org.parceler.Parcels;
+
+import java.util.ArrayList;
 
 public class NotebookMainActivity extends AppCompatActivity {
 
@@ -31,7 +36,10 @@ public class NotebookMainActivity extends AppCompatActivity {
 	CollapsingToolbarLayout collapsingToolbarLayout;
 	String parent;
 	TextView tvSub;
-    @Override
+	ViewPager viewPager;
+	FragmentPagerAdapter viewPagerAdapter;
+
+	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notebook_main);
@@ -62,6 +70,11 @@ public class NotebookMainActivity extends AppCompatActivity {
 		toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
 		fab = (FloatingActionButton) findViewById(R.id.fabnotebookmain);
 		fab.setBackgroundTintList(ColorStateList.valueOf(Helpers.getSingleColorAccent(getApplicationContext(),notebook.color)));
+
+		viewPager = (ViewPager) findViewById(R.id.viewpager);
+		ArrayList<Page> pageList = notebook.pages;
+		viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(),pageList);
+		viewPager.setAdapter(viewPagerAdapter);
 
 	}
 

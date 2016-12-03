@@ -1,4 +1,4 @@
-package com.twotowerstudios.virtualnotebookdesign.NotebookMain.Fragments.Favorite;
+package com.twotowerstudios.virtualnotebookdesign.NotebookMain.Fragments.EveryPage;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -17,14 +17,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * Created by coldblade2000 on 11/24/16.
+ * Created by Panther II on 02/12/2016.
  */
 
-public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.ViewHolder>{
-	Context context;
-	ArrayList<Page> favPageList = new ArrayList<>();
+public class EveryPageAdapter extends RecyclerView.Adapter<EveryPageAdapter.ViewHolder>{
 
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+	Context context;
+	ArrayList<Page> pageList = new ArrayList<>();
+	public class ViewHolder extends RecyclerView.ViewHolder {
 		public TextView tvFavPage;
 		public TextView tvFavName;
 		public TextView tvFavSub;
@@ -39,41 +39,39 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
 			tvFavItemCount = (TextView) itemView.findViewById(R.id.tvFavItemCount);
 			ivFavStar = (ImageView) itemView.findViewById(R.id.ivFavStar);
 		}
-    }
-    public FavoritesAdapter(Context context, ArrayList<Page> list){
-       for(Page a : list){
-		   if(a.isFavorite()){
-			   favPageList.add(a);
-		   }
-	   }
-		if (favPageList!=null) {
-			Collections.sort(favPageList);
-		}else{
-			favPageList.add(new Page("DEBUG", 406));
-		}
-		this.context=context;
-    }
-
-    @Override
-    public FavoritesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+	}
+	public EveryPageAdapter(){}
+	public EveryPageAdapter(Context context, ArrayList<Page> list){
+		this.context = context;
+		Collections.sort(list);
+		pageList = list;
+	}
+	@Override
+	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.pagelistitem, parent, false));
 	}
 
 
-    @Override
-    public void onBindViewHolder(FavoritesAdapter.ViewHolder holder, final int position) {
-		Page page = favPageList.get(position);
+	@Override
+	public void onBindViewHolder(ViewHolder holder, int position) {
+		Page page = pageList.get(position);
 		holder.tvFavPage.setText(page.getPageNumber());
 		holder.tvFavName.setText(page.getName());
 		holder.tvFavSub.setText("Last Modified "+
-				DateUtils.getRelativeTimeSpanString(page.getLastModifiedMillis(), Helpers.getCurrentTimeInMillis(),DateUtils.SECOND_IN_MILLIS));
+				DateUtils.getRelativeTimeSpanString(page.getLastModifiedMillis(),Helpers.getCurrentTimeInMillis(),DateUtils.SECOND_IN_MILLIS));
 		holder.tvFavItemCount.setText(page.getNumberOfItems());
-		holder.ivFavStar.setVisibility(View.VISIBLE);
+		if(page.isFavorite()){
+			holder.ivFavStar.setVisibility(View.VISIBLE);
+		}else{
+			holder.ivFavStar.setVisibility(View.INVISIBLE);
+		}
 
-    }
+	}
 
-    @Override
-    public int getItemCount() {
-        return favPageList.size();
-    }
+	@Override
+	public int getItemCount() {
+		return pageList.size();
+	}
+
+
 }

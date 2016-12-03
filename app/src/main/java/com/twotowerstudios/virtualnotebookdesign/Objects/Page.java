@@ -10,17 +10,19 @@ import java.util.ArrayList;
  * Created by Panther II on 17/11/2016.
  */
 @Parcel
-public class Page {
+public class Page implements Comparable<Page>{
 	public ArrayList<Object> content;
 	public String name;
 	public int pageNumber;
 	public long lastModifiedMillis;
+	public boolean isFavorite;
 
 	public Page(String name, int pageNumber){
 		this.name = name;
 		this.pageNumber = pageNumber;
 		this.content = new ArrayList<Object>();
 		this.lastModifiedMillis = Helpers.getCurrentTimeInMillis();
+		this.isFavorite=true;
 	}
 	public Page(){}
 
@@ -34,4 +36,10 @@ public class Page {
 	public long getLastModifiedMillis() {return lastModifiedMillis;}
 	public String getName(){return name;}
 	public int getNumberOfItems(){return content.size();}
+	public boolean isFavorite(){return isFavorite;}
+
+	@Override
+	public int compareTo(Page page) {
+		return this.pageNumber-page.pageNumber;
+	}
 }

@@ -17,8 +17,7 @@ public class Notebook {
 	public int debugNumOfPages,color,accentColor;
 	public long lastModified;
 	public ArrayList<Page> pages;
-	public ArrayList<Integer> favoritePages;
-	
+
 	public Notebook(String name, int color,
 					int debugNumOfPages, long lastModified, Context context){
 		this.name = name;
@@ -32,9 +31,10 @@ public class Notebook {
 		this.name=name;
 		this.color=color;
 		this.lastModified=Helpers.getCurrentTimeInMillis();
-		this.debugNumOfPages =0;
+		this.debugNumOfPages =5;
 		this.accentColor=accentColor;
 		this.pages = new ArrayList<>();
+		this.pages.add(new Page("DEBUG PAGE", 405));
 	}
 	public Notebook(){}
 	public int getColor() {return  color;}
@@ -63,15 +63,10 @@ public class Notebook {
 		 this.debugNumOfPages = debugNumOfPages;
 	}
 
-	public void addToFavorites(int index){
-		favoritePages.add(index);
-	}
-
-	public ArrayList<Integer> getFavoritePages() {
-		return favoritePages;
-	}
-
 	public ArrayList<Page> getPages() {
 		return pages;
+	}
+	public void addPage(Page page){
+		pages.add(page);
 	}
 }

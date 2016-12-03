@@ -69,7 +69,7 @@ public class InitNotebooks {
 
 				Notebook a = new Notebook("debug", ContextCompat.getColor(context, R.color.md_grey_500), 404, Helpers.stringDataToMillis("2016/01/01"),context);list.add(a);
 				a = new Notebook("Science",ContextCompat.getColor(context, R.color.md_brown_500), 29, Helpers.stringDataToMillis("2016/11/10"),context);list.add(a);
-				a = new Notebook("ECL",ContextCompat.getColor(context, R.color.md_blue_grey_500), 18, Helpers.stringDataToMillis("2016/12/26"),context);list.add(a);
+				a = new Notebook("ECL",ContextCompat.getColor(context, R.color.md_yellow_500), 18, Helpers.stringDataToMillis("2016/12/26"),context);list.add(a);
 				a = new Notebook("Art",ContextCompat.getColor(context, R.color.md_indigo_500), 32, Helpers.stringDataToMillis("2016/08/15"),context);list.add(a);
 				a = new Notebook("Science",ContextCompat.getColor(context, R.color.md_cyan_500), 22, Helpers.stringDataToMillis("2016/01/20"),context);list.add(a);
 				a = new Notebook("Science",ContextCompat.getColor(context, R.color.md_lime_500), 44, Helpers.stringDataToMillis("2016/12/07"),context);list.add(a);
@@ -77,7 +77,7 @@ public class InitNotebooks {
 				a = new Notebook("Robotics",ContextCompat.getColor(context, R.color.md_brown_500), 11, Helpers.stringDataToMillis("2016/06/06"),context);list.add(a);
 				a = new Notebook("English",ContextCompat.getColor(context, R.color.md_pink_500), 65, Helpers.stringDataToMillis("2016/07/18"),context);list.add(a);
 				a = new Notebook("Biology",ContextCompat.getColor(context, R.color.md_purple_500), 83, Helpers.stringDataToMillis("2016/01/15"),context);list.add(a);
-				a = new Notebook("Economy",ContextCompat.getColor(context, R.color.md_blue_grey_500), 47, Helpers.stringDataToMillis("2016/11/04"),context);list.add(a);
+				a = new Notebook("Economy",ContextCompat.getColor(context, R.color.md_brown_500), 47, Helpers.stringDataToMillis("2016/11/04"),context);list.add(a);
 				a = new Notebook("Politics",ContextCompat.getColor(context, R.color.md_orange_500), 50, Helpers.stringDataToMillis("2016/05/22"),context);list.add(a);
 				a = new Notebook("Politics",ContextCompat.getColor(context, R.color.md_amber_500), 28, Helpers.stringDataToMillis("2016/12/27"),context);list.add(a);
 				a = new Notebook("Politics",ContextCompat.getColor(context, R.color.md_cyan_500), 95, Helpers.stringDataToMillis("2016/11/02"),context);list.add(a);

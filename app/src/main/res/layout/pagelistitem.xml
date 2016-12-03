@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  xmlns:app="http://schemas.android.com/apk/res-auto"
+			  android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_margin="16dp">
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="16"
+			android:id="@+id/tvFavPage"
+			android:layout_marginRight="8dp"
+			android:textAppearance="@style/TextAppearance.AppCompat.Headline"
+			android:textSize="24sp"
+			android:textStyle="normal|bold|italic"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Modified 5 days ago. 12 items"
+			android:textColor="@color/accent"
+			android:id="@+id/tvFavSub"
+			android:layout_toRightOf="@id/tvFavPage"
+			android:layout_below="@+id/tvFavName"
+			android:layout_toEndOf="@+id/tvFavPage"
+			android:textSize="16sp"
+			android:fontFamily="sans-serif"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="The study of Genetics and Geriatrics"
+			android:id="@+id/tvFavName"
+			android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+			android:layout_toRightOf="@+id/tvFavPage"
+			android:layout_toLeftOf="@+id/ivFavStar"
+			android:textSize="16sp"
+			android:fontFamily="sans-serif"
+			android:textColor="?android:attr/textColorPrimary"/>
+
+		<ImageView
+			app:srcCompat="@drawable/ic_star_black_24dp"
+			android:id="@+id/ivFavStar"
+			android:tint="@color/colorAccent"
+			android:layout_alignParentRight="true"
+			android:layout_alignParentTop="true"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:visibility="visible"
+			android:layout_alignBottom="@id/tvFavName"/>
+
+		<TextView
+			android:layout_height="wrap_content"
+			android:layout_width="24dp"
+			android:text="87 items"
+			android:textSize="9sp"
+			android:textAlignment="center"
+			android:id="@+id/tvFavItemCount"
+			android:layout_below="@+id/ivFavStar"
+			android:layout_alignRight="@+id/ivFavStar"
+			android:layout_alignTop="@+id/tvFavSub"/>
+
+
+	</RelativeLayout>
+
+	<View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#dddddd"/>
+</LinearLayout>

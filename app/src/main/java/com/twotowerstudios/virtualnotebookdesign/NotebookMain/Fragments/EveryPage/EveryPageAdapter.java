@@ -43,7 +43,9 @@ public class EveryPageAdapter extends RecyclerView.Adapter<EveryPageAdapter.View
 	public EveryPageAdapter(){}
 	public EveryPageAdapter(Context context, ArrayList<Page> list){
 		this.context = context;
-		Collections.sort(list);
+		if (list != null) {
+			Collections.sort(list);
+		}
 		pageList = list;
 	}
 	@Override

@@ -83,6 +83,7 @@ public class NotebookMainActivity extends AppCompatActivity {
 		switch (item.getItemId()) {
 			// Respond to the action bar's Up/Home button
 			case android.R.id.home:
+				Toast.makeText(getApplicationContext(),"Back CLicked", Toast.LENGTH_SHORT).show();
 				// Launch the correct Activity here
 				if (parent.equals("MainActivity")){
 					Intent intent = new Intent(this, NotebookSelection.class);

@@ -28,7 +28,6 @@ public class FavoritesFragment extends Fragment {
     public FavoritesFragment() {
         // Required empty public constructor
     }
-
     public static FavoritesFragment newInstance(int page, String title, ArrayList<Page> pageList) {
         FavoritesFragment fragment = new FavoritesFragment();
         Bundle args = new Bundle();
@@ -38,7 +37,6 @@ public class FavoritesFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +47,6 @@ public class FavoritesFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_favorites, container, false);
     }
 

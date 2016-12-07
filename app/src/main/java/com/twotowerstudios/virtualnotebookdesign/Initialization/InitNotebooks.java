@@ -8,9 +8,11 @@ import com.google.gson.Gson;
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 import com.twotowerstudios.virtualnotebookdesign.Misc.SharedPrefs;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
+import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
 import com.twotowerstudios.virtualnotebookdesign.R;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by Panther II on 30/10/2016.
@@ -89,6 +91,29 @@ public class InitNotebooks {
 
 				new Helpers().writeStringToFile(gson.toJson(list), context, "Notebooks.json");
 			}
+		}
+	}
+	public static ArrayList<Page> populateDebugNotebookPages(ArrayList<Page> list, int reps){
+		String TAG="InitNotebooks";
+		if (list == null||list.size()==0) {
+			Random r = new Random();
+			reps = r.nextInt(reps);
+			String[] names = {"Art","Biology","Chemistry",
+					"DT","ECL","English",
+					"History","Math","PE",
+					"Physics","Science","Spanish",
+					"Philosphy","Geography","Politics",
+					"Economy","I.C.T.","Robotics"};
+			int namesLength = names.length;
+			for(int i=0;i<reps;i++){
+                Page a = new Page(names[r.nextInt(namesLength)],r.nextInt(100)); list.add(a);
+				Log.d(TAG, "populateDebugNotebookPages: added new page.");
+			}
+			Log.d(TAG, "populateDebugNotebookPages: returned list");
+			return list;
+		} else {
+			Log.d("Helpers","PopulateDebugNotebookPages: list is not null or size != 0, returning list as-is");
+			return list;
 		}
 	}
 }

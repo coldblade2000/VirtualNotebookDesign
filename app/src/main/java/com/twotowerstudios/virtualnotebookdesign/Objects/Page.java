@@ -22,7 +22,7 @@ public class Page implements Comparable<Page>{
 		this.pageNumber = pageNumber;
 		this.content = new ArrayList<Object>();
 		this.lastModifiedMillis = Helpers.getCurrentTimeInMillis();
-		this.isFavorite=true;
+		this.isFavorite=false;
 	}
 	public Page(){}
 

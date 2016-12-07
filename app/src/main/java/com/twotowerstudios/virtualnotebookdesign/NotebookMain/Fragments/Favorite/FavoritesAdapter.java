@@ -63,11 +63,11 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
     @Override
     public void onBindViewHolder(FavoritesAdapter.ViewHolder holder, final int position) {
 		Page page = favPageList.get(position);
-		holder.tvFavPage.setText(page.getPageNumber());
-		holder.tvFavName.setText(page.getName());
+		holder.tvFavPage.setText(""+page.getPageNumber());
+		holder.tvFavName.setText(""+page.getName());
 		holder.tvFavSub.setText("Last Modified "+
 				DateUtils.getRelativeTimeSpanString(page.getLastModifiedMillis(), Helpers.getCurrentTimeInMillis(),DateUtils.SECOND_IN_MILLIS));
-		holder.tvFavItemCount.setText(page.getNumberOfItems());
+		holder.tvFavItemCount.setText(""+page.getNumberOfItems());
 		holder.ivFavStar.setVisibility(View.VISIBLE);
 
     }

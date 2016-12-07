@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.twotowerstudios.virtualnotebookdesign.Initialization.InitNotebooks;
 import com.twotowerstudios.virtualnotebookdesign.MainMenu.MainActivity;
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 import com.twotowerstudios.virtualnotebookdesign.NotebookSelection.NotebookSelection;
@@ -73,6 +74,9 @@ public class NotebookMainActivity extends AppCompatActivity {
 
 		viewPager = (ViewPager) findViewById(R.id.viewpager);
 		ArrayList<Page> pageList = notebook.pages;
+		if (pageList.size()==0||pageList==null){
+			pageList = InitNotebooks.populateDebugNotebookPages(pageList, 15);
+		}
 		viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(),pageList);
 		viewPager.setAdapter(viewPagerAdapter);
 
@@ -83,7 +87,6 @@ public class NotebookMainActivity extends AppCompatActivity {
 		switch (item.getItemId()) {
 			// Respond to the action bar's Up/Home button
 			case android.R.id.home:
-				Toast.makeText(getApplicationContext(),"Back CLicked", Toast.LENGTH_SHORT).show();
 				// Launch the correct Activity here
 				if (parent.equals("MainActivity")){
 					Intent intent = new Intent(this, NotebookSelection.class);

@@ -57,11 +57,11 @@ public class EveryPageAdapter extends RecyclerView.Adapter<EveryPageAdapter.View
 	@Override
 	public void onBindViewHolder(ViewHolder holder, int position) {
 		Page page = pageList.get(position);
-		holder.tvFavPage.setText(page.getPageNumber());
-		holder.tvFavName.setText(page.getName());
+		holder.tvFavPage.setText(""+page.getPageNumber());
+		holder.tvFavName.setText(""+page.getName());
 		holder.tvFavSub.setText("Last Modified "+
 				DateUtils.getRelativeTimeSpanString(page.getLastModifiedMillis(),Helpers.getCurrentTimeInMillis(),DateUtils.SECOND_IN_MILLIS));
-		holder.tvFavItemCount.setText(page.getNumberOfItems());
+		holder.tvFavItemCount.setText(""+page.getNumberOfItems());
 		if(page.isFavorite()){
 			holder.ivFavStar.setVisibility(View.VISIBLE);
 		}else{

@@ -41,7 +41,6 @@ public class FavoritesFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 		pageList = Parcels.unwrap(getArguments().getParcelable("list"));
-
     }
 
     @Override

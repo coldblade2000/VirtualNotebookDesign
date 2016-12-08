@@ -17,6 +17,7 @@ import java.util.ArrayList;
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 	private static int NUM_ITEMS = 2;
 	ArrayList<Page> pageList;
+	private String titles[] = {"All Pages", "Favorites"};
 	public ViewPagerAdapter(FragmentManager fm, ArrayList<Page> list) {
 		super(fm);
 		pageList = list;
@@ -27,14 +28,18 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 	public Fragment getItem(int position) {
 		switch(position){
 			case 0: //FavoritesFragment
-				return EveryPageFragment.newInstance(0, "All Pages",pageList);
+				return EveryPageFragment.newInstance(0, titles[0],pageList);
 			case 1:
-				return FavoritesFragment.newInstance(1, "Favorites",pageList);
+				return FavoritesFragment.newInstance(1, titles[1],pageList);
 			default:
 				return null;
 		}
 	}
 
+	@Override
+	public CharSequence getPageTitle(int position) {
+		return titles[position];
+	}
 
 	@Override
 	public int getCount() {

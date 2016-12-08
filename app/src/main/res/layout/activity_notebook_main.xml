@@ -49,23 +49,63 @@
 
 
 	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
 		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
 		app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-		<android.support.design.widget.TabLayout
-			android:id="@+id/sliding_tabs"
+		<RelativeLayout
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			app:tabMode="fixed" />
+			android:layout_height="match_parent"
 
-		<android.support.v4.view.ViewPager
-			android:id="@+id/viewpager"
+			android:background="#bbbbbb"
+			android:id="@+id/emptyNotebook">
+
+			<ImageView
+				app:srcCompat="@drawable/ic_note_add_white_24px"
+				android:id="@+id/imageView"
+				android:layout_width="88dp"
+				android:layout_height="88dp"
+				android:layout_marginTop="91dp"
+				android:layout_alignParentTop="true"
+				android:layout_centerHorizontal="true"/>
+
+			<TextView
+				android:text="There's nothing here. \nDo you want to add a new page?"
+				android:layout_height="wrap_content"
+				android:id="@+id/textView4"
+				android:layout_marginTop="23dp"
+				android:layout_width="200dp"
+				android:layout_below="@+id/imageView"
+				android:layout_centerHorizontal="true"
+				android:textAppearance="@style/TextAppearance.AppCompat.Title"
+				android:textAlignment="center"
+				android:textSize="20sp"
+				android:textColor="#333333"/>
+
+		</RelativeLayout>
+
+		<LinearLayout
 			android:layout_width="match_parent"
-			android:layout_height="0px"
-			android:layout_weight="1"/>
+			android:layout_height="match_parent"
+			android:orientation="vertical"
+			android:visibility="gone"
+			android:id="@+id/notEmptyNotebook">
 
+			<android.support.design.widget.TabLayout
+				android:id="@+id/sliding_tabs"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				app:tabMode="fixed" />
+
+			<android.support.v4.view.ViewPager
+				android:id="@+id/viewpager"
+				android:layout_width="match_parent"
+				android:layout_height="0px"
+				style="@style/MyCustomTabLayout"
+				android:layout_weight="1"/>
+
+		</LinearLayout>
 	</LinearLayout>
 
 	<android.support.design.widget.FloatingActionButton
@@ -73,7 +113,7 @@
 		android:layout_width="56dp"
 		android:layout_height="56dp"
 		app:fabSize="normal"
-		android:src="@drawable/ic_note_add_white_24px"
+		app:srcCompat="@drawable/ic_note_add_white_24px"
 		android:tint="@android:color/white"
 		app:backgroundTint="@color/colorPrimary"
 		android:visibility="visible"

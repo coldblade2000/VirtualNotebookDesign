@@ -2,6 +2,7 @@ package com.twotowerstudios.virtualnotebookdesign.MainMenu;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +28,7 @@ public class BookLightAdapter  extends RecyclerView.Adapter<BookLightAdapter.Vie
 	}
 
 	protected Context context;
-	private ArrayList<Notebook> bookList;
+	private ArrayList<Notebook> bookList = new ArrayList<>();
 	public static class ViewHolder extends RecyclerView.ViewHolder {
 		// each data item is just a string in this case
 		public ImageView ivBook;
@@ -51,13 +52,18 @@ public class BookLightAdapter  extends RecyclerView.Adapter<BookLightAdapter.Vie
 		return new ViewHolder(v);
 	}
 	@Override
-	public void onBindViewHolder(ViewHolder holder, final int position){
+	public void onBindViewHolder(ViewHolder holder, int position){
+		Log.d("", "onBindViewHolder: position = "+position);
+		final int position2 = position;
 		holder.tvName.setText(bookList.get(position).getName());
 		holder.ivBook.setColorFilter(bookList.get(position).getColor());
 		holder.rvBookLight.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				Interface.openNotebook(bookList.get(position));
+				if(bookList==null){
+					Log.d("" ,"onClick: booklist == null");
+				}
+				Interface.openNotebook(bookList.get(position2));
 			}
 		});
 	}

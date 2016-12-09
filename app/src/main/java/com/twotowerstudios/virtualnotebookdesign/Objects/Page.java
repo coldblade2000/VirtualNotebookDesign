@@ -15,6 +15,7 @@ public class Page implements Comparable<Page>{
 	public String name;
 	public int pageNumber;
 	public long lastModifiedMillis;
+	public long dateMillis;
 	public boolean isFavorite;
 
 	public Page(String name, int pageNumber){
@@ -23,6 +24,15 @@ public class Page implements Comparable<Page>{
 		this.content = new ArrayList<Object>();
 		this.lastModifiedMillis = Helpers.getCurrentTimeInMillis();
 		this.isFavorite=false;
+		this.dateMillis=0;
+	}
+	public Page(String name, int pageNumber, int dateMillis){
+		this.name = name;
+		this.pageNumber = pageNumber;
+		this.content = new ArrayList<Object>();
+		this.lastModifiedMillis = Helpers.getCurrentTimeInMillis();
+		this.isFavorite=false;
+		this.dateMillis=dateMillis;
 	}
 	public Page(){}
 
@@ -37,6 +47,10 @@ public class Page implements Comparable<Page>{
 	public String getName(){return name;}
 	public int getNumberOfItems(){return content.size();}
 	public boolean isFavorite(){return isFavorite;}
+
+	public void setDateMillis(long dateMillis) {this.dateMillis = dateMillis;}
+
+	public long getDateMillis() {return dateMillis;}
 
 	@Override
 	public int compareTo(Page page) {

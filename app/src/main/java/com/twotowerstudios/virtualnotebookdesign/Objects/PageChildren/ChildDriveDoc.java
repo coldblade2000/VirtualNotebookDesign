@@ -5,4 +5,22 @@ package com.twotowerstudios.virtualnotebookdesign.Objects.PageChildren;
  */
 
 public class ChildDriveDoc {
+    public String name;
+    public String driveId;
+
+    public void setDriveId(String driveId) {
+        this.driveId = driveId;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDriveId() {
+        return driveId;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

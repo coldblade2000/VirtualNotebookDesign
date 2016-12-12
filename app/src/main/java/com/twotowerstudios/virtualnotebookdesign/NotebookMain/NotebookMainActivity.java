@@ -110,7 +110,7 @@ public class NotebookMainActivity extends AppCompatActivity {
 			// Respond to the action bar's Up/Home button
 			case android.R.id.home:
 				// Launch the correct Activity here
-				if (parent.equals("MainActivity")){
+				if (parent.equals("MainActivity")) {
 					Intent intent = new Intent(this, NotebookSelection.class);
 					intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 					startActivity(intent);

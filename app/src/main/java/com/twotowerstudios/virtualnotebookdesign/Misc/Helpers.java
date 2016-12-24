@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
+import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
 import com.twotowerstudios.virtualnotebookdesign.R;
 
 import java.io.BufferedReader;
@@ -46,7 +47,7 @@ public class Helpers {
 	 * 1: yyyy/MM/dd, HH:mm:ss
 	 * 2:
 	 */
-	public static String millisDateToString(Long millis, int format) {
+	/*public static String millisDateToString(Long millis, int format) {
 		SimpleDateFormat formatter;
 		switch(format){
 			case 1:
@@ -64,7 +65,7 @@ public class Helpers {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(millis);
 		return formatter.format(calendar.getTime());
-	}
+	}*/
 	public static long getCurrentTimeInMillis(){
 		Calendar cal = Calendar.getInstance();
 
@@ -81,7 +82,7 @@ public class Helpers {
 		}
 	}
 
-	public String getStringFromFile(String filename, Context context) {
+	public static String getStringFromFile(String filename, Context context) {
 		BufferedReader input = null;
 		try {
 			input = new BufferedReader(new InputStreamReader(context.openFileInput(filename)));
@@ -89,7 +90,7 @@ public class Helpers {
 			e.printStackTrace();
 		}
 		String line;
-		StringBuffer buffer = new StringBuffer();
+		StringBuilder buffer = new StringBuilder();
 		try {
 			while ((line = input.readLine()) != null) {
 				buffer.append(line + "\n");
@@ -102,7 +103,7 @@ public class Helpers {
 		return buffer.toString();
 
 	}
-	public  ArrayList<Notebook> getNotebookList(Context context){
+	public static ArrayList<Notebook> getNotebookList(Context context){
 		ArrayList<Notebook> notebookList;
 		Gson gson = new Gson();
 
@@ -124,7 +125,7 @@ public class Helpers {
 		writeStringToFile(outputString, context, "Notebooks.json");
 	}
 
-	public void addToNotebookList(Notebook notebook, Context context){
+	public static void addToNotebookList(Notebook notebook, Context context){
 		ArrayList<Notebook> list = getNotebookList(context);
 		boolean bookalreadyexists=false;
 		try {
@@ -183,7 +184,7 @@ public class Helpers {
 		return colors;
 	}
 
-	public static ArrayList<Integer> getColorAccents(Context context){
+	private static ArrayList<Integer> getColorAccents(Context context){
 		ArrayList<Integer> colors = new ArrayList<>();
 		colors.add(ContextCompat.getColor(context,R.color.md_light_blue_A200));
 		colors.add(ContextCompat.getColor(context,R.color.md_green_A200));
@@ -211,11 +212,10 @@ public class Helpers {
 		ArrayList<Integer> colors = getPossibleColors(context);
 		String TAG = "getSingleColorAccent";
 		Log.d(TAG, "colors.size()== "+colors.size());
-		int accentColor = getColorAccents(context).get(colors.indexOf(color));
-		return accentColor;
+		return getColorAccents(context).get(colors.indexOf(color));
 	}
-	static Random random = new Random();
-	static String possibility = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_?";
+	private static Random random = new Random();
+	private static final String POSSIBILITY = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_?";
 
 	public static String generateUniqueId(int length){
 		/** BTW to ease confusion:
@@ -228,9 +228,29 @@ public class Helpers {
 		 */
 		String result="";
 		for(int i=0;i<length;i++){
-			result=result+possibility.charAt(random.nextInt(63));
+			result=result+POSSIBILITY.charAt(random.nextInt(63));
 		}
 		return result;
+	}
+
+	public static Notebook getNotebookFromUID(String UID16, Context context){
+		ArrayList<Notebook> list=Helpers.getNotebookList(context);
+		for(Notebook a: list){
+			if(a.getUID16().equals(UID16)){
+				return a;
+			}
+		}
+		return null;
+	}
+
+	public static Page getPageFromUID(String UID16,String parentUID ,Context context){
+		ArrayList<Page> list= getNotebookFromUID(parentUID,context).getPages();
+		for(Page a:list){
+			if(a.getUID().equals(UID16)){
+				return a;
+			}
+		}
+		return null;
 	}
 	/**
 	This isColorDark method was copied word for word from the "Spectrum" library, written by

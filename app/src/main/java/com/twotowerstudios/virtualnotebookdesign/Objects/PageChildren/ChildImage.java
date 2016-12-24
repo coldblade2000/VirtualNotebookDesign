@@ -2,17 +2,14 @@ package com.twotowerstudios.virtualnotebookdesign.Objects.PageChildren;
 
 import android.content.Context;
 
-/**
- * Created by Panther II on 11/12/2016.
- */
-
 public class ChildImage {
 	public String name;
 	public String ImageUID;
 	public String path;
 	public String UID16;
+	public String parentUID;
 
-	public ChildImage(String name, String ImageUID, Context context){
+	public ChildImage(String name, String ImageUID, String parentUID, Context context){
 		this.name=name;
 		this.ImageUID=ImageUID;
 		path=context.getFilesDir()+"/"+ImageUID;
@@ -38,4 +35,8 @@ public class ChildImage {
 	public String getUID16() {return UID16;}
 
 	public void setUID16(String UID16) {this.UID16 = UID16;}
+
+	public String getParentUID() {return parentUID;}
+
+	public void setParentUID(String parentUID) {this.parentUID = parentUID;}
 }

@@ -1,7 +1,5 @@
 package com.twotowerstudios.virtualnotebookdesign.NotebookMain;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -10,7 +8,9 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -81,8 +81,8 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 		fabnotebookmain.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				FragmentTransaction ft = getFragmentManager().beginTransaction();
-				Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+				FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+				Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
 				if (prev != null) {
 					ft.remove(prev);
 				}
@@ -102,8 +102,8 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 			emptyNotebook.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View view) {
-					FragmentTransaction ft = getFragmentManager().beginTransaction();
-					Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+					FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+					Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
 					if (prev != null) {
 						ft.remove(prev);
 					}
@@ -180,9 +180,9 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 
 	@Override
 	public void onFragmentInteraction(String name, int pageNum, Calendar cal) {
-		pageList.add(new Page(name, pageNum, cal.getTimeInMillis()+43200000));
+		pageList.add(new Page(name, pageNum, cal.getTimeInMillis()+43200000, notebook.getUID16()));
 		notebook.setPages(pageList);
-		new Helpers().addToNotebookList(notebook, getApplicationContext());
+		Helpers.addToNotebookList(notebook, getApplicationContext());
 		if (notebook == null) {
 			Log.d("OnFragmentInteraction", "notebook == null");
 		}

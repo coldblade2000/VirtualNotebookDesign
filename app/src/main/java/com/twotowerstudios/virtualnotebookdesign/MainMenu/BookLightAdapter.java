@@ -15,33 +15,29 @@ import com.twotowerstudios.virtualnotebookdesign.R;
 
 import java.util.ArrayList;
 
-/**
- * Created by Panther II on 10/10/2016.
- */
+class BookLightAdapter  extends RecyclerView.Adapter<BookLightAdapter.ViewHolder>{
 
-public class BookLightAdapter  extends RecyclerView.Adapter<BookLightAdapter.ViewHolder>{
+	private BookLightAdapter.MainMenuToNotebook Interface;
 
-	BookLightAdapter.MainMenuToNotebook Interface;
-
-	public interface MainMenuToNotebook{
+	interface MainMenuToNotebook{
 		void openNotebook(Notebook notebook);
 	}
 
 	protected Context context;
 	private ArrayList<Notebook> bookList = new ArrayList<>();
-	public static class ViewHolder extends RecyclerView.ViewHolder {
+	static class ViewHolder extends RecyclerView.ViewHolder {
 		// each data item is just a string in this case
-		public ImageView ivBook;
-		public RelativeLayout rvBookLight;
-		public TextView tvName;
-		public ViewHolder(View view) {
+		ImageView ivBook;
+		RelativeLayout rvBookLight;
+		TextView tvName;
+		ViewHolder(View view) {
 			super(view);
 			rvBookLight = (RelativeLayout) view.findViewById(R.id.rvBookLight);
 			ivBook = (ImageView) view.findViewById(R.id.ivBookLight);
 			tvName = (TextView) view.findViewById(R.id.tvName);
 		}
 	}
-	public BookLightAdapter (Context context, ArrayList<Notebook> bookList, MainMenuToNotebook openNotebook){
+	BookLightAdapter(Context context, ArrayList<Notebook> bookList, MainMenuToNotebook openNotebook){
 		this.bookList = bookList;
 		this.context = context;
 		Interface=openNotebook;

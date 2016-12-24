@@ -1,9 +1,9 @@
 package com.twotowerstudios.virtualnotebookdesign.NotebookMain.Fragments.NewPage;
 
-import android.app.DialogFragment;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,7 +44,6 @@ public class NewPageFragment extends DialogFragment implements CalendarDatePicke
 	public interface OnFragmentInteractionListener {
 		void onFragmentInteraction(String name, int pageNum, Calendar cal);
 	}
-    // TODO: Rename and change types and number of parameters
     public static NewPageFragment newInstance(ArrayList<Page> list, int accentColor) {
         NewPageFragment fragment = new NewPageFragment();
         Bundle args = new Bundle();
@@ -85,8 +84,10 @@ public class NewPageFragment extends DialogFragment implements CalendarDatePicke
 		lldate.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
+				Log.d("Newpagefragment","onClick called");
 				CalendarDatePickerDialogFragment cdp = new CalendarDatePickerDialogFragment()
 						.setOnDateSetListener(NewPageFragment.this);
+				cdp.show(getFragmentManager(), "dateFrag");
 			}
 		});
 

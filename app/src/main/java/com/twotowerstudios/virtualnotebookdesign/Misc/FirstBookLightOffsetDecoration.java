@@ -4,17 +4,11 @@ import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-/**
- * Created by Panther II on 14/10/2016.
- */
-
-
 public class FirstBookLightOffsetDecoration extends RecyclerView.ItemDecoration {
 	private int firstItemOffset;
 
 	public FirstBookLightOffsetDecoration(int beginningOffset) {
-		firstItemOffset = beginningOffset;
-	}
+		firstItemOffset = beginningOffset;}
 
 	@Override
 	public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {

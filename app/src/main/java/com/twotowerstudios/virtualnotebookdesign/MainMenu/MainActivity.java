@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -47,9 +46,7 @@ public class MainActivity extends AppCompatActivity implements BookLightAdapter.
 
     private AccountHeader accountHeader;
     private FloatingActionButton fab1, fabShoot, fabImage, fabPage;
-    private RecyclerView BookLightRecyclerView;
-    private RecyclerView.Adapter BookLightAdapter;
-    //private RecyclerView.LayoutManager CommonBooksCardLayoutManager;
+	//private RecyclerView.LayoutManager CommonBooksCardLayoutManager;
 
 
     boolean isMainfabOpen;
@@ -60,9 +57,8 @@ public class MainActivity extends AppCompatActivity implements BookLightAdapter.
 
 		SharedPrefs.setBoolean(getApplicationContext(), "debug", true);
 
-		if(new Helpers().getStringFromFile("Notebooks.json", getApplicationContext())==null
-		|| new Helpers().getStringFromFile("Notebooks.json", getApplicationContext())==""){
-			File file = new File(getFilesDir(),"Notebooks.json");
+		if(Helpers.getStringFromFile("Notebooks.json", getApplicationContext()).equals("")){
+			new File(getFilesDir(), "Notebooks.json");
 		}
 		if(InitNotebooks.isDebug(getApplicationContext())){
 			Log.d("isDebugNoteSelect", "DEBUG MODE = true;");
@@ -70,14 +66,14 @@ public class MainActivity extends AppCompatActivity implements BookLightAdapter.
 		}
            //    ============================
 
-        BookLightRecyclerView = (RecyclerView) findViewById(R.id.rvCommonBooks);
+		RecyclerView bookLightRecyclerView = (RecyclerView) findViewById(R.id.rvCommonBooks);
 
         final LinearLayoutManager BookLightLayoutManager = new LinearLayoutManager(this);
         BookLightLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        BookLightRecyclerView.setLayoutManager(BookLightLayoutManager);
-        ArrayList<Notebook> notebookList = new Helpers().getNotebookList(getApplicationContext());
-        BookLightAdapter = new BookLightAdapter(this, notebookList, this);
-        BookLightRecyclerView.setAdapter(BookLightAdapter);
+        bookLightRecyclerView.setLayoutManager(BookLightLayoutManager);
+        ArrayList<Notebook> notebookList = Helpers.getNotebookList(getApplicationContext());
+		RecyclerView.Adapter bookLightAdapter = new BookLightAdapter(this, notebookList, this);
+        bookLightRecyclerView.setAdapter(bookLightAdapter);
         //==================
         isMainfabOpen = false;
         fab1 = (FloatingActionButton) findViewById(R.id.fabMain);
@@ -120,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements BookLightAdapter.
         final IProfile h3 = new ProfileDrawerItem().withName("Header 3");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        PrimaryDrawerItem diNotebooks= new PrimaryDrawerItem().withName("Notebooks").withDescription("Full list of notebooks");
+        //PrimaryDrawerItem diNotebooks= new PrimaryDrawerItem().withName("Notebooks").withDescription("Full list of notebooks");
         accountHeader = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.header)
@@ -163,9 +159,7 @@ public class MainActivity extends AppCompatActivity implements BookLightAdapter.
                          }*/
                         if (drawerItem != null){
                             Intent intent = null;
-                            if (position == 1){
-
-                            }else if (position == 2){
+                            if (position == 2){
                                 intent = new Intent(MainActivity.this, NotebookSelection.class);
                             }
                             if (intent != null){
@@ -181,9 +175,8 @@ public class MainActivity extends AppCompatActivity implements BookLightAdapter.
                 .build();
         Glide.with(this).load(R.drawable.header2).into(accountHeader.getHeaderBackgroundView());
         /**Color.parseColor("#00FFFF")*/
-		DisplayMetrics displayMetrics = new DisplayMetrics();
 		FirstBookLightOffsetDecoration firstBookLightOffsetDecoration = new FirstBookLightOffsetDecoration((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, getResources().getDisplayMetrics()));
-   		BookLightRecyclerView.addItemDecoration(firstBookLightOffsetDecoration);
+   		bookLightRecyclerView.addItemDecoration(firstBookLightOffsetDecoration);
     }
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {

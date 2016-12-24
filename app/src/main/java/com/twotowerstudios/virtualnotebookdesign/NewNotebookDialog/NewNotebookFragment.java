@@ -32,7 +32,6 @@ public class NewNotebookFragment extends DialogFragment implements NewNotebookAd
 
 	RecyclerView rvNewNotebook;
 	int activeColorIndex, activeColor;
-	Helpers help = new Helpers();
 	ArrayList<Integer> colors;
 	ArrayList<Notebook> notebookList;
 	Toolbar toolbar;
@@ -59,7 +58,7 @@ public class NewNotebookFragment extends DialogFragment implements NewNotebookAd
 		swColors = (Switch) v.findViewById(R.id.switch1);
 
 		etNewName = (EditText) v.findViewById(R.id.etNewName);
-		notebookList = help.getNotebookList(getContext());
+		notebookList = Helpers.getNotebookList(getContext());
 		toolbar = (Toolbar) v.findViewById(R.id.newnotebooktoolbar);
 		toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
 			@Override

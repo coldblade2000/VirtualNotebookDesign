@@ -18,22 +18,25 @@ public class Page implements Comparable<Page>{
 	public long dateMillis;
 	public boolean isFavorite;
 	public String UID16;
+	public String parentUID;
 
-	public Page(String name, int pageNumber){
+	public Page(String name, int pageNumber, String parentUID){
 		this.name = name;
 		this.pageNumber = pageNumber;
 		this.content = new ArrayList<Object>();
 		this.lastModifiedMillis = Helpers.getCurrentTimeInMillis();
 		this.isFavorite=false;
 		this.dateMillis=0;
+		this.parentUID=parentUID;
 		UID16 ="p"+Helpers.generateUniqueId(16);
 	}
-	public Page(String name, int pageNumber, long dateMillis){
+	public Page(String name, int pageNumber, long dateMillis, String parentUID){
 		this.name = name;
 		this.pageNumber = pageNumber;
 		this.content = new ArrayList<Object>();
 		this.lastModifiedMillis = Helpers.getCurrentTimeInMillis();
 		this.isFavorite=false;
+		this.parentUID=parentUID;
 		this.dateMillis=dateMillis;
 	}
 	public Page(){}
@@ -60,6 +63,10 @@ public class Page implements Comparable<Page>{
 		}*/
 		return UID16;
 	}
+
+	public String getParentUID() {return parentUID;}
+
+	public void setParentUID(String parentUID) {this.parentUID = parentUID;}
 
 	public void setUID16(String UID16) {this.UID16 = UID16;}
 

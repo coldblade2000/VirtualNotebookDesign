@@ -50,8 +50,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notebook_selection);
-		if(new Helpers().getStringFromFile("Notebooks.json", getApplicationContext())==null
-				/*|| new Helpers().getStringFromFile("Notebooks.json", getApplicationContext())==""*/){
+		if(Helpers.getStringFromFile("Notebooks.json", getApplicationContext()).equals("")){
 			File file = new File(getFilesDir(),"Notebooks.json");
 		}
 		if(InitNotebooks.isDebug(getApplicationContext())){
@@ -96,7 +95,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 		rvNotebookSelection = (RecyclerView) findViewById(R.id.rvnotebookselection);
         final LinearLayoutManager rvNotebookSelectionManager = new LinearLayoutManager(this);
         rvNotebookSelection.setLayoutManager(rvNotebookSelectionManager);
-		notebookSelectionCardList = new Helpers().getNotebookList(getApplicationContext());
+		notebookSelectionCardList = Helpers.getNotebookList(getApplicationContext());
         //prepareNotebookSelectionCards();
         rvNotebookSelectionAdapter = new NotebookSelectionAdapter(this, notebookSelectionCardList, this);
         rvNotebookSelection.setAdapter(rvNotebookSelectionAdapter);
@@ -218,10 +217,9 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 	}
 
 	public void refreshData(Notebook newNotebook) {
-		Helpers help = new Helpers();
-		help.addToNotebookList(newNotebook, getApplicationContext());
+		Helpers.addToNotebookList(newNotebook, getApplicationContext());
 		notebookSelectionCardList.clear();
-		notebookSelectionCardList.addAll(help.getNotebookList(getApplicationContext()));
+		notebookSelectionCardList.addAll(Helpers.getNotebookList(getApplicationContext()));
 		rvNotebookSelectionAdapter.notifyDataSetChanged();
 		rvNotebookSelection.getLayoutManager().scrollToPosition(notebookSelectionCardList.size());
 	}

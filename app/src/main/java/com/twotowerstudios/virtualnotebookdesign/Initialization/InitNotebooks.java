@@ -8,25 +8,18 @@ import com.google.gson.Gson;
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 import com.twotowerstudios.virtualnotebookdesign.Misc.SharedPrefs;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
-import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
 import com.twotowerstudios.virtualnotebookdesign.R;
 
 import java.util.ArrayList;
-import java.util.Random;
-
-/**
- * Created by Panther II on 30/10/2016.
- */
 
 public class InitNotebooks {
 
 	public static boolean isDebug(Context context){
 		return SharedPrefs.getBoolean(context, "debug");
 	}
-	public static boolean doDebugBooksExist(Context context){
+	private static boolean doDebugBooksExist(Context context){
 		try {
-			Helpers help = new Helpers();
-			ArrayList<Notebook> list = help.getNotebookList(context);
+			ArrayList<Notebook> list = Helpers.getNotebookList(context);
 			for(Notebook n :list){
 				if(n.getName().equalsIgnoreCase("debug")){
 					Log.d("DebugBook", "Debug book exists");
@@ -41,11 +34,10 @@ public class InitNotebooks {
 		return false;
 	}
 	public static void populateDebugBooks(Context context, boolean isDebugTrue){
-		Helpers help = new Helpers();
-		if (isDebugTrue && !doDebugBooksExist(context)&& help.getNotebookList(context).isEmpty()){
+		if (isDebugTrue && !doDebugBooksExist(context)&& Helpers.getNotebookList(context).isEmpty()){
 
 			try {
-				ArrayList<Notebook> list = new Helpers().getNotebookList(context);
+				ArrayList<Notebook> list = Helpers.getNotebookList(context);
 
 				Notebook a = new Notebook("debug", ContextCompat.getColor(context, R.color.md_grey_500), 404, Helpers.stringDataToMillis("2016/01/01"),context);list.add(a);
 				a = new Notebook("Science",ContextCompat.getColor(context, R.color.md_brown_500), 29, Helpers.stringDataToMillis("2016/11/10"),context);list.add(a);
@@ -65,7 +57,7 @@ public class InitNotebooks {
 				a = new Notebook("Robotics",ContextCompat.getColor(context, R.color.md_orange_500), 78, Helpers.stringDataToMillis("2016/10/29"),context);list.add(a);Log.d("populateDebugBooks", "successfully wrote all debug books");
 				Gson gson = new Gson();
 
-				new Helpers().writeStringToFile(gson.toJson(list), context, "Notebooks.json");
+				Helpers.writeStringToFile(gson.toJson(list), context, "Notebooks.json");
 			} catch (Exception e) {
 				ArrayList<Notebook> list = new ArrayList<>();
 
@@ -89,11 +81,11 @@ public class InitNotebooks {
 				Log.d("populateDebugBooks", "successfully wrote all debug books");
 				Gson gson = new Gson();
 
-				new Helpers().writeStringToFile(gson.toJson(list), context, "Notebooks.json");
+				Helpers.writeStringToFile(gson.toJson(list), context, "Notebooks.json");
 			}
 		}
 	}
-	public static ArrayList<Page> populateDebugNotebookPages(ArrayList<Page> list, int reps){
+	/*public static ArrayList<Page> populateDebugNotebookPages(ArrayList<Page> list, int reps){
 		String TAG="InitNotebooks";
 		if (list == null||list.size()==0) {
 			Random r = new Random();
@@ -115,5 +107,5 @@ public class InitNotebooks {
 			Log.d("Helpers","PopulateDebugNotebookPages: list is not null or size != 0, returning list as-is");
 			return list;
 		}
-	}
+	}*/
 }

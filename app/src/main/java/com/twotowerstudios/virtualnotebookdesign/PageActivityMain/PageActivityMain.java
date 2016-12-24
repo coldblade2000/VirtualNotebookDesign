@@ -28,6 +28,9 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 		setSupportActionBar(tbpagemain);
 		tbpagemain.setTitle(""+page.name);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+		tbpagemain.inflateMenu(R.menu.pagemainmenu);
+
 		StaggeredGridLayoutManager lmpagemain = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
 		rvpagemain.setLayoutManager(lmpagemain);
 		rvpagemain.setAdapter(new PageActivityAdapter(getApplicationContext(),page.getContent(), this));

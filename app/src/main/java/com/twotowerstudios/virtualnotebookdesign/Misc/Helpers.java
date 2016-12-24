@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Random;
 
 public class Helpers {
 
@@ -106,8 +107,14 @@ public class Helpers {
 		Gson gson = new Gson();
 
 		String fileString = getStringFromFile("Notebooks.json", context);
-		Type type = new TypeToken<ArrayList<Notebook>>(){}.getType();
-		notebookList = gson.fromJson(fileString,type);
+		Log.v("Helpers", "getNotebookList: \n"+fileString);
+		if (!fileString.equalsIgnoreCase("")) {
+			Type type = new TypeToken<ArrayList<Notebook>>(){}.getType();
+			notebookList = gson.fromJson(fileString,type);
+		} else {
+			Log.d("getNotebookList", "notebooks.json is empty, returning empty arraylist");
+			notebookList = new ArrayList<>();
+		}
 
 		return notebookList;
 	}
@@ -116,15 +123,25 @@ public class Helpers {
 		String outputString = gson.toJson(notebookList);
 		writeStringToFile(outputString, context, "Notebooks.json");
 	}
+
 	public void addToNotebookList(Notebook notebook, Context context){
 		ArrayList<Notebook> list = getNotebookList(context);
-		for(int i=0; i<list.size(); i++){
-			if(list.get(i).name.equalsIgnoreCase(notebook.name.toLowerCase())){
-				Toast.makeText(context, "Can't add notebook, already exists", Toast.LENGTH_SHORT).show();
-				break;
+		boolean bookalreadyexists=false;
+		try {
+			for(int i=0; i<list.size(); i++){
+				if(list.get(i).name.equalsIgnoreCase(notebook.name.toLowerCase())){
+					bookalreadyexists=true;
+					//Toast.makeText(context, "Can't add notebook, already exists", Toast.LENGTH_SHORT).show();
+					list.set(i,notebook);
+					break;
+				}
 			}
+		} catch (NullPointerException e) {
+			Log.d("NewNotebookFrag","Notebooklist was empty, adding notebook");
 		}
-		list.add(notebook);
+		if (!bookalreadyexists) {
+			list.add(notebook);
+		}
 		writeListToFile(context,list);
 	}
 	public static void deleteNotebookByName(String name, Context context){
@@ -140,6 +157,7 @@ public class Helpers {
 			}
 		}
 	}
+
 
 	public static ArrayList<Integer> getPossibleColors(Context context){
 		ArrayList<Integer> colors = new ArrayList<>();
@@ -188,12 +206,31 @@ public class Helpers {
 
 		return colors;
 	}
+
 	public static int getSingleColorAccent(Context context, int color){
 		ArrayList<Integer> colors = getPossibleColors(context);
 		String TAG = "getSingleColorAccent";
 		Log.d(TAG, "colors.size()== "+colors.size());
 		int accentColor = getColorAccents(context).get(colors.indexOf(color));
 		return accentColor;
+	}
+	static Random random = new Random();
+	static String possibility = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_?";
+
+	public static String generateUniqueId(int length){
+		/** BTW to ease confusion:
+		 * n prefix = Notebook
+		 * p prefix = Page
+		 * i prefix = Image file
+		 * t prefix = ChildText
+		 * d prefix = ChildDriveDoc
+		 * c prefix = ChildImage
+		 */
+		String result="";
+		for(int i=0;i<length;i++){
+			result=result+possibility.charAt(random.nextInt(63));
+		}
+		return result;
 	}
 	/**
 	This isColorDark method was copied word for word from the "Spectrum" library, written by

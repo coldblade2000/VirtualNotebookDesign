@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+	android:layout_height="wrap_content"
+	android:layout_width="wrap_content"
+	xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<LinearLayout
+		android:layout_width="wrap_content"
+		android:layout_margin="8dp"
+		android:layout_height="wrap_content"
+		android:orientation="vertical">
+		<ImageView
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:src="@drawable/verticalexample3"
+			android:id="@+id/ivChildImage"
+			android:scaleType="fitCenter"
+			android:paddingBottom="8dp"
+			android:adjustViewBounds="true"/>
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:id="@+id/tvChildImage"
+			android:text="This is a subtitle, I believe you could do important bullshit"/>
+
+	</LinearLayout>
+
+</android.support.v7.widget.CardView>

@@ -16,6 +16,7 @@ public class Notebook {
 	public String name;
 	public int debugNumOfPages,color,accentColor;
 	public long lastModified;
+	public String UID16;
 	public ArrayList<Page> pages;
 
 	public Notebook(String name, int color,
@@ -26,6 +27,7 @@ public class Notebook {
 		this.debugNumOfPages = debugNumOfPages;
 		this.accentColor=Helpers.getSingleColorAccent(context,color);
 		this.pages = new ArrayList<>();
+		this.UID16 = "n"+Helpers.generateUniqueId(16);
 	}
 	public Notebook(String name, int color, int accentColor){
 		this.name=name;
@@ -34,10 +36,14 @@ public class Notebook {
 		this.debugNumOfPages =5;
 		this.accentColor=accentColor;
 		this.pages = new ArrayList<>();
-		this.pages.add(new Page("DEBUG PAGE", 405));
+		this.UID16 = "n"+Helpers.generateUniqueId(16);
 	}
 	public Notebook(){}
 	public int getColor() {return  color;}
+
+	public String getUID16() {return UID16;}
+
+	public void setUID16(String UID16) {this.UID16 = UID16;}
 
 	public void setColor(int color) {this.color = color;}
 
@@ -65,6 +71,8 @@ public class Notebook {
 
 	public ArrayList<Page> getPages() {
 		return pages;
+	}
+	public void setPages(ArrayList<Page> list){pages=list;
 	}
 	public void addPage(Page page){
 		pages.add(page);

@@ -51,7 +51,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notebook_selection);
 		if(new Helpers().getStringFromFile("Notebooks.json", getApplicationContext())==null
-				|| new Helpers().getStringFromFile("Notebooks.json", getApplicationContext())==""){
+				/*|| new Helpers().getStringFromFile("Notebooks.json", getApplicationContext())==""*/){
 			File file = new File(getFilesDir(),"Notebooks.json");
 		}
 		if(InitNotebooks.isDebug(getApplicationContext())){
@@ -218,7 +218,10 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 	}
 
 	public void refreshData(Notebook newNotebook) {
-		notebookSelectionCardList.add(newNotebook);
+		Helpers help = new Helpers();
+		help.addToNotebookList(newNotebook, getApplicationContext());
+		notebookSelectionCardList.clear();
+		notebookSelectionCardList.addAll(help.getNotebookList(getApplicationContext()));
 		rvNotebookSelectionAdapter.notifyDataSetChanged();
 		rvNotebookSelection.getLayoutManager().scrollToPosition(notebookSelectionCardList.size());
 	}

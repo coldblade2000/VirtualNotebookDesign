@@ -17,6 +17,7 @@ public class Page implements Comparable<Page>{
 	public long lastModifiedMillis;
 	public long dateMillis;
 	public boolean isFavorite;
+	public String UID16;
 
 	public Page(String name, int pageNumber){
 		this.name = name;
@@ -25,8 +26,9 @@ public class Page implements Comparable<Page>{
 		this.lastModifiedMillis = Helpers.getCurrentTimeInMillis();
 		this.isFavorite=false;
 		this.dateMillis=0;
+		UID16 ="p"+Helpers.generateUniqueId(16);
 	}
-	public Page(String name, int pageNumber, int dateMillis){
+	public Page(String name, int pageNumber, long dateMillis){
 		this.name = name;
 		this.pageNumber = pageNumber;
 		this.content = new ArrayList<Object>();
@@ -35,6 +37,31 @@ public class Page implements Comparable<Page>{
 		this.dateMillis=dateMillis;
 	}
 	public Page(){}
+
+	public String getUID() {
+		/**if(UID16==null||UID16=="") {
+			UID16 = "p"+Helpers.generateUniqueId(16);
+			Log.d("Page getUID()","Generated new UID for "+name+": "+UID16);
+			ArrayList<Notebook> notebookList = new Helpers().getNotebookList(context);
+			for(Notebook a: notebookList){
+				if(a.getName().equalsIgnoreCase(parent)){
+					for(Page b:a.getPages()){
+						if(b.getName().equals(name)){
+							b.setUID16(UID16);
+							Helpers.writeListToFile(context,notebookList);
+							Log.i("Page getUID()","wrote updated list to file");
+						}break;
+					}
+				}break;
+			}
+			return UID16;
+		}else{
+			return UID16;
+		}*/
+		return UID16;
+	}
+
+	public void setUID16(String UID16) {this.UID16 = UID16;}
 
 	public void addToPage(Object newObject){content.add(newObject);}
 	public void setLastModifiedMillis(long lastModifiedMillis) {

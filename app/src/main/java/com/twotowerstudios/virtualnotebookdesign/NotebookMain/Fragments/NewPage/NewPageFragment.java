@@ -2,53 +2,55 @@ package com.twotowerstudios.virtualnotebookdesign.NotebookMain.Fragments.NewPage
 
 import android.app.DialogFragment;
 import android.content.Context;
-import android.net.Uri;
+import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.codetroopers.betterpickers.calendardatepicker.CalendarDatePickerDialogFragment;
+import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
+import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
 import com.twotowerstudios.virtualnotebookdesign.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link NewPageFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link NewPageFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class NewPageFragment extends DialogFragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+import org.parceler.Parcels;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+import java.util.ArrayList;
+import java.util.Calendar;
 
+
+public class NewPageFragment extends DialogFragment implements CalendarDatePickerDialogFragment.OnDateSetListener {
+
+	ArrayList<Page> list;
+	Toolbar tbnewpage;
+	EditText teNewpageName, teNewpageNumber;
+	LinearLayout lldate;
+	TextView tvDate;
+	int accentColor;
+	Calendar cal = Calendar.getInstance();
     private OnFragmentInteractionListener mListener;
 
     public NewPageFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment NewPageFragment.
-     */
+	public interface OnFragmentInteractionListener {
+		void onFragmentInteraction(String name, int pageNum, Calendar cal);
+	}
     // TODO: Rename and change types and number of parameters
-    public static NewPageFragment newInstance(String param1, String param2) {
+    public static NewPageFragment newInstance(ArrayList<Page> list, int accentColor) {
         NewPageFragment fragment = new NewPageFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+		args.putParcelable("list", Parcels.wrap(list));
+		args.putInt("accentColor", accentColor);
+        //args.putString(ARG_PARAM1, param1);
         fragment.setArguments(args);
         return fragment;
     }
@@ -57,26 +59,63 @@ public class NewPageFragment extends DialogFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            //mParam1 = getArguments().getString(ARG_PARAM1);
+			list = Parcels.unwrap(getArguments().getParcelable("list"));
+			accentColor = getArguments().getInt("accentColor");
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_new_page, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
+	@Override
+	public void onViewCreated(View v, Bundle savedInstanceState) {
+		tbnewpage = (Toolbar) v.findViewById(R.id.tbnewpage);
+		teNewpageName = (EditText) v.findViewById(R.id.teNewpageName);
+		teNewpageNumber = (EditText) v.findViewById(R.id.teNewpageNumber);
+		lldate = (LinearLayout) v.findViewById(R.id.lldate);
+		tvDate = (TextView) v.findViewById(R.id.tvDate);
+		tbnewpage.setBackgroundColor(accentColor);
+		if(Helpers.isColorDark(accentColor)) {
+			tbnewpage.setTitleTextColor(Color.WHITE);
+		}
+		lldate.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				CalendarDatePickerDialogFragment cdp = new CalendarDatePickerDialogFragment()
+						.setOnDateSetListener(NewPageFragment.this);
+			}
+		});
 
-    @Override
+		tbnewpage.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				boolean pageExists = false;
+				for(Page page : list){
+					if(page.getName().equalsIgnoreCase(teNewpageName.toString())){
+						pageExists=true;
+						Toast.makeText(getActivity(),"Page with the same title already exists", Toast.LENGTH_SHORT).show();
+						break;
+					}
+				}
+				if(!pageExists){
+					int pageNum = Integer.parseInt(teNewpageNumber.getText().toString());
+					mListener.onFragmentInteraction(teNewpageName.getText().toString(),pageNum,
+					cal);
+					dismiss();
+				}
+				return false;
+			}
+		});
+		tbnewpage.setTitle("New Page");
+		tbnewpage.inflateMenu(R.menu.newpage);
+
+	}
+
+	@Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
@@ -93,18 +132,17 @@ public class NewPageFragment extends DialogFragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }
+	/**
+	 * @param dialog      The view associated with this listener.
+	 * @param year        The year that was set.
+	 * @param monthOfYear The month that was set (0-11) for compatibility with {@link Calendar}.
+	 * @param dayOfMonth  The day of the month that was set.
+	 */
+	@Override
+	public void onDateSet(CalendarDatePickerDialogFragment dialog, int year, int monthOfYear, int dayOfMonth) {
+		tvDate.setText(year+"-"+monthOfYear+"-"+dayOfMonth);
+		Log.d("OnDateSet", "Year == "+year);
+		cal.set(year,monthOfYear, dayOfMonth);
+	}
+
 }

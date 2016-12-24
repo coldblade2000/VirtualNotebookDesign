@@ -72,15 +72,20 @@ public class NewNotebookFragment extends DialogFragment implements NewNotebookAd
 					return false;
 				}else{
 					boolean notebookExists=false;
-					for(int i=0;i<notebookList.size();i++){
-						if (nameLow.equalsIgnoreCase(notebookList.get(i).getName())){
-							Toast.makeText(getContext(),"Notebook already exists", Toast.LENGTH_SHORT).show();
-							notebookExists=true;
-							break;
+					try {
+						for(int i=0;i<notebookList.size();i++){
+							if (nameLow.equalsIgnoreCase(notebookList.get(i).getName())){
+								Toast.makeText(getContext(),"Notebook already exists", Toast.LENGTH_SHORT).show();
+								notebookExists=true;
+								break;
+							}
 						}
+					} catch (NullPointerException e) {
+						Log.d("NewNotebookFrag","Notebooklist was empty, adding notebook");
 					}
 					if (!notebookExists){
 						Toast.makeText(getContext(),"Created notebook called: \""+nameReal+"\"", Toast.LENGTH_SHORT).show();
+						Log.d("NewNotebookFrag","Created notebook called:"+nameReal);
 						((NotebookSelection)getActivity()).refreshData(new Notebook(nameReal,colors.get(activeColorIndex), Helpers.getSingleColorAccent(getContext(), activeColor)));
 						dismiss();
 						//refresh.refreshData();

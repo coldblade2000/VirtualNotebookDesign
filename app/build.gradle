@@ -29,6 +29,7 @@ dependencies {
         transitive = true
     }
     compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.code-troopers.betterpickers:library:3.0.2'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.google.code.gson:gson:2.8.0'
     compile 'com.android.support:support-v4:24.2.1'

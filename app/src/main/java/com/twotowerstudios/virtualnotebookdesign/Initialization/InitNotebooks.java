@@ -20,7 +20,6 @@ import java.util.Random;
 
 public class InitNotebooks {
 
-
 	public static boolean isDebug(Context context){
 		return SharedPrefs.getBoolean(context, "debug");
 	}
@@ -28,8 +27,8 @@ public class InitNotebooks {
 		try {
 			Helpers help = new Helpers();
 			ArrayList<Notebook> list = help.getNotebookList(context);
-			for(int i=0; i<=list.size();i++){
-				if(list.get(i).getName().equalsIgnoreCase("debug")){
+			for(Notebook n :list){
+				if(n.getName().equalsIgnoreCase("debug")){
 					Log.d("DebugBook", "Debug book exists");
 					return true;
 				}
@@ -42,7 +41,8 @@ public class InitNotebooks {
 		return false;
 	}
 	public static void populateDebugBooks(Context context, boolean isDebugTrue){
-		if (isDebugTrue && !doDebugBooksExist(context)){
+		Helpers help = new Helpers();
+		if (isDebugTrue && !doDebugBooksExist(context)&& help.getNotebookList(context).isEmpty()){
 
 			try {
 				ArrayList<Notebook> list = new Helpers().getNotebookList(context);

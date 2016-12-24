@@ -1,29 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.twotowerstudios.virtualnotebookdesign">
+		  package="com.twotowerstudios.virtualnotebookdesign">
 
-    <application
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:theme="@style/MaterialDrawerTheme.Light">
-        <activity android:name=".MainMenu.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+	<application
+		android:allowBackup="true"
+		android:icon="@mipmap/ic_launcher"
+		android:label="@string/app_name"
+		android:supportsRtl="true"
+		android:theme="@style/MaterialDrawerTheme.Light">
+		<activity android:name=".MainMenu.MainActivity">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".NotebookSelection.NotebookSelection"
-			android:launchMode="singleTask"
-            android:label="@string/title_activity_notebook_selection" />
-        <activity
-            android:name=".NotebookMain.NotebookMainActivity"
-            android:label="@string/title_activity_notebook_main"
-			android:parentActivityName=".NotebookSelection.NotebookSelection"
-			></activity>
-    </application>
+				<category android:name="android.intent.category.LAUNCHER"/>
+			</intent-filter>
+		</activity>
+		<activity
+			android:name=".NotebookSelection.NotebookSelection"
+			android:label="@string/title_activity_notebook_selection"
+			android:launchMode="singleTask"/>
+		<activity
+			android:name=".NotebookMain.NotebookMainActivity"
+			android:label="@string/title_activity_notebook_main"
+			android:launchMode="singleTop"
+			android:parentActivityName=".NotebookSelection.NotebookSelection"/>
+		<activity
+			android:name=".PageActivityMain.PageActivityMain"
+			android:label="@string/title_activity_page_main"
+			android:parentActivityName=".NotebookMain.NotebookMainActivity">
+
+
+		</activity>
+	</application>
 
 </manifest>

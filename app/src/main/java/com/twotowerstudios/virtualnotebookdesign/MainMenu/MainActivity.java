@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements BookLightAdapter.
         BookLightLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         BookLightRecyclerView.setLayoutManager(BookLightLayoutManager);
         ArrayList<Notebook> notebookList = new Helpers().getNotebookList(getApplicationContext());
-        BookLightAdapter = new BookLightAdapter(this, notebookList);
+        BookLightAdapter = new BookLightAdapter(this, notebookList, this);
         BookLightRecyclerView.setAdapter(BookLightAdapter);
         //==================
         isMainfabOpen = false;

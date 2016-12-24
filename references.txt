@@ -20,3 +20,4 @@ http://stackoverflow.com/questions/40601129/how-to-change-colors-of-parent-fragm
 http://saulmm.github.io/mastering-coordinator
 http://stackoverflow.com/questions/32655342/how-to-randomly-receive-a-material-design-color
 http://stackoverflow.com/questions/2535124/how-to-sort-an-arraylist-of-objects-by-a-property
+https://github.com/code-troopers/android-betterpickers

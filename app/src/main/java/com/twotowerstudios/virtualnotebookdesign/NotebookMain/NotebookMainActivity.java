@@ -1,5 +1,7 @@
 package com.twotowerstudios.virtualnotebookdesign.NotebookMain;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -14,6 +16,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -23,53 +26,101 @@ import android.widget.Toast;
 
 import com.twotowerstudios.virtualnotebookdesign.MainMenu.MainActivity;
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
+import com.twotowerstudios.virtualnotebookdesign.NotebookMain.Fragments.NewPage.NewPageFragment;
 import com.twotowerstudios.virtualnotebookdesign.NotebookSelection.NotebookSelection;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
+import com.twotowerstudios.virtualnotebookdesign.PageActivityMain.PageActivityMain;
 import com.twotowerstudios.virtualnotebookdesign.R;
 
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
-public class NotebookMainActivity extends AppCompatActivity {
+public class NotebookMainActivity extends AppCompatActivity implements NewPageFragment.OnFragmentInteractionListener, NotebookAdapterToAct{
 
 	Toolbar toolbar;
 	Notebook notebook;
-	FloatingActionButton fab;
+	FloatingActionButton fabnotebookmain;
 	CollapsingToolbarLayout collapsingToolbarLayout;
 	String parent;
 	TextView tvSub;
 	ViewPager viewPager;
+	ArrayList<Page> pageList;
 	FragmentPagerAdapter viewPagerAdapter;
+	RefreshData refreshData;
+	RelativeLayout emptyNotebook;
+	LinearLayout notEmptyNotebook;
+
+	@Override
+	public void clickListener(int position) {
+		Intent intent = new Intent(this, PageActivityMain.class);
+		intent.putExtra("page", Parcels.wrap(pageList.get(position)));
+		intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		startActivity(intent);
+	}
+
+	public interface RefreshData{
+		void Refresh(Notebook notebook);
+	}
 
 	private boolean isListEmpty;
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notebook_main);
-		notebook = Parcels.unwrap(getIntent().getParcelableExtra("notebook"));
-		ArrayList<Page> pageList = notebook.pages;
-		RelativeLayout emptyNotebook = (RelativeLayout) findViewById(R.id.emptyNotebook);
-		LinearLayout notEmptyNotebook = (LinearLayout) findViewById(R.id.notEmptyNotebook);
-		fab = (FloatingActionButton) findViewById(R.id.fabnotebookmain);
+		if (notebook==null) {
+			Log.d("NotebookMainActivity", "notebook == null");
+			notebook = Parcels.unwrap(getIntent().getParcelableExtra("notebook"));
+		}
+		pageList = notebook.getPages();
+		emptyNotebook = (RelativeLayout) findViewById(R.id.emptyNotebook);
+		notEmptyNotebook = (LinearLayout) findViewById(R.id.notEmptyNotebook);
+		fabnotebookmain = (FloatingActionButton) findViewById(R.id.fabnotebookmain);
+		fabnotebookmain.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				FragmentTransaction ft = getFragmentManager().beginTransaction();
+				Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+				if (prev != null) {
+					ft.remove(prev);
+				}
+				ft.addToBackStack(null);
+
+				// Create and show the dialog.
+				NewPageFragment newFragment = NewPageFragment.newInstance(pageList, notebook.getAccentColor());
+				newFragment.show(ft, "dialog");
+			}
+		});
 		if (pageList.size()==0||pageList==null){ //if notebook is empty
 			//pageList = InitNotebooks.populateDebugNotebookPages(pageList, 15);
 			isListEmpty = true;
 			emptyNotebook.setVisibility(View.VISIBLE);
-			fab.setVisibility(View.GONE);
+			fabnotebookmain.setVisibility(View.GONE);
 			notEmptyNotebook.setVisibility(View.GONE);
 			emptyNotebook.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View view) {
+					FragmentTransaction ft = getFragmentManager().beginTransaction();
+					Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+					if (prev != null) {
+						ft.remove(prev);
+					}
+					ft.addToBackStack(null);
+
+					// Create and show the dialog.
+					NewPageFragment newFragment = NewPageFragment.newInstance(pageList, notebook.getAccentColor());
+					newFragment.show(ft, "dialog");
 
 				}
 			});
-		}else{
+		}else{ //if notebook is NOT empty
+			isListEmpty = false;
 			emptyNotebook.setVisibility(View.GONE);
 			notEmptyNotebook.setVisibility(View.VISIBLE);
 			viewPager = (ViewPager) findViewById(R.id.viewpager);
-			viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(),pageList);
+			viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(),pageList,this);
 			viewPager.setAdapter(viewPagerAdapter);
 
 			TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
@@ -99,8 +150,7 @@ public class NotebookMainActivity extends AppCompatActivity {
 			tvSub.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
 		}
 		toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
-		fab.setBackgroundTintList(ColorStateList.valueOf(Helpers.getSingleColorAccent(getApplicationContext(),notebook.color)));
-
+		fabnotebookmain.setBackgroundTintList(ColorStateList.valueOf(Helpers.getSingleColorAccent(getApplicationContext(),notebook.color)));
 
 	}
 
@@ -126,5 +176,26 @@ public class NotebookMainActivity extends AppCompatActivity {
 
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public void onFragmentInteraction(String name, int pageNum, Calendar cal) {
+		pageList.add(new Page(name, pageNum, cal.getTimeInMillis()+43200000));
+		notebook.setPages(pageList);
+		new Helpers().addToNotebookList(notebook, getApplicationContext());
+		if (notebook == null) {
+			Log.d("OnFragmentInteraction", "notebook == null");
+		}
+		isListEmpty = false;
+		emptyNotebook.setVisibility(View.GONE);
+		notEmptyNotebook.setVisibility(View.VISIBLE);
+		viewPager = (ViewPager) findViewById(R.id.viewpager);
+		viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(),pageList, this);
+		viewPager.setAdapter(viewPagerAdapter);
+
+		TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+		tabLayout.setupWithViewPager(viewPager);
+		fabnotebookmain.setVisibility(View.VISIBLE);
+		//refreshData.Refresh(notebook);
 	}
 }

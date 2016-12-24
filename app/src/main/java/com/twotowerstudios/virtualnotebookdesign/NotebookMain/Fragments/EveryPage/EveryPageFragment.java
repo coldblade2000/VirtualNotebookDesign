@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.twotowerstudios.virtualnotebookdesign.NotebookMain.NotebookAdapterToAct;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
 import com.twotowerstudios.virtualnotebookdesign.R;
 
@@ -20,9 +21,11 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class EveryPageFragment extends Fragment {
+public class EveryPageFragment extends Fragment{
 	ArrayList<Page> pageList;
-	RecyclerView rvEveryPage;
+	public RecyclerView rvEveryPage;
+	NotebookAdapterToAct interf;
+	EveryPageAdapter adapter;
 	public EveryPageFragment() {
 		// Required empty public constructor
 	}
@@ -45,11 +48,12 @@ public class EveryPageFragment extends Fragment {
 		rvEveryPage = (RecyclerView) view.findViewById(R.id.rvEveryPage);
 		LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
 		rvEveryPage.setLayoutManager(linearLayoutManager);
-		rvEveryPage.setAdapter(new EveryPageAdapter(getContext(), pageList));
+		rvEveryPage.setAdapter(new EveryPageAdapter(getContext(), pageList, interf));
 	}
 
-	public static EveryPageFragment newInstance(int page, String title, ArrayList<Page> pageList) {
+	public static EveryPageFragment newInstance(int page, String title, ArrayList<Page> pageList, NotebookAdapterToAct interf) {
 		EveryPageFragment fragment = new EveryPageFragment();
+		fragment.interf=interf;
 		Bundle args = new Bundle();
 		args.putInt("page", page);
 		args.putString("title", title);

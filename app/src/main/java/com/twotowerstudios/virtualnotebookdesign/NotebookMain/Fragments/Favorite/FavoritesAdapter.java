@@ -7,14 +7,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
+import com.twotowerstudios.virtualnotebookdesign.NotebookMain.NotebookAdapterToAct;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
 import com.twotowerstudios.virtualnotebookdesign.R;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Created by coldblade2000 on 11/24/16.
@@ -23,6 +24,7 @@ import java.util.Collections;
 public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.ViewHolder>{
 	Context context;
 	ArrayList<Page> favPageList = new ArrayList<>();
+	NotebookAdapterToAct interf;
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
 		public TextView tvFavPage;
@@ -30,6 +32,7 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
 		public TextView tvFavSub;
 		public TextView tvFavItemCount;
 		public ImageView ivFavStar;
+		public LinearLayout llpagelistitem;
 
 		public ViewHolder(View itemView) {
 			super(itemView);
@@ -38,20 +41,13 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
 			tvFavName = (TextView) itemView.findViewById(R.id.tvFavName);
 			tvFavItemCount = (TextView) itemView.findViewById(R.id.tvFavItemCount);
 			ivFavStar = (ImageView) itemView.findViewById(R.id.ivFavStar);
+			llpagelistitem = (LinearLayout) itemView.findViewById(R.id.llpagelistitem);
 		}
     }
-    public FavoritesAdapter(Context context, ArrayList<Page> list){
-       for(Page a : list){
-		   if(a.isFavorite()){
-			   favPageList.add(a);
-		   }
-	   }
-		if (favPageList!=null) {
-			Collections.sort(favPageList);
-		}else{
-			favPageList.add(new Page("DEBUG", 406));
-		}
+    public FavoritesAdapter(Context context, ArrayList<Page> list, NotebookAdapterToAct interf){
+       this.favPageList=list;
 		this.context=context;
+		this.interf=interf;
     }
 
     @Override
@@ -61,9 +57,16 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
 
 
     @Override
-    public void onBindViewHolder(FavoritesAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(FavoritesAdapter.ViewHolder holder, int position) {
 		Page page = favPageList.get(position);
+		final int newpos=position;
 		holder.tvFavPage.setText(""+page.getPageNumber());
+		holder.llpagelistitem.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				interf.clickListener(newpos);
+			}
+		});
 		holder.tvFavName.setText(""+page.getName());
 		holder.tvFavSub.setText("Last Modified "+
 				DateUtils.getRelativeTimeSpanString(page.getLastModifiedMillis(), Helpers.getCurrentTimeInMillis(),DateUtils.SECOND_IN_MILLIS));

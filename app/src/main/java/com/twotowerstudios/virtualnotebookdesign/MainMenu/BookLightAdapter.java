@@ -41,9 +41,10 @@ public class BookLightAdapter  extends RecyclerView.Adapter<BookLightAdapter.Vie
 			tvName = (TextView) view.findViewById(R.id.tvName);
 		}
 	}
-	public BookLightAdapter (Context context, ArrayList<Notebook> bookList){
+	public BookLightAdapter (Context context, ArrayList<Notebook> bookList, MainMenuToNotebook openNotebook){
 		this.bookList = bookList;
 		this.context = context;
+		Interface=openNotebook;
 	}
 	@Override
 	public BookLightAdapter.ViewHolder onCreateViewHolder (ViewGroup parent, int viewType){

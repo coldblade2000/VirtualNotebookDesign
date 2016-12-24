@@ -9,27 +9,34 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.twotowerstudios.virtualnotebookdesign.NotebookMain.NotebookAdapterToAct;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
 import com.twotowerstudios.virtualnotebookdesign.R;
 
 import org.parceler.Parcels;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link FavoritesFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FavoritesFragment extends Fragment {
-	ArrayList<Page> pageList;
+public class FavoritesFragment extends Fragment{
+	ArrayList<Page> favPageList = new ArrayList<>();
 	RecyclerView rvFavorite;
+	NotebookAdapterToAct interf;
+	TextView tvFavoritesEmpty;
+	boolean isFavoritesListEmpty;
     public FavoritesFragment() {
         // Required empty public constructor
     }
-    public static FavoritesFragment newInstance(int page, String title, ArrayList<Page> pageList) {
+    public static FavoritesFragment newInstance(int page, String title, ArrayList<Page> pageList, NotebookAdapterToAct interf) {
         FavoritesFragment fragment = new FavoritesFragment();
+		fragment.interf=interf;
         Bundle args = new Bundle();
         args.putInt("page", page);
         args.putString("title", title);
@@ -40,8 +47,14 @@ public class FavoritesFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-		pageList = Parcels.unwrap(getArguments().getParcelable("list"));
-    }
+		final ArrayList<Page> fullList = Parcels.unwrap(getArguments().getParcelable("list"));
+		for(Page p: fullList) {
+			if(p.isFavorite()){
+				favPageList.add(p);
+			}
+		}
+		Collections.sort(favPageList);
+	}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,6 +67,11 @@ public class FavoritesFragment extends Fragment {
 		rvFavorite = (RecyclerView) view.findViewById(R.id.rvFavorites);
 		LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
 		rvFavorite.setLayoutManager(linearLayoutManager);
-		rvFavorite.setAdapter(new FavoritesAdapter(getContext(), pageList));
+		rvFavorite.setAdapter(new FavoritesAdapter(getContext(), favPageList, interf));
+		tvFavoritesEmpty = (TextView) view.findViewById(R.id.tvFavoritesEmpty);
+		if(isFavoritesListEmpty){
+			tvFavoritesEmpty.setVisibility(View.GONE);
+		}
 	}
+
 }

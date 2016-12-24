@@ -8,7 +8,10 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Nothing here..."/>
+        android:text="Nothing here...You could favorite some of your notebook's pages."
+		android:textAlignment="center"
+		android:padding="16dp"
+		android:id="@+id/tvFavoritesEmpty"/>
     <android.support.v7.widget.RecyclerView
         android:layout_width="wrap_content"
         android:layout_height="match_parent"

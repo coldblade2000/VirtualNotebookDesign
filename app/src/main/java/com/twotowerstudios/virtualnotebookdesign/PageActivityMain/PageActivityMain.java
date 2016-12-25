@@ -26,7 +26,7 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 		rvpagemain = (RecyclerView)  findViewById(R.id.rvpagemain);
 
 		setSupportActionBar(tbpagemain);
-		tbpagemain.setTitle(""+page.name);
+		tbpagemain.setTitle(""+page.getName());
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		tbpagemain.inflateMenu(R.menu.pagemainmenu);

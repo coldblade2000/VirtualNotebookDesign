@@ -12,13 +12,13 @@ import java.util.ArrayList;
 @Parcel
 public class Page implements Comparable<Page>{
 	public ArrayList<Object> content;
-	public String name;
-	public int pageNumber;
-	public long lastModifiedMillis;
-	public long dateMillis;
-	public boolean isFavorite;
-	public String UID16;
-	public String parentUID;
+	private String name;
+	int pageNumber;
+	long lastModifiedMillis;
+	long dateMillis;
+	boolean isFavorite;
+	String UID16;
+	String parentUID;
 
 	public Page(String name, int pageNumber, String parentUID){
 		this.name = name;

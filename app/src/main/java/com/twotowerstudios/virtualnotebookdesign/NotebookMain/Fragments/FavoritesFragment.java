@@ -1,4 +1,4 @@
-package com.twotowerstudios.virtualnotebookdesign.NotebookMain.Fragments.Favorite;
+package com.twotowerstudios.virtualnotebookdesign.NotebookMain.Fragments;
 
 
 import android.os.Bundle;
@@ -27,10 +27,12 @@ import java.util.Collections;
  */
 public class FavoritesFragment extends Fragment{
 	ArrayList<Page> favPageList = new ArrayList<>();
-	RecyclerView rvFavorite;
+
+
+
+	public RecyclerView rvFavorite;
 	NotebookAdapterToAct interf;
 	TextView tvFavoritesEmpty;
-	boolean isFavoritesListEmpty;
     public FavoritesFragment() {
         // Required empty public constructor
     }
@@ -47,13 +49,14 @@ public class FavoritesFragment extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-		final ArrayList<Page> fullList = Parcels.unwrap(getArguments().getParcelable("list"));
+		ArrayList<Page> fullList = Parcels.unwrap(getArguments().getParcelable("list"));
 		for(Page p: fullList) {
 			if(p.isFavorite()){
 				favPageList.add(p);
 			}
 		}
 		Collections.sort(favPageList);
+
 	}
 
     @Override
@@ -67,11 +70,12 @@ public class FavoritesFragment extends Fragment{
 		rvFavorite = (RecyclerView) view.findViewById(R.id.rvFavorites);
 		LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
 		rvFavorite.setLayoutManager(linearLayoutManager);
-		rvFavorite.setAdapter(new FavoritesAdapter(getContext(), favPageList, interf));
+		rvFavorite.setAdapter(new NotebookPageAdapter(getContext(), favPageList, interf,true));
 		tvFavoritesEmpty = (TextView) view.findViewById(R.id.tvFavoritesEmpty);
-		if(isFavoritesListEmpty){
+		if(!favPageList.isEmpty()){
 			tvFavoritesEmpty.setVisibility(View.GONE);
 		}
 	}
+
 
 }

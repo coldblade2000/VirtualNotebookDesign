@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 
@@ -26,7 +25,6 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
-import com.twotowerstudios.virtualnotebookdesign.Initialization.InitNotebooks;
 import com.twotowerstudios.virtualnotebookdesign.Misc.FirstBookLightOffsetDecoration;
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 import com.twotowerstudios.virtualnotebookdesign.Misc.SharedPrefs;
@@ -45,6 +43,8 @@ public class MainActivity extends AppCompatActivity implements BookLightAdapter.
     //https://github.com/mikepenz/MaterialDrawer
 
     private AccountHeader accountHeader;
+    RecyclerView bookLightRecyclerView;
+    ArrayList<Notebook> notebookList;
     private FloatingActionButton fab1, fabShoot, fabImage, fabPage;
 	//private RecyclerView.LayoutManager CommonBooksCardLayoutManager;
 
@@ -60,18 +60,18 @@ public class MainActivity extends AppCompatActivity implements BookLightAdapter.
 		if(Helpers.getStringFromFile("Notebooks.json", getApplicationContext()).equals("")){
 			new File(getFilesDir(), "Notebooks.json");
 		}
-		if(InitNotebooks.isDebug(getApplicationContext())){
+		/*if(InitNotebooks.isDebug(getApplicationContext())){
 			Log.d("isDebugNoteSelect", "DEBUG MODE = true;");
 			InitNotebooks.populateDebugBooks(getApplicationContext(), InitNotebooks.isDebug(getApplicationContext()));
-		}
+		}*/
            //    ============================
 
-		RecyclerView bookLightRecyclerView = (RecyclerView) findViewById(R.id.rvCommonBooks);
+		bookLightRecyclerView = (RecyclerView) findViewById(R.id.rvCommonBooks);
 
         final LinearLayoutManager BookLightLayoutManager = new LinearLayoutManager(this);
         BookLightLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         bookLightRecyclerView.setLayoutManager(BookLightLayoutManager);
-        ArrayList<Notebook> notebookList = Helpers.getNotebookList(getApplicationContext());
+        notebookList = Helpers.getNotebookList(getApplicationContext());
 		RecyclerView.Adapter bookLightAdapter = new BookLightAdapter(this, notebookList, this);
         bookLightRecyclerView.setAdapter(bookLightAdapter);
         //==================
@@ -191,5 +191,13 @@ public class MainActivity extends AppCompatActivity implements BookLightAdapter.
         intent.putExtra("parent", "MainActivity");
         startActivity(intent);
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        notebookList.clear();
+        notebookList.addAll(Helpers.getNotebookList(getApplicationContext()));
+        bookLightRecyclerView.getAdapter().notifyDataSetChanged();
     }
 }

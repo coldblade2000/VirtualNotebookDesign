@@ -8,23 +8,19 @@ import org.parceler.Parcel;
 
 import java.util.ArrayList;
 
-/**
- * Created by Panther II on 30/10/2016.
- */
 @Parcel
 public class Notebook {
-	public String name;
-	public int debugNumOfPages,color,accentColor;
-	public long lastModified;
-	public String UID16;
-	public ArrayList<Page> pages;
+	String name;
+	int color,accentColor;
+	long lastModified;
+	String UID16;
+	ArrayList<Page> pages;
 
 	public Notebook(String name, int color,
 					int debugNumOfPages, long lastModified, Context context){
 		this.name = name;
 		this.lastModified = lastModified;
 		this.color = color;
-		this.debugNumOfPages = debugNumOfPages;
 		this.accentColor=Helpers.getSingleColorAccent(context,color);
 		this.pages = new ArrayList<>();
 		this.UID16 = "n"+Helpers.generateUniqueId(16);
@@ -33,7 +29,6 @@ public class Notebook {
 		this.name=name;
 		this.color=color;
 		this.lastModified=Helpers.getCurrentTimeInMillis();
-		this.debugNumOfPages =5;
 		this.accentColor=accentColor;
 		this.pages = new ArrayList<>();
 		this.UID16 = "n"+Helpers.generateUniqueId(16);
@@ -61,13 +56,9 @@ public class Notebook {
 		this.lastModified = lastModified;
 	}
 
-	public int getDebugNumOfPages() {return debugNumOfPages;}
 
 	public int getNumberOfPages(){return pages.size();}
 
-	public void setDebugNumOfPages(int debugNumOfPages) {
-		 this.debugNumOfPages = debugNumOfPages;
-	}
 
 	public ArrayList<Page> getPages() {
 		return pages;

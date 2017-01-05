@@ -231,4 +231,12 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
         intent.putExtra("parent","NotebookSelection");
 		startActivity(intent);
 	}
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        notebookSelectionCardList.clear();
+        notebookSelectionCardList.addAll(Helpers.getNotebookList(getApplicationContext()));
+        rvNotebookSelectionAdapter.notifyDataSetChanged();
+    }
 }

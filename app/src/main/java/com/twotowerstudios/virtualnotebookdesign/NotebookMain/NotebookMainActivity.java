@@ -9,7 +9,6 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
@@ -45,10 +44,12 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 	FloatingActionButton fabnotebookmain;
 	CollapsingToolbarLayout collapsingToolbarLayout;
 	String parent;
+	String notebookUID16;
 	TextView tvSub;
 	ViewPager viewPager;
+	boolean isFirstTime;
 	ArrayList<Page> pageList;
-	FragmentPagerAdapter viewPagerAdapter;
+	ViewPagerAdapter viewPagerAdapter;
 	RefreshData refreshData;
 	RelativeLayout emptyNotebook;
 	LinearLayout notEmptyNotebook;
@@ -62,7 +63,7 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 	}
 
 	public interface RefreshData{
-		void Refresh(Notebook notebook);
+		void Refresh(ArrayList<Page> pagelist);
 	}
 
 	private boolean isListEmpty;
@@ -70,11 +71,13 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notebook_main);
+		isFirstTime=true;
 		if (notebook==null) {
 			Log.d("NotebookMainActivity", "notebook == null");
 			notebook = Parcels.unwrap(getIntent().getParcelableExtra("notebook"));
 		}
 		pageList = notebook.getPages();
+		notebookUID16=notebook.getUID16();
 		emptyNotebook = (RelativeLayout) findViewById(R.id.emptyNotebook);
 		notEmptyNotebook = (LinearLayout) findViewById(R.id.notEmptyNotebook);
 		fabnotebookmain = (FloatingActionButton) findViewById(R.id.fabnotebookmain);
@@ -132,15 +135,15 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 		tvSub.setText("Last Modified: "+ DateUtils.getRelativeTimeSpanString(notebook.getLastModified(), Helpers.getCurrentTimeInMillis(), DateUtils.SECOND_IN_MILLIS));
 
 		AppBarLayout appbarlayoutNotebook = (AppBarLayout) findViewById(R.id.appbarlayoutNotebook);
-		appbarlayoutNotebook.setBackgroundColor(notebook.color);
+		appbarlayoutNotebook.setBackgroundColor(notebook.getColor());
 		collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapseToolbarNotebook);
 		toolbar = (Toolbar) findViewById(R.id.toolbarNotebook);
 		setSupportActionBar(toolbar);
-		toolbar.setBackgroundColor(notebook.color);
-		getSupportActionBar().setTitle(notebook.name);
+		toolbar.setBackgroundColor(notebook.getColor());
+		getSupportActionBar().setTitle(notebook.getName());
 		getSupportActionBar().setSubtitle("Last modified: " + DateUtils.getRelativeTimeSpanString(notebook.getLastModified(), Helpers.getCurrentTimeInMillis(), DateUtils.SECOND_IN_MILLIS));
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		if(Helpers.isColorDark(notebook.color)){
+		if(Helpers.isColorDark(notebook.getColor())){
 			collapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplicationContext(), R.color.md_white_1000));
 			collapsingToolbarLayout.setCollapsedTitleTextColor(ContextCompat.getColor(getApplicationContext(), R.color.md_white_1000));
 			tvSub.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.md_white_1000));
@@ -150,7 +153,7 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 			tvSub.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
 		}
 		toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
-		fabnotebookmain.setBackgroundTintList(ColorStateList.valueOf(Helpers.getSingleColorAccent(getApplicationContext(),notebook.color)));
+		fabnotebookmain.setBackgroundTintList(ColorStateList.valueOf(Helpers.getSingleColorAccent(getApplicationContext(),notebook.getColor())));
 
 	}
 
@@ -179,6 +182,19 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 	}
 
 	@Override
+	protected void onResume() {
+		Log.v("notebookmainactivity", "onResume called");
+		super.onResume();
+		if(isFirstTime){
+			isFirstTime=false;
+		}else{
+			pageList.clear();
+			pageList.addAll(Helpers.getNotebookFromUID(notebookUID16, getApplicationContext()).getPages());
+			viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), pageList, this));
+		}
+	}
+
+	@Override
 	public void onFragmentInteraction(String name, int pageNum, Calendar cal) {
 		pageList.add(new Page(name, pageNum, cal.getTimeInMillis()+43200000, notebook.getUID16()));
 		notebook.setPages(pageList);
@@ -192,6 +208,7 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 		viewPager = (ViewPager) findViewById(R.id.viewpager);
 		viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(),pageList, this);
 		viewPager.setAdapter(viewPagerAdapter);
+
 
 		TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
 		tabLayout.setupWithViewPager(viewPager);

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -119,7 +118,7 @@ public class Helpers {
 
 		return notebookList;
 	}
-	public static void writeListToFile(Context context, ArrayList<Notebook> notebookList){
+	static void writeListToFile(Context context, ArrayList<Notebook> notebookList){
 		Gson gson = new Gson();
 		String outputString = gson.toJson(notebookList);
 		writeStringToFile(outputString, context, "Notebooks.json");
@@ -129,8 +128,16 @@ public class Helpers {
 		ArrayList<Notebook> list = getNotebookList(context);
 		boolean bookalreadyexists=false;
 		try {
+			for(Notebook a: list){
+				if(a.getUID16().equals(notebook.getUID16())){
+					bookalreadyexists=true;
+					//Toast.makeText(context, "Can't add notebook, already exists", Toast.LENGTH_SHORT).show();
+					list.set(list.indexOf(a), notebook);
+					break;
+				}
+			}
 			for(int i=0; i<list.size(); i++){
-				if(list.get(i).name.equalsIgnoreCase(notebook.name.toLowerCase())){
+				if(list.get(i).getName().equalsIgnoreCase(notebook.getName().toLowerCase())){
 					bookalreadyexists=true;
 					//Toast.makeText(context, "Can't add notebook, already exists", Toast.LENGTH_SHORT).show();
 					list.set(i,notebook);
@@ -145,7 +152,7 @@ public class Helpers {
 		}
 		writeListToFile(context,list);
 	}
-	public static void deleteNotebookByName(String name, Context context){
+	/*public static void deleteNotebookByName(String name, Context context){
 		Toast.makeText(context, "deleteNotebookByName invoked", Toast.LENGTH_SHORT);
 		ArrayList<Notebook> list = new Helpers().getNotebookList(context);
 		for(int i = 0; i <= list.size(); i++){
@@ -157,7 +164,7 @@ public class Helpers {
 				break;
 			}
 		}
-	}
+	}*/
 
 
 	public static ArrayList<Integer> getPossibleColors(Context context){
@@ -252,10 +259,35 @@ public class Helpers {
 		}
 		return null;
 	}
+	public static void overwritePage(String parentUID, Page page, Context context){
+		ArrayList<Notebook> notebookArraylist = getNotebookList(context);
+		boolean isModified = false;
+		for (int i = 0; i < notebookArraylist.size(); i++) {
+			Notebook a = notebookArraylist.get(i);
+			if(a.getUID16().equals(parentUID)) {
+				ArrayList<Page> pageList = a.getPages();
+
+				for (Page b : pageList) {
+					if (b.getUID().equals(page.getUID())) {
+						pageList.set(pageList.indexOf(b), page);
+						isModified = true;
+						a.setPages(pageList);
+						notebookArraylist.set(i, a);
+						break;
+					}
+				}
+
+				break;
+			}
+		}
+		if (isModified) {
+			writeListToFile(context,notebookArraylist);
+		}
+	}
 	/**
 	This isColorDark method was copied word for word from the "Spectrum" library, written by
 	Nathan Walters (and 5 other contributors), published to GitHub with an explicit MIT
-	license, which has no restrictions, except that the creater is not liable for anything,
+	license, which has no restrictions, except that the creator is not liable for anything,
 	and both the license and copyright notices must be written somewhere. This will be done
 	 in the journal, references.txt and report.
 

@@ -38,6 +38,7 @@ public class Page implements Comparable<Page>{
 		this.isFavorite=false;
 		this.parentUID=parentUID;
 		this.dateMillis=dateMillis;
+		UID16 ="p"+Helpers.generateUniqueId(16);
 	}
 	public Page(){}
 
@@ -81,6 +82,7 @@ public class Page implements Comparable<Page>{
 	public String getName(){return name;}
 	public int getNumberOfItems(){return content.size();}
 	public boolean isFavorite(){return isFavorite;}
+	public void setIsFavorite(boolean isFavorite){this.isFavorite=isFavorite;}
 
 	public void setDateMillis(long dateMillis) {this.dateMillis = dateMillis;}
 
@@ -88,6 +90,7 @@ public class Page implements Comparable<Page>{
 
 	@Override
 	public int compareTo(Page page) {
+
 		return this.pageNumber-page.pageNumber;
 	}
 }

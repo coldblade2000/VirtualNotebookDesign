@@ -13,11 +13,12 @@
 		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:text="16"
+			android:text="9999"
+			android:ems="2"
 			android:id="@+id/tvFavPage"
 			android:layout_marginRight="8dp"
-			android:textAppearance="@style/TextAppearance.AppCompat.Headline"
 			android:textSize="24sp"
+			android:textColor="#777777"
 			android:textStyle="normal|bold|italic"/>
 
 		<TextView

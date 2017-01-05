@@ -3,7 +3,7 @@
 	  xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<item android:title="Item"
-		  app:showAsAction="always"
-		  android:id="@+id/mPageFav"
-		  android:icon="@drawable/ic_star_white_24dp"/>
+		app:showAsAction="always"
+		android:id="@+id/mPageFav"
+		android:icon="@drawable/ic_star_border_white_24dp"/>
 </menu>

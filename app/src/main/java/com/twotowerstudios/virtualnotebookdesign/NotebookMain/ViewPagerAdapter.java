@@ -4,8 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.twotowerstudios.virtualnotebookdesign.NotebookMain.Fragments.EveryPage.EveryPageFragment;
-import com.twotowerstudios.virtualnotebookdesign.NotebookMain.Fragments.Favorite.FavoritesFragment;
+import com.twotowerstudios.virtualnotebookdesign.NotebookMain.Fragments.EveryPageFragment;
+import com.twotowerstudios.virtualnotebookdesign.NotebookMain.Fragments.FavoritesFragment;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
 
 import java.util.ArrayList;
@@ -16,23 +16,29 @@ import java.util.ArrayList;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
 	private static int NUM_ITEMS = 2;
-	ArrayList<Page> pageList;
-	NotebookAdapterToAct interf;
+	private ArrayList<Page> pageList;
+	private NotebookAdapterToAct interf;
 	private String titles[] = {"All Pages", "Favorites"};
+
+	private EveryPageFragment everyPageFragment;
+	private FavoritesFragment favoritesFragment;
+
 	public ViewPagerAdapter(FragmentManager fm, ArrayList<Page> list, NotebookAdapterToAct interf) {
 		super(fm);
 		pageList = list;
-		this.interf=interf;
+		this.interf = interf;
 	}
 
 
 	@Override
 	public Fragment getItem(int position) {
-		switch(position){
+		switch (position) {
 			case 0:
-				return EveryPageFragment.newInstance(0, titles[0],pageList,interf);
+				everyPageFragment=  EveryPageFragment.newInstance(0, titles[0], pageList, interf);
+				return everyPageFragment;
 			case 1:
-				return FavoritesFragment.newInstance(1, titles[1],pageList,interf);
+				favoritesFragment = FavoritesFragment.newInstance(1, titles[1], pageList, interf);
+				return favoritesFragment;
 			default:
 				return null;
 		}
@@ -47,4 +53,5 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 	public int getCount() {
 		return NUM_ITEMS;
 	}
+
 }

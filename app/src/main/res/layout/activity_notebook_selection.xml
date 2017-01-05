@@ -28,7 +28,8 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/toolbar"
 
-            android:id="@+id/rvnotebookselection">
+            android:id="@+id/rvnotebookselection"
+			tools:listitem="@layout/notebookselectioncard">
 
         </android.support.v7.widget.RecyclerView>
 

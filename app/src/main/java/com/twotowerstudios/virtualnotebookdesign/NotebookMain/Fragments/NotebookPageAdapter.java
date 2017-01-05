@@ -1,4 +1,4 @@
-package com.twotowerstudios.virtualnotebookdesign.NotebookMain.Fragments.EveryPage;
+package com.twotowerstudios.virtualnotebookdesign.NotebookMain.Fragments;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -12,33 +12,40 @@ import android.widget.TextView;
 
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 import com.twotowerstudios.virtualnotebookdesign.NotebookMain.NotebookAdapterToAct;
+import com.twotowerstudios.virtualnotebookdesign.NotebookMain.NotebookMainActivity;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
 import com.twotowerstudios.virtualnotebookdesign.R;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Created by Panther II on 02/12/2016.
  */
 
-public class EveryPageAdapter extends RecyclerView.Adapter<EveryPageAdapter.ViewHolder>{
+public class NotebookPageAdapter extends RecyclerView.Adapter<NotebookPageAdapter.ViewHolder> implements NotebookMainActivity.RefreshData{
 
 
-	Context context;
-	ArrayList<Page> pageList = new ArrayList<>();
-	NotebookAdapterToAct interf;
+	private Context context;
+	private ArrayList<Page> pageList = new ArrayList<>();
+	private NotebookAdapterToAct interf;
+	private boolean onlyFavorites;
 
+	@Override
+	public void Refresh(ArrayList<Page> list) {
+		pageList.clear();
+		pageList.addAll(list);
+		notifyDataSetChanged();
+	}
 
-	public class ViewHolder extends RecyclerView.ViewHolder {
-		public TextView tvFavPage;
-		public TextView tvFavName;
-		public TextView tvFavSub;
-		public TextView tvFavItemCount;
-		public ImageView ivFavStar;
-		public LinearLayout llpagelistitem;
+	class ViewHolder extends RecyclerView.ViewHolder {
+		TextView tvFavPage;
+		TextView tvFavName;
+		TextView tvFavSub;
+		TextView tvFavItemCount;
+		ImageView ivFavStar;
+		LinearLayout llpagelistitem;
 
-		public ViewHolder(View itemView) {
+		ViewHolder(View itemView) {
 			super(itemView);
 			llpagelistitem = (LinearLayout) itemView.findViewById(R.id.llpagelistitem);
 			tvFavPage = (TextView) itemView.findViewById(R.id.tvFavPage);
@@ -50,12 +57,10 @@ public class EveryPageAdapter extends RecyclerView.Adapter<EveryPageAdapter.View
 	}
 
 
-	public EveryPageAdapter(){}
-	public EveryPageAdapter(Context context, ArrayList<Page> list, NotebookAdapterToAct interf){
+	public NotebookPageAdapter(){}
+	public NotebookPageAdapter(Context context, ArrayList<Page> list, NotebookAdapterToAct interf, boolean onlyFavorites){
+		this.onlyFavorites = onlyFavorites;
 		this.context = context;
-		if (list != null) {
-			Collections.sort(list);
-		}
 		this.interf=interf;
 		pageList = list;
 	}
@@ -75,12 +80,16 @@ public class EveryPageAdapter extends RecyclerView.Adapter<EveryPageAdapter.View
 				interf.clickListener(newpos);
 			}
 		});
-		holder.tvFavPage.setText(""+page.getPageNumber());
+		if (!(page.getPageNumber()==100404)) {
+			holder.tvFavPage.setText(""+page.getPageNumber());
+		} else {
+			holder.tvFavPage.setText("");
+		}
 		holder.tvFavName.setText(""+page.getName());
 		holder.tvFavSub.setText("Last Modified "+
 				DateUtils.getRelativeTimeSpanString(page.getLastModifiedMillis(),Helpers.getCurrentTimeInMillis(),DateUtils.SECOND_IN_MILLIS));
 		holder.tvFavItemCount.setText(""+page.getNumberOfItems());
-		if(page.isFavorite()){
+		if(onlyFavorites||page.isFavorite()){
 			holder.ivFavStar.setVisibility(View.VISIBLE);
 		}else{
 			holder.ivFavStar.setVisibility(View.INVISIBLE);

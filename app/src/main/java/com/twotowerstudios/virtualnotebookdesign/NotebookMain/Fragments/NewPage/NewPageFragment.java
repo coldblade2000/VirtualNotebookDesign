@@ -94,20 +94,34 @@ public class NewPageFragment extends DialogFragment implements CalendarDatePicke
 		tbnewpage.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
-				boolean pageExists = false;
+				/*boolean proceed = true;
 				for(Page page : list){
 					if(page.getName().equalsIgnoreCase(teNewpageName.toString())){
-						pageExists=true;
+						proceed=false;
 						Toast.makeText(getActivity(),"Page with the same title already exists", Toast.LENGTH_SHORT).show();
 						break;
 					}
 				}
-				if(!pageExists){
-					int pageNum = Integer.parseInt(teNewpageNumber.getText().toString());
-					mListener.onFragmentInteraction(teNewpageName.getText().toString(),pageNum,
-					cal);
-					dismiss();
-				}
+				if(proceed){*/
+
+					if (teNewpageNumber.getText().toString().equals("")) {
+						mListener.onFragmentInteraction(teNewpageName.getText().toString(),100404,
+                        cal);
+						dismiss();
+					} else {
+
+						final int pageNum = Integer.parseInt(teNewpageNumber.getText().toString());
+
+						if (pageNum <10000) {
+							mListener.onFragmentInteraction(teNewpageName.getText().toString(),pageNum, cal);
+							dismiss();
+						} else {
+							Toast.makeText(getActivity(),"Page number can't be higher than 9999", Toast.LENGTH_SHORT).show();
+
+						}
+					}
+
+				//}
 				return false;
 			}
 		});

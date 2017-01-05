@@ -4,35 +4,96 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:id="@+id/activity_page_main"
 	android:layout_width="match_parent"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_height="match_parent"
-
 	tools:context="com.twotowerstudios.virtualnotebookdesign.PageActivityMain.PageActivityMain">
 
-	<LinearLayout
+
+	<RelativeLayout
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:orientation="vertical">
 
-		<android.support.v7.widget.Toolbar
-			android:layout_width="match_parent"
-			android:layout_height="?attr/actionBarSize"
-			android:background="?attr/colorPrimary"
-			android:id="@+id/tbpagemain"
-			android:elevation="4dp"/>
+		android:layout_height="match_parent">
 
+
+		<android.support.design.widget.FloatingActionButton
+			android:layout_width="56dp"
+			android:layout_height="56dp"
+			app:fabSize="normal"
+			android:src="@mipmap/plus"
+			app:elevation="8dp"
+			android:layout_marginRight="@dimen/fab_margin_right"
+			android:layout_marginEnd="@dimen/fab_margin_right"
+			android:layout_marginBottom="@dimen/fab_margin_bottom"
+			android:id="@+id/fabPageMain1"
+			android:layout_alignParentRight="true"
+			android:layout_alignParentBottom="true"
+			android:layout_alignParentEnd="true"/>
+
+		<android.support.design.widget.FloatingActionButton
+			android:id="@+id/fabTextChild"
+			android:layout_width="56dp"
+			android:layout_height="56dp"
+			app:fabSize="mini"
+			android:layout_marginLeft="8dp"
+			app:srcCompat="@drawable/ic_format_size_black_24dp"
+			android:tint="@android:color/white"
+			app:backgroundTint="@color/colorPrimary"
+			android:layout_marginBottom="20dp"
+			android:layout_above="@+id/fabPageMain1"
+			android:layout_alignLeft="@+id/fabPageMain1"
+			android:layout_alignStart="@+id/fabPageMain1"
+			android:translationY="60dp"
+			android:visibility="gone" />
+		<android.support.design.widget.FloatingActionButton
+			android:id="@+id/fabImageChild"
+			android:layout_width="56dp"
+			android:layout_height="56dp"
+			app:fabSize="mini"
+			android:layout_marginLeft="8dp"
+			app:srcCompat="@drawable/ic_image_white_24px"
+			android:tint="@android:color/white"
+			app:backgroundTint="@color/colorPrimary"
+			android:layout_marginBottom="20dp"
+			android:layout_above="@+id/fabTextChild"
+			android:layout_alignLeft="@+id/fabPageMain1"
+			android:layout_alignStart="@+id/fabPageMain1"
+			android:translationY="60dp"
+			android:visibility="gone" />
+		<android.support.design.widget.FloatingActionButton
+			android:id="@+id/fabDriveChild"
+			android:layout_width="56dp"
+			android:layout_height="56dp"
+			app:fabSize="mini"
+			android:layout_marginLeft="8dp"
+			app:srcCompat="@drawable/monochrome128"
+			android:tint="@android:color/white"
+			app:backgroundTint="@color/colorPrimary"
+			android:layout_marginBottom="20dp"
+			android:layout_above="@+id/fabImageChild"
+			android:layout_alignLeft="@+id/fabPageMain1"
+			android:layout_alignStart="@+id/fabPageMain1"
+			android:translationY="60dp"
+			android:visibility="gone" />
 		<LinearLayout
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:orientation="vertical">
-
-			<android.support.v7.widget.RecyclerView
+			android:layout_height="match_parent"
+			android:orientation="vertical"
+			android:id="@+id/llpagemain">
+			<android.support.v7.widget.Toolbar
 				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginLeft="16dp"
-				android:layout_marginRight="16dp"
-				android:id="@+id/rvpagemain"/>
-		</LinearLayout>
+				android:layout_height="?attr/actionBarSize"
+				android:background="?attr/colorPrimary"
+				android:id="@+id/tbpagemain"
+				android:elevation="4dp" />
+				<android.support.v7.widget.RecyclerView
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_marginLeft="16dp"
 
-	</LinearLayout>
+					android:layout_marginRight="16dp"
+					android:id="@+id/rvpagemain" />
+			</LinearLayout>
+
+	</RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

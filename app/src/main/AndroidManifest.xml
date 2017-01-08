@@ -27,6 +27,7 @@
 		<activity
 			android:name=".PageActivityMain.PageActivityMain"
 			android:label="@string/title_activity_page_main"
+			android:launchMode="singleTop"
 			android:parentActivityName=".NotebookMain.NotebookMainActivity">
 
 

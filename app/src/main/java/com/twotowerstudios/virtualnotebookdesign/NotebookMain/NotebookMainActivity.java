@@ -23,10 +23,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.twotowerstudios.virtualnotebookdesign.MainMenu.MainActivity;
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 import com.twotowerstudios.virtualnotebookdesign.NotebookMain.Fragments.NewPage.NewPageFragment;
-import com.twotowerstudios.virtualnotebookdesign.NotebookSelection.NotebookSelection;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
 import com.twotowerstudios.virtualnotebookdesign.PageActivityMain.PageActivityMain;
@@ -48,9 +46,9 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 	TextView tvSub;
 	ViewPager viewPager;
 	boolean isFirstTime;
+	TabLayout tabLayout;
 	ArrayList<Page> pageList;
 	ViewPagerAdapter viewPagerAdapter;
-	RefreshData refreshData;
 	RelativeLayout emptyNotebook;
 	LinearLayout notEmptyNotebook;
 
@@ -58,15 +56,12 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 	public void clickListener(int position) {
 		Intent intent = new Intent(this, PageActivityMain.class);
 		intent.putExtra("page", Parcels.wrap(pageList.get(position)));
+		intent.putExtra("notebookUID16", notebookUID16);
 		intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		startActivity(intent);
 	}
 
-	public interface RefreshData{
-		void Refresh(ArrayList<Page> pagelist);
-	}
 
-	private boolean isListEmpty;
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,7 +69,13 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 		isFirstTime=true;
 		if (notebook==null) {
 			Log.d("NotebookMainActivity", "notebook == null");
-			notebook = Parcels.unwrap(getIntent().getParcelableExtra("notebook"));
+			if (getIntent().getStringExtra("parent").equals("NotebookSelection")
+					||(getIntent().getStringExtra("parent").equals("MainActivity"))) {
+				notebook = Parcels.unwrap(getIntent().getParcelableExtra("notebook"));
+			}else if(getIntent().getStringExtra("parent").equals("PageActivityMain")){
+				notebook = Helpers.getNotebookFromUID(getIntent().getStringExtra("notebookUID16"), getApplicationContext());
+			}
+
 		}
 		pageList = notebook.getPages();
 		notebookUID16=notebook.getUID16();
@@ -98,7 +99,6 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 		});
 		if (pageList.size()==0||pageList==null){ //if notebook is empty
 			//pageList = InitNotebooks.populateDebugNotebookPages(pageList, 15);
-			isListEmpty = true;
 			emptyNotebook.setVisibility(View.VISIBLE);
 			fabnotebookmain.setVisibility(View.GONE);
 			notEmptyNotebook.setVisibility(View.GONE);
@@ -111,22 +111,18 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 						ft.remove(prev);
 					}
 					ft.addToBackStack(null);
-
-					// Create and show the dialog.
 					NewPageFragment newFragment = NewPageFragment.newInstance(pageList, notebook.getAccentColor());
 					newFragment.show(ft, "dialog");
 
 				}
 			});
 		}else{ //if notebook is NOT empty
-			isListEmpty = false;
 			emptyNotebook.setVisibility(View.GONE);
 			notEmptyNotebook.setVisibility(View.VISIBLE);
 			viewPager = (ViewPager) findViewById(R.id.viewpager);
-			viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(),pageList,this);
-			viewPager.setAdapter(viewPagerAdapter);
+			viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(),pageList,this));
 
-			TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+			tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
 			tabLayout.setupWithViewPager(viewPager);
 		}
 		parent = getIntent().getExtras().getString("parent");
@@ -154,7 +150,6 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 		}
 		toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
 		fabnotebookmain.setBackgroundTintList(ColorStateList.valueOf(Helpers.getSingleColorAccent(getApplicationContext(),notebook.getColor())));
-
 	}
 
 	@Override
@@ -163,7 +158,8 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 			// Respond to the action bar's Up/Home button
 			case android.R.id.home:
 				// Launch the correct Activity here
-				if (parent.equals("MainActivity")) {
+				finish();
+				/*if (parent.equals("MainActivity")) {
 					Intent intent = new Intent(this, NotebookSelection.class);
 					intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 					startActivity(intent);
@@ -175,7 +171,7 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 					startActivity(intent);
 					finish();
 					return true;
-				}
+				}*/
 
 		}
 		return super.onOptionsItemSelected(item);
@@ -183,7 +179,6 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 
 	@Override
 	protected void onResume() {
-		Log.v("notebookmainactivity", "onResume called");
 		super.onResume();
 		if(isFirstTime){
 			isFirstTime=false;
@@ -191,28 +186,30 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 			pageList.clear();
 			pageList.addAll(Helpers.getNotebookFromUID(notebookUID16, getApplicationContext()).getPages());
 			viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), pageList, this));
+			tabLayout.setupWithViewPager(viewPager);
 		}
 	}
 
 	@Override
 	public void onFragmentInteraction(String name, int pageNum, Calendar cal) {
 		pageList.add(new Page(name, pageNum, cal.getTimeInMillis()+43200000, notebook.getUID16()));
+		notebook.setLastModified(Helpers.getCurrentTimeInMillis());
 		notebook.setPages(pageList);
 		Helpers.addToNotebookList(notebook, getApplicationContext());
+		tvSub.setText("Last Modified: "+ DateUtils.getRelativeTimeSpanString(notebook.getLastModified(), Helpers.getCurrentTimeInMillis(), DateUtils.SECOND_IN_MILLIS));
+		getSupportActionBar().setSubtitle("Last modified: " + DateUtils.getRelativeTimeSpanString(notebook.getLastModified(), Helpers.getCurrentTimeInMillis(), DateUtils.SECOND_IN_MILLIS));
+
 		if (notebook == null) {
 			Log.d("OnFragmentInteraction", "notebook == null");
 		}
-		isListEmpty = false;
 		emptyNotebook.setVisibility(View.GONE);
 		notEmptyNotebook.setVisibility(View.VISIBLE);
 		viewPager = (ViewPager) findViewById(R.id.viewpager);
 		viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(),pageList, this);
 		viewPager.setAdapter(viewPagerAdapter);
 
-
-		TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+		tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
 		tabLayout.setupWithViewPager(viewPager);
 		fabnotebookmain.setVisibility(View.VISIBLE);
-		//refreshData.Refresh(notebook);
 	}
 }

@@ -1,8 +1,6 @@
 package com.twotowerstudios.virtualnotebookdesign.PageActivityMain;
 
 import android.animation.ObjectAnimator;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -12,12 +10,13 @@ import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
-import com.twotowerstudios.virtualnotebookdesign.NotebookMain.NotebookMainActivity;
+import com.twotowerstudios.virtualnotebookdesign.Objects.ChildBase;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
 import com.twotowerstudios.virtualnotebookdesign.R;
 
@@ -28,12 +27,15 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 	Toolbar tbpagemain;
 	RecyclerView rvpagemain;
 	Page page;
+	String notebookUID16;
 	boolean isMainfabOpen;
 	FloatingActionButton fabPageMain1, fabTextChild, fabImageChild,fabDriveChild;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		page = Parcels.unwrap(getIntent().getParcelableExtra("page"));
+		notebookUID16 = getIntent().getStringExtra("notebookUID16");
 		setContentView(R.layout.activity_page_main);
 
 		tbpagemain = (Toolbar) findViewById(R.id.tbpagemain);
@@ -83,7 +85,6 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 
 
 		});
-
 		fabTextChild.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -99,9 +100,7 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 				newFragment.show(ft, "dialog");
 			}
 		});
-
 	}
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.pagemainmenu,menu);
@@ -128,17 +127,21 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 					page.setIsFavorite(true);
 				}
 				invalidateOptionsMenu();
-				Helpers.overwritePage(page.getParentUID(),page,getApplicationContext());
+				Helpers.addPageFromUID16(page.getParentUID(),page,getApplicationContext());
 				break;
 			case android.R.id.home:
-				Intent intent = new Intent(this, NotebookMainActivity.class);
+				/**Intent intent = new Intent(this, NotebookMainActivity.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-				startActivity(intent);
+				intent.putExtra("notebookUID16", notebookUID16);
+				intent.putExtra("parent", "PageActivityMain");
+				startActivity(intent);*/
 				finish();
 				return true;
+
 		}
 		return true;
 	}
+
 
 	@Override
 	public void clickListener(int position) {
@@ -146,7 +149,12 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 	}
 
 	@Override
-	public void onFragmentInteraction(Uri uri) {
-
+	public void returnTextChildInfo(String title, String text) {
+		Log.d("PageActivityMain", "returnTextChildInfo called.");
+		ChildBase newChild = new ChildBase(title, text, page.getParentUID());
+		page.addToPage(newChild);
+		Helpers.addPageFromUID16(page.getParentUID(),page,getApplicationContext());
+		//((PageActivityAdapter) rvpagemain.getAdapter()).refreshList(newChild);
+		rvpagemain.getAdapter().notifyDataSetChanged();
 	}
 }

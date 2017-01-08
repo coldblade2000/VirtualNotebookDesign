@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,12 +28,10 @@ import java.util.Collections;
  */
 public class FavoritesFragment extends Fragment{
 	ArrayList<Page> favPageList = new ArrayList<>();
-
-
-
 	public RecyclerView rvFavorite;
 	NotebookAdapterToAct interf;
 	TextView tvFavoritesEmpty;
+
     public FavoritesFragment() {
         // Required empty public constructor
     }
@@ -67,6 +66,8 @@ public class FavoritesFragment extends Fragment{
 
 	@Override
 	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+		Log.d("FavoriteFragment", "onviewcreated called");
+
 		rvFavorite = (RecyclerView) view.findViewById(R.id.rvFavorites);
 		LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
 		rvFavorite.setLayoutManager(linearLayoutManager);

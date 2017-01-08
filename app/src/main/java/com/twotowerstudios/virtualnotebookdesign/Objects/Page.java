@@ -6,12 +6,10 @@ import org.parceler.Parcel;
 
 import java.util.ArrayList;
 
-/**
- * Created by Panther II on 17/11/2016.
- */
+
 @Parcel
 public class Page implements Comparable<Page>{
-	public ArrayList<Object> content;
+	public ArrayList<ChildBase> content;
 	private String name;
 	int pageNumber;
 	long lastModifiedMillis;
@@ -23,7 +21,7 @@ public class Page implements Comparable<Page>{
 	public Page(String name, int pageNumber, String parentUID){
 		this.name = name;
 		this.pageNumber = pageNumber;
-		this.content = new ArrayList<Object>();
+		this.content = new ArrayList<ChildBase>();
 		this.lastModifiedMillis = Helpers.getCurrentTimeInMillis();
 		this.isFavorite=false;
 		this.dateMillis=0;
@@ -33,7 +31,7 @@ public class Page implements Comparable<Page>{
 	public Page(String name, int pageNumber, long dateMillis, String parentUID){
 		this.name = name;
 		this.pageNumber = pageNumber;
-		this.content = new ArrayList<Object>();
+		this.content = new ArrayList<ChildBase>();
 		this.lastModifiedMillis = Helpers.getCurrentTimeInMillis();
 		this.isFavorite=false;
 		this.parentUID=parentUID;
@@ -45,12 +43,12 @@ public class Page implements Comparable<Page>{
 	public String getUID() {
 		/**if(UID16==null||UID16=="") {
 			UID16 = "p"+Helpers.generateUniqueId(16);
-			Log.d("Page getUID()","Generated new UID for "+name+": "+UID16);
+			Log.d("Page getUID()","Generated new UID for "+title+": "+UID16);
 			ArrayList<Notebook> notebookList = new Helpers().getNotebookList(context);
 			for(Notebook a: notebookList){
 				if(a.getName().equalsIgnoreCase(parent)){
 					for(Page b:a.getPages()){
-						if(b.getName().equals(name)){
+						if(b.getName().equals(title)){
 							b.setUID16(UID16);
 							Helpers.writeListToFile(context,notebookList);
 							Log.i("Page getUID()","wrote updated list to file");
@@ -71,12 +69,12 @@ public class Page implements Comparable<Page>{
 
 	public void setUID16(String UID16) {this.UID16 = UID16;}
 
-	public void addToPage(Object newObject){content.add(newObject);}
+	public void addToPage(ChildBase newObject){content.add(newObject);}
 	public void setLastModifiedMillis(long lastModifiedMillis) {
 		this.lastModifiedMillis = lastModifiedMillis;}
 	public void setName(String name){this.name = name;}
 	public void setPageNumber(int pageNumber){this.pageNumber = pageNumber;}
-	public ArrayList<Object> getContent(){return content;}
+	public ArrayList<ChildBase> getContent(){return content;}
 	public int getPageNumber(){return pageNumber;}
 	public long getLastModifiedMillis() {return lastModifiedMillis;}
 	public String getName(){return name;}

@@ -2,7 +2,6 @@ package com.twotowerstudios.virtualnotebookdesign.NotebookMain.Fragments;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 import com.twotowerstudios.virtualnotebookdesign.NotebookMain.NotebookAdapterToAct;
-import com.twotowerstudios.virtualnotebookdesign.NotebookMain.NotebookMainActivity;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
 import com.twotowerstudios.virtualnotebookdesign.R;
 
@@ -22,20 +20,13 @@ import java.util.ArrayList;
  * Created by Panther II on 02/12/2016.
  */
 
-public class NotebookPageAdapter extends RecyclerView.Adapter<NotebookPageAdapter.ViewHolder> implements NotebookMainActivity.RefreshData{
+public class NotebookPageAdapter extends RecyclerView.Adapter<NotebookPageAdapter.ViewHolder>{
 
 
 	private Context context;
 	private ArrayList<Page> pageList = new ArrayList<>();
 	private NotebookAdapterToAct interf;
 	private boolean onlyFavorites;
-
-	@Override
-	public void Refresh(ArrayList<Page> list) {
-		pageList.clear();
-		pageList.addAll(list);
-		notifyDataSetChanged();
-	}
 
 	class ViewHolder extends RecyclerView.ViewHolder {
 		TextView tvFavPage;
@@ -86,8 +77,8 @@ public class NotebookPageAdapter extends RecyclerView.Adapter<NotebookPageAdapte
 			holder.tvFavPage.setText("");
 		}
 		holder.tvFavName.setText(""+page.getName());
-		holder.tvFavSub.setText("Last Modified "+
-				DateUtils.getRelativeTimeSpanString(page.getLastModifiedMillis(),Helpers.getCurrentTimeInMillis(),DateUtils.SECOND_IN_MILLIS));
+		//holder.tvFavSub.setText("Last Modified "+DateUtils.getRelativeTimeSpanString(page.getLastModifiedMillis(),Helpers.getCurrentTimeInMillis(),DateUtils.SECOND_IN_MILLIS));
+		holder.tvFavSub.setText(""+Helpers.millisDateToString(page.getDateMillis(),2 ));
 		holder.tvFavItemCount.setText(""+page.getNumberOfItems());
 		if(onlyFavorites||page.isFavorite()){
 			holder.ivFavStar.setVisibility(View.VISIBLE);
@@ -101,6 +92,5 @@ public class NotebookPageAdapter extends RecyclerView.Adapter<NotebookPageAdapte
 	public int getItemCount() {
 		return pageList.size();
 	}
-
 
 }

@@ -28,6 +28,7 @@ public class EveryPageFragment extends Fragment{
 	public RecyclerView rvEveryPage;
 	NotebookAdapterToAct interf;
 	String parentUID16;
+
 	public EveryPageFragment() {
 		// Required empty public constructor
 	}

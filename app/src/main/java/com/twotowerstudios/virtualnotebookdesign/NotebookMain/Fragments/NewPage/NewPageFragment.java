@@ -44,6 +44,7 @@ public class NewPageFragment extends DialogFragment implements CalendarDatePicke
 	public interface OnFragmentInteractionListener {
 		void onFragmentInteraction(String name, int pageNum, Calendar cal);
 	}
+
     public static NewPageFragment newInstance(ArrayList<Page> list, int accentColor) {
         NewPageFragment fragment = new NewPageFragment();
         Bundle args = new Bundle();

@@ -2,7 +2,7 @@ package com.twotowerstudios.virtualnotebookdesign.NotebookMain;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.twotowerstudios.virtualnotebookdesign.NotebookMain.Fragments.EveryPageFragment;
 import com.twotowerstudios.virtualnotebookdesign.NotebookMain.Fragments.FavoritesFragment;
@@ -10,18 +10,13 @@ import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
 
 import java.util.ArrayList;
 
-/**
- * Created by Panther II on 02/12/2016.
- */
 
-public class ViewPagerAdapter extends FragmentPagerAdapter {
-	private static int NUM_ITEMS = 2;
+public class ViewPagerAdapter extends FragmentStatePagerAdapter {
+	private static final int NUM_ITEMS = 2;
 	private ArrayList<Page> pageList;
 	private NotebookAdapterToAct interf;
-	private String titles[] = {"All Pages", "Favorites"};
+	private final String titles[] = {"All Pages", "Favorites"};
 
-	private EveryPageFragment everyPageFragment;
-	private FavoritesFragment favoritesFragment;
 
 	public ViewPagerAdapter(FragmentManager fm, ArrayList<Page> list, NotebookAdapterToAct interf) {
 		super(fm);
@@ -34,11 +29,9 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 	public Fragment getItem(int position) {
 		switch (position) {
 			case 0:
-				everyPageFragment=  EveryPageFragment.newInstance(0, titles[0], pageList, interf);
-				return everyPageFragment;
+				return EveryPageFragment.newInstance(0, titles[0], pageList, interf);
 			case 1:
-				favoritesFragment = FavoritesFragment.newInstance(1, titles[1], pageList, interf);
-				return favoritesFragment;
+				return FavoritesFragment.newInstance(1, titles[1], pageList, interf);
 			default:
 				return null;
 		}
@@ -54,4 +47,13 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 		return NUM_ITEMS;
 	}
 
+	@Override
+	public int getItemPosition(Object object) {
+		return POSITION_NONE;
+	}
+	public void refreshList(ArrayList<Page> list){
+		pageList.clear();
+		pageList.addAll(list);
+		notifyDataSetChanged();
+	}
 }

@@ -2,6 +2,7 @@ package com.twotowerstudios.virtualnotebookdesign.PageActivityMain;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.twotowerstudios.virtualnotebookdesign.Objects.PageChildren.ChildDriveDoc;
-import com.twotowerstudios.virtualnotebookdesign.Objects.PageChildren.ChildImage;
-import com.twotowerstudios.virtualnotebookdesign.Objects.PageChildren.ChildText;
+import com.twotowerstudios.virtualnotebookdesign.Objects.ChildBase;
 import com.twotowerstudios.virtualnotebookdesign.R;
 
 import java.io.File;
@@ -21,7 +20,7 @@ import java.util.ArrayList;
 public class PageActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 	Context context;
-	ArrayList<Object> list;
+	ArrayList<ChildBase> list;
 	PageAdapterToAct interf;
 
 	private final int TEXT=0,IMAGE=1,DRIVE=2;
@@ -58,19 +57,31 @@ public class PageActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 		}
 	}
 
+	/**@Override
+	public int getItemViewType(int position) {
+		if(((ChildBase)list.get(position)).getUID16().charAt(0)=='t'){
+			return TEXT;
+		}else if(((ChildBase)list.get(position)).getUID16().charAt(0)=='c'){
+			return IMAGE;
+		}else if(((ChildBase)list.get(position)).getUID16().charAt(0)=='d'){
+			return DRIVE;
+		}
+		return -1;
+	}
+*/
 	@Override
 	public int getItemViewType(int position) {
-		if(list.get(position)instanceof ChildText){
+		if(list.get(position).getChildType()==0){
 			return TEXT;
-		}else if(list.get(position)instanceof ChildImage){
+		}else if(list.get(position).getChildType()==1){
 			return IMAGE;
-		}else if(list.get(position)instanceof ChildDriveDoc){
+		}else if(list.get(position).getChildType()==2){
 			return DRIVE;
 		}
 		return -1;
 	}
 
-	public PageActivityAdapter(Context context, ArrayList<Object> list, PageAdapterToAct interf){
+	public PageActivityAdapter(Context context, ArrayList<ChildBase> list, PageAdapterToAct interf){
 		this.context=context;
 		this.list=list;
 		this.interf=interf;
@@ -103,24 +114,36 @@ public class PageActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 	}
 
 	@Override
-	public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-		switch (holder.getItemViewType()){
+	public void onBindViewHolder(RecyclerView.ViewHolder Vholder, int position) {
+		Log.d("PageActivityAdapter", "onBindViewHolder: start");
+		switch (Vholder.getItemViewType()){
+			
 			case TEXT:
-				ViewHolderText vhText = (ViewHolderText) holder;
-				configureViewHolderText(vhText, position);
+				Log.d("PageActivityAdapter", "onBindViewHolder: TEXT Itemviewtype");
+				ViewHolderText holder = (ViewHolderText) Vholder;
+				ChildBase child = list.get(position);
+				holder.tvChild.setText(""+child.getText());
+				if(child.getTitle()==null){		//if theres no title, make Title disappear
+					holder.tvChildTextTitle.setVisibility(View.GONE);
+				}else{ //make title appear
+					holder.tvChildTextTitle.setVisibility(View.VISIBLE);
+					holder.tvChildTextTitle.setText(child.getTitle());
+				}
+				//configureViewHolderText(vhText, position);
 				break;
 			case IMAGE:
-				ViewHolderImage vhImage = (ViewHolderImage) holder;
+				ViewHolderImage vhImage = (ViewHolderImage) Vholder;
 				configureViewHolderImage(vhImage, position);
 				break;
 			case DRIVE:
-				ViewHolderDrive vhDrive = (ViewHolderDrive) holder;
+				ViewHolderDrive vhDrive = (ViewHolderDrive)Vholder;
 				configureViewHolderDrive(vhDrive, position);
 				break;
 		}
+		Log.d("PageActivityAdapter", "Vholder.getitemviewtype = "+Vholder.getItemViewType());
 	}
 
-	private void configureViewHolderText(ViewHolderText holder, int position){
+	/**private void configureViewHolderText(ViewHolderText holder, int position){
 		ChildText child = (ChildText) list.get(position);
 		holder.tvChild.setText(""+child.getText());
 		if(child.getTitle()==null){		//if theres no title, make Title disappear
@@ -129,18 +152,18 @@ public class PageActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 			holder.tvChildTextTitle.setVisibility(View.VISIBLE);
 			holder.tvChildTextTitle.setText(child.getTitle());
 		}
-	}
+	}*/
 	private void configureViewHolderImage(ViewHolderImage holder, int position){
-		ChildImage child = (ChildImage) list.get(position);
-		holder.tvChildImage.setText(child.getName());
+		ChildBase child = list.get(position);
+		holder.tvChildImage.setText(child.getTitle());
 		File file = new File(child.getPath());
 		Glide.with(context)
 				.load(file)
 				.into(holder.ivChildImage);
 	}
 	private void configureViewHolderDrive(ViewHolderDrive holder, int position){
-		ChildDriveDoc child = (ChildDriveDoc) list.get(position);
-		holder.tvChildDrive.setText(""+child.getName());
+		ChildBase child = list.get(position);
+		holder.tvChildDrive.setText(""+child.getTitle());
 		switch(child.getType()){
 			case 0:
 				Glide.with(context)
@@ -167,5 +190,12 @@ public class PageActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 	@Override
 	public int getItemCount() {
 		return list.size();
+	}
+
+	public void refreshList(ChildBase newChild){
+		list.add(newChild);
+		notifyDataSetChanged();
+		Log.d("PageActivityAdapter", "refreshList: called. list.size() == "+list.size());
+
 	}
 }

@@ -1,15 +1,17 @@
 package com.twotowerstudios.virtualnotebookdesign.PageActivityMain;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.EditText;
 
 import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
 import com.twotowerstudios.virtualnotebookdesign.R;
@@ -63,13 +65,17 @@ public class NewPageChildFragment extends DialogFragment {
     public void onViewCreated(View v, @Nullable Bundle savedInstanceState) {
         if (type=='t') {
             Toolbar tbNewpagechild = (Toolbar) v.findViewById(R.id.tbNewpagechild);
+			final EditText etTitlePageChild = (EditText) v.findViewById(R.id.etTitlePageChild);
+			final EditText etBodyPageChild = (EditText) v.findViewById(R.id.etBodyPageChild);
+
             tbNewpagechild.inflateMenu(R.menu.newpage);
             tbNewpagechild.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.action_newpage:
-
+							mListener.returnTextChildInfo(etTitlePageChild.getText().toString(), etBodyPageChild.getText().toString());
+							dismiss();
                             break;
                     }return false;
                 }
@@ -79,7 +85,22 @@ public class NewPageChildFragment extends DialogFragment {
         }
     }
 
-    @Override
+	@Override
+	public void onResume() {
+		super.onResume();
+		DisplayMetrics displaymetrics = new DisplayMetrics();
+		getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+		int height = displaymetrics.heightPixels;
+		int width = displaymetrics.widthPixels;
+		WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+		lp.copyFrom(getDialog().getWindow().getAttributes());
+		lp.width = (int)(width*0.9);
+		lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+		getDialog().getWindow().setAttributes(lp);
+	}
+
+	@Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
@@ -96,7 +117,6 @@ public class NewPageChildFragment extends DialogFragment {
         mListener = null;
     }
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void returnTextChildInfo(String title, String text);
     }
 }

@@ -24,6 +24,7 @@ import java.util.Random;
 
 public class Helpers {
 
+	static Gson gson = new Gson();
 	public static long stringDataToMillis(String date) {
 		//source: http://stackoverflow.com/questions/9671085/convert-date-to-miliseconds
 		long millis;
@@ -44,16 +45,16 @@ public class Helpers {
 	/**
 	 * Format meanings
 	 * 1: yyyy/MM/dd, HH:mm:ss
-	 * 2:
+	 * 2: yyyy/MM/dd
 	 */
-	/*public static String millisDateToString(Long millis, int format) {
+	public static String millisDateToString(Long millis, int format) {
 		SimpleDateFormat formatter;
 		switch(format){
 			case 1:
 				formatter = new SimpleDateFormat("yyyy/MM/dd, HH:mm:ss");
 				break;
 			case 2:
-				formatter = new SimpleDateFormat("yyyy/MM/dd, HH:mm");
+				formatter = new SimpleDateFormat("yyyy/MM/dd");
 				break;
 			default:
 				formatter = new SimpleDateFormat("yyyy/MM/dd, HH:mm:ss");
@@ -64,7 +65,7 @@ public class Helpers {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(millis);
 		return formatter.format(calendar.getTime());
-	}*/
+	}
 	public static long getCurrentTimeInMillis(){
 		Calendar cal = Calendar.getInstance();
 
@@ -104,7 +105,6 @@ public class Helpers {
 	}
 	public static ArrayList<Notebook> getNotebookList(Context context){
 		ArrayList<Notebook> notebookList;
-		Gson gson = new Gson();
 
 		String fileString = getStringFromFile("Notebooks.json", context);
 		Log.v("Helpers", "getNotebookList: \n"+fileString);
@@ -119,7 +119,6 @@ public class Helpers {
 		return notebookList;
 	}
 	static void writeListToFile(Context context, ArrayList<Notebook> notebookList){
-		Gson gson = new Gson();
 		String outputString = gson.toJson(notebookList);
 		writeStringToFile(outputString, context, "Notebooks.json");
 	}
@@ -152,20 +151,6 @@ public class Helpers {
 		}
 		writeListToFile(context,list);
 	}
-	/*public static void deleteNotebookByName(String name, Context context){
-		Toast.makeText(context, "deleteNotebookByName invoked", Toast.LENGTH_SHORT);
-		ArrayList<Notebook> list = new Helpers().getNotebookList(context);
-		for(int i = 0; i <= list.size(); i++){
-			if(list.get(i).name.equalsIgnoreCase(name)){
-
-				String x = "Deleted the following notebook: "+list.get(i).name;
-				list.remove(i);
-				Toast.makeText(context, x,Toast.LENGTH_SHORT);
-				break;
-			}
-		}
-	}*/
-
 
 	public static ArrayList<Integer> getPossibleColors(Context context){
 		ArrayList<Integer> colors = new ArrayList<>();
@@ -259,30 +244,22 @@ public class Helpers {
 		}
 		return null;
 	}
-	public static void overwritePage(String parentUID, Page page, Context context){
-		ArrayList<Notebook> notebookArraylist = getNotebookList(context);
-		boolean isModified = false;
-		for (int i = 0; i < notebookArraylist.size(); i++) {
-			Notebook a = notebookArraylist.get(i);
-			if(a.getUID16().equals(parentUID)) {
-				ArrayList<Page> pageList = a.getPages();
-
-				for (Page b : pageList) {
-					if (b.getUID().equals(page.getUID())) {
-						pageList.set(pageList.indexOf(b), page);
-						isModified = true;
-						a.setPages(pageList);
-						notebookArraylist.set(i, a);
-						break;
-					}
-				}
-
+	public static void addPageFromUID16(String parentUID, Page page, Context context){
+		Notebook notebook = getNotebookFromUID(parentUID, context);
+		ArrayList<Page> pageList = notebook.getPages();
+		boolean doesPageExistAlready = false;
+		for(int i=0;i<pageList.size();i++){
+			if(pageList.get(i).getUID().equals(page.getUID())){
+				pageList.set(i,page);
+				doesPageExistAlready=true;
 				break;
 			}
 		}
-		if (isModified) {
-			writeListToFile(context,notebookArraylist);
+		if (!doesPageExistAlready) {
+			pageList.add(page);
 		}
+		notebook.setPages(pageList);
+		addToNotebookList(notebook, context);
 	}
 	/**
 	This isColorDark method was copied word for word from the "Spectrum" library, written by

@@ -23,8 +23,6 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 		pageList = list;
 		this.interf = interf;
 	}
-
-
 	@Override
 	public Fragment getItem(int position) {
 		switch (position) {

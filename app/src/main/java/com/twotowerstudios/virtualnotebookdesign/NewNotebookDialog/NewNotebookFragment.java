@@ -144,7 +144,7 @@ public class NewNotebookFragment extends DialogFragment implements NewNotebookAd
 	public static NewNotebookFragment newInstance() {
 			NewNotebookFragment f = new NewNotebookFragment();
 			return f;
-		}
+	}
 	public void changeColor(int position){
 		if(Helpers.isColorDark(colors.get(position))){
 			toolbar.setTitleTextColor(getResources().getColor(R.color.md_dark_primary_text));

@@ -1,10 +1,15 @@
 package com.twotowerstudios.virtualnotebookdesign.PageActivityMain;
 
 import android.animation.ObjectAnimator;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.RecyclerView;
@@ -22,13 +27,18 @@ import com.twotowerstudios.virtualnotebookdesign.R;
 
 import org.parceler.Parcels;
 
-public class PageActivityMain extends AppCompatActivity implements PageActivityAdapter.PageAdapterToAct, NewPageChildFragment.OnFragmentInteractionListener{
+import java.io.File;
+import java.io.IOException;
+
+public class PageActivityMain extends AppCompatActivity implements PageActivityAdapter.PageAdapterToAct, NewPageChildFragment.OnFragmentInteractionListener, ModalBottomSheet.OnModalBottomSheetListener{
 
 	Toolbar tbpagemain;
 	RecyclerView rvpagemain;
 	Page page;
 	String notebookUID16;
 	boolean isMainfabOpen;
+	/*LinearLayout bottom_drawer;
+	BottomSheetBehavior bottomSheetBehavior;*/
 	FloatingActionButton fabPageMain1, fabTextChild, fabImageChild,fabDriveChild;
 
 	@Override
@@ -56,6 +66,11 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 		fabTextChild = ((FloatingActionButton) findViewById(R.id.fabTextChild));
 		fabImageChild = ((FloatingActionButton) findViewById(R.id.fabImageChild));
 		fabDriveChild = ((FloatingActionButton) findViewById(R.id.fabDriveChild));
+
+		/**bottom_drawer = (LinearLayout) findViewById(R.id.bottom_drawer);
+		bottomSheetBehavior = BottomSheetBehavior.from(bottom_drawer);
+		bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);*/
+
 
 		fabPageMain1.setOnClickListener(new View.OnClickListener(){
 			@Override
@@ -98,6 +113,14 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 				// Create and show the dialog.
 				NewPageChildFragment newFragment = NewPageChildFragment.newInstance('t', page);
 				newFragment.show(ft, "dialog");
+			}
+		});
+		fabImageChild.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				//bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+				ModalBottomSheet modalBottomSheet = new ModalBottomSheet();
+				modalBottomSheet.show(getSupportFragmentManager(), "bottom sheet");
 			}
 		});
 	}
@@ -156,5 +179,32 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 		Helpers.addPageFromUID16(page.getParentUID(),page,getApplicationContext());
 		//((PageActivityAdapter) rvpagemain.getAdapter()).refreshList(newChild);
 		rvpagemain.getAdapter().notifyDataSetChanged();
+	}
+
+	@Override
+	public void returnDecision(String tag) {
+		String newImageName = "i"+Helpers.generateUniqueId(16);
+		if(tag.equals("camera")){
+			Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+			if(takePicture.resolveActivity(getPackageManager()) !=null){
+				File photo = null;
+				try{
+					photo = File.createTempFile(newImageName, ".png", getExternalFilesDir(Environment.DIRECTORY_PICTURES));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				if(photo!=null) {
+					Uri photoURI = FileProvider.getUriForFile(this, "com.twotowerstudios.virtualnotebookdesign.fileprovider", photo);
+					takePicture.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+					startActivityForResult(takePicture, 1);
+					ChildBase newImage = new ChildBase("", newImageName, page.getParentUID(),photoURI, getApplicationContext());
+					page.addToPage(newImage);
+					Helpers.addPageFromUID16(page.getParentUID(), page, getApplicationContext());
+					rvpagemain.getAdapter().notifyDataSetChanged();
+				}
+			}
+		}else if(tag.equals("gallery")){
+
+		}
 	}
 }

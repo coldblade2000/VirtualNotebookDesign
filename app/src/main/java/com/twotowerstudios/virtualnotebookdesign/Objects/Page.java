@@ -41,25 +41,6 @@ public class Page implements Comparable<Page>{
 	public Page(){}
 
 	public String getUID() {
-		/**if(UID16==null||UID16=="") {
-			UID16 = "p"+Helpers.generateUniqueId(16);
-			Log.d("Page getUID()","Generated new UID for "+title+": "+UID16);
-			ArrayList<Notebook> notebookList = new Helpers().getNotebookList(context);
-			for(Notebook a: notebookList){
-				if(a.getName().equalsIgnoreCase(parent)){
-					for(Page b:a.getPages()){
-						if(b.getName().equals(title)){
-							b.setUID16(UID16);
-							Helpers.writeListToFile(context,notebookList);
-							Log.i("Page getUID()","wrote updated list to file");
-						}break;
-					}
-				}break;
-			}
-			return UID16;
-		}else{
-			return UID16;
-		}*/
 		return UID16;
 	}
 

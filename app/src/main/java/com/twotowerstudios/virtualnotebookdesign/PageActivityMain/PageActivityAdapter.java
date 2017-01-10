@@ -1,6 +1,9 @@
 package com.twotowerstudios.virtualnotebookdesign.PageActivityMain;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.provider.MediaStore;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +17,7 @@ import com.twotowerstudios.virtualnotebookdesign.Objects.ChildBase;
 import com.twotowerstudios.virtualnotebookdesign.R;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -117,7 +121,6 @@ public class PageActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 	public void onBindViewHolder(RecyclerView.ViewHolder Vholder, int position) {
 		Log.d("PageActivityAdapter", "onBindViewHolder: start");
 		switch (Vholder.getItemViewType()){
-			
 			case TEXT:
 				Log.d("PageActivityAdapter", "onBindViewHolder: TEXT Itemviewtype");
 				ViewHolderText holder = (ViewHolderText) Vholder;
@@ -132,8 +135,35 @@ public class PageActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 				//configureViewHolderText(vhText, position);
 				break;
 			case IMAGE:
-				ViewHolderImage vhImage = (ViewHolderImage) Vholder;
-				configureViewHolderImage(vhImage, position);
+				ViewHolderImage holderImage = (ViewHolderImage) Vholder;
+				ChildBase childImage = list.get(position);
+				holderImage.tvChildImage.setText(childImage.getTitle());
+				if(childImage.doesUriExist()){
+					/**Glide.with(context)
+							//.load(childImage.getUri())
+							.load(R.drawable.ic_sync_black_24dp)
+							.diskCacheStrategy(DiskCacheStrategy.ALL)
+							.thumbnail(0.1f)
+							.into(holderImage.ivChildImage);*/
+					try {
+						holderImage.ivChildImage.setImageBitmap(MediaStore.Images.Media.getBitmap(context.getContentResolver(), childImage.getUri()));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					Log.d("PageActivityAdapter", "onBindViewHolder: uri exists: "+childImage.getUri().toString());
+				}else{
+					File file = new File(childImage.getPath());
+					BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+					Bitmap bitmap = BitmapFactory.decodeFile(file.getAbsolutePath(),bmOptions);
+					bitmap = Bitmap.createScaledBitmap(bitmap,holderImage.ivChildImage.getWidth(),holderImage.ivChildImage.getHeight(),true);
+					holderImage.ivChildImage.setImageBitmap(bitmap);
+					/**Glide.with(context)
+							//.load(child.getUri())
+							//.load(file)
+							.load(R.drawable.ic_collections_black_24dp)
+							.into(holderImage.ivChildImage);*/
+					Log.d("PageActivityAdapter", "onBindViewHolder: uri doesnt exist, path = "+childImage.getPath());
+				}
 				break;
 			case DRIVE:
 				ViewHolderDrive vhDrive = (ViewHolderDrive)Vholder;
@@ -142,7 +172,6 @@ public class PageActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 		}
 		Log.d("PageActivityAdapter", "Vholder.getitemviewtype = "+Vholder.getItemViewType());
 	}
-
 	/**private void configureViewHolderText(ViewHolderText holder, int position){
 		ChildText child = (ChildText) list.get(position);
 		holder.tvChild.setText(""+child.getText());
@@ -153,14 +182,8 @@ public class PageActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 			holder.tvChildTextTitle.setText(child.getTitle());
 		}
 	}*/
-	private void configureViewHolderImage(ViewHolderImage holder, int position){
-		ChildBase child = list.get(position);
-		holder.tvChildImage.setText(child.getTitle());
-		File file = new File(child.getPath());
-		Glide.with(context)
-				.load(file)
-				.into(holder.ivChildImage);
-	}
+	//private void configureViewHolderImage(ViewHolderImage holder, int position){
+
 	private void configureViewHolderDrive(ViewHolderDrive holder, int position){
 		ChildBase child = list.get(position);
 		holder.tvChildDrive.setText(""+child.getTitle());

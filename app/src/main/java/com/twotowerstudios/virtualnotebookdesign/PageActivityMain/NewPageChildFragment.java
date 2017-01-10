@@ -117,6 +117,6 @@ public class NewPageChildFragment extends DialogFragment {
         mListener = null;
     }
     public interface OnFragmentInteractionListener {
-        void returnTextChildInfo(String title, String text);
+        void returnTextChildInfo(String title, String  text);
     }
 }

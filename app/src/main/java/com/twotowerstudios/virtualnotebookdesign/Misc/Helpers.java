@@ -25,6 +25,8 @@ import java.util.Random;
 public class Helpers {
 
 	static Gson gson = new Gson();
+	private static Random random = new Random();
+	private static final String POSSIBILITY = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_?";
 	public static long stringDataToMillis(String date) {
 		//source: http://stackoverflow.com/questions/9671085/convert-date-to-miliseconds
 		long millis;
@@ -98,16 +100,22 @@ public class Helpers {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-
 		return buffer.toString();
-
 	}
+
 	public static ArrayList<Notebook> getNotebookList(Context context){
 		ArrayList<Notebook> notebookList;
-
+		Log.d("Helpers", "context = "+context.getPackageCodePath());
 		String fileString = getStringFromFile("Notebooks.json", context);
-		Log.v("Helpers", "getNotebookList: \n"+fileString);
+		int reps = (fileString.length()/4000)+1;
+		for (int i = 0; i < reps; i++) {
+			if((i+1)*4000>fileString.length()) {
+				Log.v("Helpers", "getNotebookList: \n" + fileString.substring(i * 4000, fileString.length()));
+			}else{
+				Log.v("Helpers", "getNotebookList: \n" + fileString.substring(i * 4000, (i + 1) * 4000));
+
+			}
+		}
 		if (!fileString.equalsIgnoreCase("")) {
 			Type type = new TypeToken<ArrayList<Notebook>>(){}.getType();
 			notebookList = gson.fromJson(fileString,type);
@@ -115,14 +123,13 @@ public class Helpers {
 			Log.d("getNotebookList", "notebooks.json is empty, returning empty arraylist");
 			notebookList = new ArrayList<>();
 		}
-
 		return notebookList;
 	}
+
 	static void writeListToFile(Context context, ArrayList<Notebook> notebookList){
 		String outputString = gson.toJson(notebookList);
 		writeStringToFile(outputString, context, "Notebooks.json");
 	}
-
 	public static void addToNotebookList(Notebook notebook, Context context){
 		ArrayList<Notebook> list = getNotebookList(context);
 		boolean bookalreadyexists=false;
@@ -206,8 +213,6 @@ public class Helpers {
 		Log.d(TAG, "colors.size()== "+colors.size());
 		return getColorAccents(context).get(colors.indexOf(color));
 	}
-	private static Random random = new Random();
-	private static final String POSSIBILITY = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_?";
 
 	public static String generateUniqueId(int length){
 		/** BTW to ease confusion:

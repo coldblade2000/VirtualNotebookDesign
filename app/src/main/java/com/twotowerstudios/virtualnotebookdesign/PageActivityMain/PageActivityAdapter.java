@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.twotowerstudios.virtualnotebookdesign.Objects.ChildBase;
 import com.twotowerstudios.virtualnotebookdesign.R;
 
@@ -140,12 +139,10 @@ public class PageActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 				ViewHolderImage holderImage = (ViewHolderImage) Vholder;
 				ChildBase childImage = list.get(position);
 				holderImage.tvChildImage.setText(childImage.getTitle() + "Debug");
-
 				Glide.with(context)
 						//.load(childImage.getUri())
 						.load(childImage.getUri().toString())
-						.diskCacheStrategy(DiskCacheStrategy.ALL)
-						.thumbnail(0.1f)
+						.centerCrop()
 						.into(holderImage.ivChildImage);
 
 				File newFile = new File(childImage.getUri().getPath());

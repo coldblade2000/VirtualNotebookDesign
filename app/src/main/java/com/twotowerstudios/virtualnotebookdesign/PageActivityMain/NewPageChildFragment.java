@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.Toolbar;
+import android.text.method.ScrollingMovementMethod;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -67,8 +68,8 @@ public class NewPageChildFragment extends DialogFragment {
             Toolbar tbNewpagechild = (Toolbar) v.findViewById(R.id.tbNewpagechild);
 			final EditText etTitlePageChild = (EditText) v.findViewById(R.id.etTitlePageChild);
 			final EditText etBodyPageChild = (EditText) v.findViewById(R.id.etBodyPageChild);
-
-            tbNewpagechild.inflateMenu(R.menu.newpage);
+			etTitlePageChild.setMovementMethod(new ScrollingMovementMethod());
+			tbNewpagechild.inflateMenu(R.menu.newpage);
             tbNewpagechild.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {

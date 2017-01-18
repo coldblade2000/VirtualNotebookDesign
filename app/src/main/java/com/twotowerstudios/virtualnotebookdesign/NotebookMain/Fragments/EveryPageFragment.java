@@ -1,6 +1,7 @@
 package com.twotowerstudios.virtualnotebookdesign.NotebookMain.Fragments;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -68,6 +69,16 @@ public class EveryPageFragment extends Fragment{
 		fragment.setArguments(args);
 		return fragment;
 	}
+	@Override
+	public void onAttach(Context context) {
+		super.onAttach(context);
+		interf = (NotebookAdapterToAct) getActivity();
+	}
 
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		interf=null;
+	}
 
 }

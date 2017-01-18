@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
@@ -56,7 +57,10 @@ public class MainActivity extends AppCompatActivity implements BookLightAdapter.
         setContentView(R.layout.activity_main);
 
 		SharedPrefs.setBoolean(getApplicationContext(), "debug", true);
-
+//File photo = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), newImageName + ".png");
+        if(!new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), ".nomedia").exists()){
+            new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), ".nomedia");
+        }
 		if(Helpers.getStringFromFile("Notebooks.json", getApplicationContext()).equals("")){
 			new File(getFilesDir(), "Notebooks.json");
 		}

@@ -175,11 +175,6 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 				Helpers.addPageFromUID16(page.getParentUID(), page, getApplicationContext());
 				break;
 			case android.R.id.home:
-				/**Intent intent = new Intent(this, NotebookMainActivity.class);
-				 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-				 intent.putExtra("notebookUID16", notebookUID16);
-				 intent.putExtra("parent", "PageActivityMain");
-				 startActivity(intent);*/
 				finish();
 				return true;
 
@@ -227,7 +222,6 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 					ChildBase newImage = new ChildBase(""+title, newImageName, page.getParentUID(), photoURI, getApplicationContext());
 					page.addToPage(newImage);
 					Helpers.addPageFromUID16(page.getParentUID(), page, getApplicationContext());
-					contents.add(newImage);
 					rvpagemain.getAdapter().notifyDataSetChanged();
 				}
 			}

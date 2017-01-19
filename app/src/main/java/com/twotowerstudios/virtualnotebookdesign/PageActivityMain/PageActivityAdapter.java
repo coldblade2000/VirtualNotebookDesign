@@ -19,14 +19,15 @@ import java.util.ArrayList;
 
 public class PageActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-	Context context;
-	ArrayList<ChildBase> list;
-	PageAdapterToAct interf;
+	private Context context;
+	private ArrayList<ChildBase> list;
+	private PageAdapterToAct interf;
 
 	private final int TEXT = 0, IMAGE = 1, DRIVE = 2;
 
 	public interface PageAdapterToAct {
 		void clickListener(String uid);
+		void selectionListener();
 	}
 
 	public class ViewHolderText extends RecyclerView.ViewHolder {
@@ -136,7 +137,7 @@ public class PageActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 				//configureViewHolderText(vhText, position);
 				break;
 			case IMAGE:
-				ViewHolderImage holderImage = (ViewHolderImage) Vholder;
+				final ViewHolderImage holderImage = (ViewHolderImage) Vholder;
 				ChildBase childImage = list.get(position);
 				final String imageUID = childImage.getUID16();
 				if (!childImage.getTitle().equals("")||childImage.getTitle()==null) {
@@ -172,6 +173,8 @@ public class PageActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 				holderImage.ivChildImage.setOnLongClickListener(new View.OnLongClickListener() {
 					@Override
 					public boolean onLongClick(View v) {
+						holderImage.ivChildImage.setSelected(true);
+						interf.selectionListener();
 						return false;
 					}
 				});

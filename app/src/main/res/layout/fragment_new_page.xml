@@ -107,7 +107,7 @@
 				android:id="@+id/lldate">
 
 				<TextView
-					android:text="15 December, 2016"
+					android:text="Click to select date..."
 					android:layout_width="wrap_content"
 					android:layout_height="48dp"
 					android:id="@+id/tvDate"

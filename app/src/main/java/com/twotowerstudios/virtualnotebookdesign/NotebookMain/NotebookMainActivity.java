@@ -192,7 +192,11 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 
 	@Override
 	public void onFragmentInteraction(String name, int pageNum, Calendar cal) {
-		pageList.add(new Page(name, pageNum, cal.getTimeInMillis()+43200000, notebook.getUID16()));
+		if (cal.get(Calendar.YEAR) != 1970) {
+			pageList.add(new Page(name, pageNum, cal.getTimeInMillis()+43200000, notebook.getUID16()));
+		} else {
+			pageList.add(new Page(name, pageNum, 0, notebook.getUID16()));
+		}
 		notebook.setLastModified(Helpers.getCurrentTimeInMillis());
 		notebook.setPages(pageList);
 		Helpers.addToNotebookList(notebook, getApplicationContext());

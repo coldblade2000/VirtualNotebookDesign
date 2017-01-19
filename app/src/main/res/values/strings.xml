@@ -168,4 +168,5 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
 	<string name="title_activity_page_main">PageActivityMain</string>
+	<string name="title_activity_image_zoom">ImageZoomActivity</string>
 </resources>

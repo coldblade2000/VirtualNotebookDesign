@@ -2,10 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 		  package="com.twotowerstudios.virtualnotebookdesign">
 
-	<uses-feature android:name="android.hardware.camera"
-				  android:required="true" />
+	<uses-feature
+		android:name="android.hardware.camera"
+		android:required="true"/>
+
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-	
+	<uses-permission android:name="android.permission.CAMERA"/>
+
 	<application
 		android:allowBackup="true"
 		android:icon="@mipmap/ic_launcher"
@@ -23,16 +26,18 @@
 		</provider>
 
 		<activity android:name=".MainMenu.MainActivity">
+
+		</activity>
+		<activity
+			android:name=".NotebookSelection.NotebookSelection"
+			android:label="@string/title_activity_notebook_selection"
+			android:launchMode="singleTask">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 		</activity>
-		<activity
-			android:name=".NotebookSelection.NotebookSelection"
-			android:label="@string/title_activity_notebook_selection"
-			android:launchMode="singleTask"/>
 		<activity
 			android:name=".NotebookMain.NotebookMainActivity"
 			android:label="@string/title_activity_notebook_main"
@@ -43,8 +48,14 @@
 			android:label="@string/title_activity_page_main"
 			android:launchMode="singleTop"
 			android:parentActivityName=".NotebookMain.NotebookMainActivity">
-
-
+		</activity>
+		<activity
+			android:name=".PageActivityMain.ImageZoomActivity"
+			android:label="@string/title_activity_image_zoom"
+			android:parentActivityName=".PageActivityMain.PageActivityMain">
+			<meta-data
+				android:name="android.support.PARENT_ACTIVITY"
+				android:value="com.twotowerstudios.virtualnotebookdesign.PageActivityMain.PageActivityMain"/>
 		</activity>
 	</application>
 

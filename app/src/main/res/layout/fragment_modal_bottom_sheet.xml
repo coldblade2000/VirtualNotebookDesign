@@ -15,7 +15,27 @@
 		android:paddingBottom="16dp"
 		android:textAppearance="@style/TextAppearance.AppCompat.Display1"
 		android:textSize="18sp"
-		android:textColor="@color/numbers_text_color"/>
+		android:textColor="?android:attr/textColorPrimaryNoDisable"/>
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="1px"
+		android:background="#dddddd"
+		/>
+	<android.support.design.widget.TextInputLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+		<EditText
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:inputType="textPersonName"
+			android:paddingTop="4dp"
+			android:paddingBottom="4dp"
+			android:id="@+id/etImageTitle"
+			android:hint="Title..."
+			android:selectAllOnFocus="false"
+			android:layout_weight="1"
+			android:maxLines="2"/>
+	</android.support.design.widget.TextInputLayout>
 	<View
 		android:layout_width="match_parent"
 		android:layout_height="1px"

@@ -1,0 +1,31 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  xmlns:tools="http://schemas.android.com/tools"
+			  android:layout_width="match_parent"
+			  android:layout_height="match_parent"
+			  tools:context="com.twotowerstudios.virtualnotebookdesign.PageActivityMain.ImageZoomFragment"
+			  android:background="#111111"
+			  android:orientation="vertical">
+	<android.support.v7.widget.Toolbar
+		android:layout_width="match_parent"
+		android:layout_height="?attr/actionBarSize"
+		android:background="@color/md_black_1000"
+		android:theme="@style/MaterialTheme.DarkToolbar.ActionBar.DayNight"
+
+		android:id="@+id/tbfullimage"
+		android:elevation="4dp" />
+
+	<com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
+		android:layout_height="match_parent"
+		android:layout_width="match_parent"
+		android:scaleType="centerCrop"
+		android:adjustViewBounds="true"
+		android:id="@+id/ivFullscreenPage">
+
+	</com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView>
+
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="1px"
+		android:background="#33FF33"/>
+
+</LinearLayout>

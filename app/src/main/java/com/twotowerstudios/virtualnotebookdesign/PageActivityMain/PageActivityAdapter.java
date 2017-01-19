@@ -26,7 +26,7 @@ public class PageActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 	private final int TEXT = 0, IMAGE = 1, DRIVE = 2;
 
 	public interface PageAdapterToAct {
-		void clickListener(int position);
+		void clickListener(String uid);
 	}
 
 	public class ViewHolderText extends RecyclerView.ViewHolder {
@@ -127,7 +127,7 @@ public class PageActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 				ViewHolderText holder = (ViewHolderText) Vholder;
 				ChildBase child = list.get(position);
 				holder.tvChild.setText("" + child.getText());
-				if (child.getTitle() == null) {        //if theres no title, make Title disappear
+				if (child.getTitle() == null||child.getTitle().equals("")) {        //if theres no title, make Title disappear
 					holder.tvChildTextTitle.setVisibility(View.GONE);
 				} else { //make title appear
 					holder.tvChildTextTitle.setVisibility(View.VISIBLE);
@@ -138,11 +138,19 @@ public class PageActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 			case IMAGE:
 				ViewHolderImage holderImage = (ViewHolderImage) Vholder;
 				ChildBase childImage = list.get(position);
-				holderImage.tvChildImage.setText(childImage.getTitle() + "Debug");
+				final String imageUID = childImage.getUID16();
+				if (!childImage.getTitle().equals("")||childImage.getTitle()==null) {
+					holderImage.tvChildImage.setText(""+childImage.getTitle());
+				} else {
+					holderImage.tvChildImage.setVisibility(View.GONE);
+				}
+
 				Glide.with(context)
 						//.load(childImage.getUri())
 						.load(childImage.getUri().toString())
 						.centerCrop()
+						.error(R.drawable.ic_broken_image_red_24dp)
+						.placeholder(R.drawable.ic_image_black_24dp)
 						.into(holderImage.ivChildImage);
 
 				File newFile = new File(childImage.getUri().getPath());
@@ -155,7 +163,18 @@ public class PageActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 				 }*/
 				Log.d("PageActivityAdapter", "onBindViewHolder: uri exists: " + childImage.getUri().toString());
 				Log.d("PageActivityAdapter", "onBindViewHolder: uri path: " + childImage.getUri().getPath());
-
+				holderImage.ivChildImage.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						interf.clickListener(imageUID);
+					}
+				});
+				holderImage.ivChildImage.setOnLongClickListener(new View.OnLongClickListener() {
+					@Override
+					public boolean onLongClick(View v) {
+						return false;
+					}
+				});
 				break;
 			case DRIVE:
 				ViewHolderDrive vhDrive = (ViewHolderDrive) Vholder;

@@ -3,6 +3,7 @@ package com.twotowerstudios.virtualnotebookdesign.NotebookSelection;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -15,20 +16,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.bumptech.glide.Glide;
 import com.mikepenz.materialdrawer.AccountHeader;
-import com.mikepenz.materialdrawer.AccountHeaderBuilder;
-import com.mikepenz.materialdrawer.Drawer;
-import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.model.DividerDrawerItem;
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
-import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.twotowerstudios.virtualnotebookdesign.Initialization.InitNotebooks;
-import com.twotowerstudios.virtualnotebookdesign.MainMenu.MainActivity;
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
+import com.twotowerstudios.virtualnotebookdesign.Misc.SharedPrefs;
 import com.twotowerstudios.virtualnotebookdesign.NewNotebookDialog.NewNotebookFragment;
 import com.twotowerstudios.virtualnotebookdesign.NotebookMain.NotebookMainActivity;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
@@ -37,6 +30,7 @@ import com.twotowerstudios.virtualnotebookdesign.R;
 import org.parceler.Parcels;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class NotebookSelection extends AppCompatActivity implements NotebookSelectionAdapter.SelectionToNotebookInterface {
@@ -50,6 +44,15 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notebook_selection);
+		SharedPrefs.setBoolean(getApplicationContext(), "debug", false);
+		File nomedia = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), ".nomedia");
+		if(!nomedia.exists()){
+			try {
+				nomedia.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		if(Helpers.getStringFromFile("Notebooks.json", getApplicationContext()).equals("")){
 			File file = new File(getFilesDir(),"Notebooks.json");
 		}
@@ -105,7 +108,8 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
         final IProfile h3 = new ProfileDrawerItem().withName("Header 3");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        accountHeader = new AccountHeaderBuilder()
+		getSupportActionBar().setTitle("Notebooks");
+        /**accountHeader = new AccountHeaderBuilder()
                 .withActivity(this)
                 .withHeaderBackground(R.drawable.header)
                 .addProfiles(
@@ -141,11 +145,11 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
                     @Override
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-                        /**if (drawerItem != null) {
-                         Intent intent = null;
-                         if (drawerItem.getIdentifier() == 1) {
-                         intent = new Intent(DrawerActivity.this, CompactHeaderDrawerActivity.class);
-                         }*/
+                        //if (drawerItem != null) {
+                         //Intent intent = null;
+                         //if (drawerItem.getIdentifier() == 1) {
+                         //intent = new Intent(DrawerActivity.this, CompactHeaderDrawerActivity.class);
+                         //}
                         if (drawerItem != null){
                             Intent intent = null;
                             if (position == 1){
@@ -163,9 +167,9 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
                     }
                 })
                 .build();
-		drawer.setSelection(2);
+		drawer.setSelection(2);*/
 		//=========================================================
-        Glide.with(this).load(R.drawable.header2).into(accountHeader.getHeaderBackgroundView());
+//        Glide.with(this).load(R.drawable.header2).into(accountHeader.getHeaderBackgroundView());
 
     }
 

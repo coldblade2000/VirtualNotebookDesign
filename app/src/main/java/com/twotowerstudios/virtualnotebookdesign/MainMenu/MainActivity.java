@@ -37,6 +37,7 @@ import com.twotowerstudios.virtualnotebookdesign.R;
 import org.parceler.Parcels;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements BookLightAdapter.MainMenuToNotebook{
@@ -58,9 +59,15 @@ public class MainActivity extends AppCompatActivity implements BookLightAdapter.
 
 		SharedPrefs.setBoolean(getApplicationContext(), "debug", true);
 //File photo = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), newImageName + ".png");
-        if(!new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), ".nomedia").exists()){
-            new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), ".nomedia");
-        }
+
+		File nomedia = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), ".nomedia");
+        if(!nomedia.exists()){
+			try {
+				nomedia.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		if(Helpers.getStringFromFile("Notebooks.json", getApplicationContext()).equals("")){
 			new File(getFilesDir(), "Notebooks.json");
 		}
@@ -120,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements BookLightAdapter.
         final IProfile h3 = new ProfileDrawerItem().withName("Header 3");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+		getSupportActionBar().setTitle("Virtual Notebooks");
         //PrimaryDrawerItem diNotebooks= new PrimaryDrawerItem().withName("Notebooks").withDescription("Full list of notebooks");
         accountHeader = new AccountHeaderBuilder()
                 .withActivity(this)

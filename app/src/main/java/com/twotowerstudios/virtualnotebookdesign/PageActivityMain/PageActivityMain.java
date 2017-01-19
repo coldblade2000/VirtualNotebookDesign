@@ -1,14 +1,20 @@
 package com.twotowerstudios.virtualnotebookdesign.PageActivityMain;
 
+import android.Manifest;
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.RecyclerView;
@@ -27,48 +33,57 @@ import com.twotowerstudios.virtualnotebookdesign.R;
 import org.parceler.Parcels;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class PageActivityMain extends AppCompatActivity implements PageActivityAdapter.PageAdapterToAct, NewPageChildFragment.OnFragmentInteractionListener, ModalBottomSheet.OnModalBottomSheetListener {
 
 	Toolbar tbpagemain;
 	RecyclerView rvpagemain;
 	Page page;
+	ArrayList<ChildBase> contents = new ArrayList<>();
 	String notebookUID16;
 	boolean isMainfabOpen;
 	/*LinearLayout bottom_drawer;
 	BottomSheetBehavior bottomSheetBehavior;*/
 	FloatingActionButton fabPageMain1, fabTextChild, fabImageChild, fabDriveChild;
+	private boolean allowCamera;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		page = Parcels.unwrap(getIntent().getParcelableExtra("page"));
+		contents=page.getContent();
 		notebookUID16 = getIntent().getStringExtra("notebookUID16");
 		setContentView(R.layout.activity_page_main);
 
-		tbpagemain = (Toolbar) findViewById(R.id.tbpagemain);
+		allowCamera = ContextCompat.checkSelfPermission(this,
+				Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
+			tbpagemain = (Toolbar) findViewById(R.id.tbpagemain);
 		rvpagemain = (RecyclerView) findViewById(R.id.rvpagemain);
 		setSupportActionBar(tbpagemain);
-		tbpagemain.setTitle("" + page.getName());
 		tbpagemain.inflateMenu(R.menu.pagemainmenu);
-
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+		getSupportActionBar().setTitle("" + page.getName());
+		if (page.getDateMillis()!=0) {
+			getSupportActionBar().setSubtitle(""+Helpers.millisDateToString(page.getDateMillis(),2));
+		}
+		//===============================================================================================================
 		StaggeredGridLayoutManager lmpagemain = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
 		rvpagemain.setLayoutManager(lmpagemain);
-		rvpagemain.setAdapter(new PageActivityAdapter(getApplicationContext(), page.getContent(), this));
+		rvpagemain.setAdapter(new PageActivityAdapter(getApplicationContext(), contents, this));
 
 		fabPageMain1 = (FloatingActionButton) findViewById(R.id.fabPageMain1);
 		isMainfabOpen = false;
 		fabTextChild = ((FloatingActionButton) findViewById(R.id.fabTextChild));
 		fabImageChild = ((FloatingActionButton) findViewById(R.id.fabImageChild));
-		fabDriveChild = ((FloatingActionButton) findViewById(R.id.fabDriveChild));
+		//fabDriveChild = ((FloatingActionButton) findViewById(R.id.fabDriveChild)); UNUSED FOR NOW
 
 		/**bottom_drawer = (LinearLayout) findViewById(R.id.bottom_drawer);
 		 bottomSheetBehavior = BottomSheetBehavior.from(bottom_drawer);
 		 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);*/
 
-
+		//===============================================================================================================
 		fabPageMain1.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -76,14 +91,14 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 
 					fabTextChild.show();
 					fabImageChild.show();
-					fabDriveChild.show();
+					//fabDriveChild.show();
 					isMainfabOpen = true;
 					ObjectAnimator openFirstSubfab = ObjectAnimator.ofFloat(fabTextChild, View.TRANSLATION_Y, 200, 0);
 					openFirstSubfab.start();
 					ObjectAnimator openSecondSubfab = ObjectAnimator.ofFloat(fabImageChild, View.TRANSLATION_Y, 400, 0);
 					openSecondSubfab.start();
-					ObjectAnimator openThirdSubfab = ObjectAnimator.ofFloat(fabDriveChild, View.TRANSLATION_Y, 600, 0);
-					openThirdSubfab.start();
+					//ObjectAnimator openThirdSubfab = ObjectAnimator.ofFloat(fabDriveChild, View.TRANSLATION_Y, 600, 0);
+					//openThirdSubfab.start();
 					ObjectAnimator rotateMainfab = ObjectAnimator.ofFloat(fabPageMain1, View.ROTATION, 0, 135);
 					rotateMainfab.start();
 
@@ -95,11 +110,11 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 					closeFirstSubfab.start();
 					ObjectAnimator closeSecondSubfab = ObjectAnimator.ofFloat(fabImageChild, View.TRANSLATION_Y, 0, 400);
 					closeSecondSubfab.start();
-					ObjectAnimator closeThirdSubfab = ObjectAnimator.ofFloat(fabDriveChild, View.TRANSLATION_Y, 0, 600);
-					closeThirdSubfab.start();
+					//ObjectAnimator closeThirdSubfab = ObjectAnimator.ofFloat(fabDriveChild, View.TRANSLATION_Y, 0, 600);
+					//closeThirdSubfab.start();
 					fabTextChild.hide();
 					fabImageChild.hide();
-					fabDriveChild.hide();
+					//fabDriveChild.hide();
 				}
 			}
 
@@ -128,6 +143,7 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 				modalBottomSheet.show(getSupportFragmentManager(), "bottom sheet");
 			}
 		});
+		//===============================================================================================================
 	}
 
 	@Override
@@ -170,13 +186,6 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 		}
 		return true;
 	}
-
-
-	@Override
-	public void clickListener(int position) {
-
-	}
-
 	@Override
 	public void returnTextChildInfo(String title, String text) {
 		Log.d("PageActivityMain", "returnTextChildInfo called.");
@@ -188,23 +197,104 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 	}
 
 	@Override
-	public void returnDecision(String tag) {
+	public void returnDecision(String tag, String title) {
 		String newImageName = "i" + Helpers.generateUniqueId(16);
 		if (tag.equals("camera")) {
-			Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-			if (takePicture.resolveActivity(getPackageManager()) != null) {
-				File photo = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), newImageName + ".png");
-				//Uri photoURI = FileProvider.getUriForFile(this, "com.twotowerstudios.virtualnotebookdesign.fileprovider", photo);
-				Uri photoURI = Uri.fromFile(photo);
-				takePicture.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-				startActivityForResult(takePicture, 1);
-				ChildBase newImage = new ChildBase("", newImageName, page.getParentUID(), photoURI, getApplicationContext());
-				page.addToPage(newImage);
-				Helpers.addPageFromUID16(page.getParentUID(), page, getApplicationContext());
-				rvpagemain.getAdapter().notifyDataSetChanged();
+			locationpermission();
+			if (allowCamera) {
+				Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+				if (takePicture.resolveActivity(getPackageManager()) != null) {
+					File nomedia = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), ".nomedia");
+					if(!nomedia.exists()){
+						try {
+							nomedia.createNewFile();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+					File photo = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), newImageName + ".png");
+					Uri photoURI = Uri.fromFile(photo);
+					takePicture.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+					try {
+						startActivityForResult(takePicture, 1);
+					} catch (SecurityException e) {
+						e.printStackTrace();
+						ActivityCompat.requestPermissions((Activity) getApplicationContext(),
+								new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+								MY_PERMISSIONS_REQUEST_CAMERA);
+
+					}
+					ChildBase newImage = new ChildBase(""+title, newImageName, page.getParentUID(), photoURI, getApplicationContext());
+					page.addToPage(newImage);
+					Helpers.addPageFromUID16(page.getParentUID(), page, getApplicationContext());
+					contents.add(newImage);
+					rvpagemain.getAdapter().notifyDataSetChanged();
+				}
 			}
 		} else if (tag.equals("gallery")) {
 
+		}
+	}
+
+	private static final int MY_PERMISSIONS_REQUEST_CAMERA = 0;
+
+	private void locationpermission() {
+		// Here, thisActivity is the current activity
+		if (ContextCompat.checkSelfPermission(this
+				,
+				Manifest.permission.CAMERA)
+				!= PackageManager.PERMISSION_GRANTED) {
+
+			// Should we show an explanation?
+			if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+					Manifest.permission.CAMERA)) {
+
+				// Show an expanation to the user *asynchronously* -- don't block
+				// this thread waiting for the user's response! After the user
+				// sees the explanation, try again to request the permission.
+
+			} else {
+
+				// No explanation needed, we can request the permission.
+
+				ActivityCompat.requestPermissions(this,
+						new String[]{Manifest.permission.CAMERA},
+						MY_PERMISSIONS_REQUEST_CAMERA);
+
+				// MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+				// app-defined int constant. The callback method gets the
+				// result of the request.
+			}
+		}
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+		switch (requestCode) {
+			case MY_PERMISSIONS_REQUEST_CAMERA:
+				// permission was granted, yay! Do the
+// contacts-related task you need to do.
+// permission denied, boo! Disable the
+// functionality that depends on this permission.
+				allowCamera = grantResults.length > 0
+						&& grantResults[0] == PackageManager.PERMISSION_GRANTED;
+				return;
+		}
+	}
+
+	@Override
+	public void clickListener(String uid) {
+		ChildBase child=null;
+		for(ChildBase a:contents){
+			if(a.getUID16().equals(uid)){
+				child=a;
+				break;
+			}
+		}
+		if (child!=null) {
+			Intent intent = new Intent(this, ImageZoomActivity.class);
+			intent.putExtra("imagechild", Parcels.wrap(child));
+			startActivity(intent);
 		}
 	}
 }

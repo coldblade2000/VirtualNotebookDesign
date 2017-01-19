@@ -78,8 +78,12 @@ public class NotebookPageAdapter extends RecyclerView.Adapter<NotebookPageAdapte
 		}
 		holder.tvFavName.setText(""+page.getName());
 		//holder.tvFavSub.setText("Last Modified "+DateUtils.getRelativeTimeSpanString(page.getLastModifiedMillis(),Helpers.getCurrentTimeInMillis(),DateUtils.SECOND_IN_MILLIS));
-		holder.tvFavSub.setText(""+Helpers.millisDateToString(page.getDateMillis(),2 ));
-		holder.tvFavItemCount.setText(""+page.getNumberOfItems());
+		if((page.getDateMillis()!=0)) {
+			holder.tvFavSub.setText("" + Helpers.millisDateToString(page.getDateMillis(), 2));
+		}else{
+			holder.tvFavSub.setVisibility(View.GONE);
+		}
+		holder.tvFavItemCount.setText(""+page.getNumberOfItems()+ "\nitems");
 		if(onlyFavorites||page.isFavorite()){
 			holder.ivFavStar.setVisibility(View.VISIBLE);
 		}else{

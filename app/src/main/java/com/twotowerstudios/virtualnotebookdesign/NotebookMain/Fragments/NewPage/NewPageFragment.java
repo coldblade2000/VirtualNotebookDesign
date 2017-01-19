@@ -63,6 +63,7 @@ public class NewPageFragment extends DialogFragment implements CalendarDatePicke
 			list = Parcels.unwrap(getArguments().getParcelable("list"));
 			accentColor = getArguments().getInt("accentColor");
         }
+		cal.set(Calendar.YEAR, 1970);
     }
 
     @Override

@@ -8,6 +8,7 @@ import android.support.design.widget.BottomSheetDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.twotowerstudios.virtualnotebookdesign.R;
@@ -15,9 +16,9 @@ import com.twotowerstudios.virtualnotebookdesign.R;
 public class ModalBottomSheet extends BottomSheetDialogFragment {
 	LinearLayout bottomGalleryButton, bottomCameraButton;
 	OnModalBottomSheetListener mListener;
-
+	EditText etImageTitle;
 	public interface OnModalBottomSheetListener{
-		void returnDecision(String tag);
+		void returnDecision(String tag, String title);
 	}
 	public ModalBottomSheet() {
 		// Required empty public constructor
@@ -53,18 +54,19 @@ public class ModalBottomSheet extends BottomSheetDialogFragment {
 	public void onViewCreated(View v, @Nullable Bundle savedInstanceState) {
 		bottomCameraButton = (LinearLayout) v.findViewById(R.id.bottomCameraButton);
 		bottomGalleryButton = (LinearLayout) v.findViewById(R.id.bottomGalleryButton);
+		etImageTitle=(EditText)v.findViewById(R.id.etImageTitle);
 
 		bottomCameraButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				mListener.returnDecision("camera");
+				mListener.returnDecision("camera",etImageTitle.getText().toString());
 				dismiss();
 			}
 		});
 		bottomGalleryButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				mListener.returnDecision("gallery");
+				mListener.returnDecision("gallery",etImageTitle.getText().toString());
 				dismiss();
 			}
 		});

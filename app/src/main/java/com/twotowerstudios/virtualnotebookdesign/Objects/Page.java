@@ -16,6 +16,11 @@ public class Page implements Comparable<Page>{
 	long dateMillis;
 	boolean isFavorite;
 	String UID16;
+
+	public void setContent(ArrayList<ChildBase> content) {
+		this.content = content;
+	}
+
 	String parentUID;
 
 	public Page(String name, int pageNumber, String parentUID){
@@ -51,6 +56,8 @@ public class Page implements Comparable<Page>{
 	public void setUID16(String UID16) {this.UID16 = UID16;}
 
 	public void addToPage(ChildBase newObject){content.add(newObject);}
+	public void removeFromPage(ChildBase object){content.remove(object);}
+	public void removeFromPage(int index){content.remove(index);}
 	public void setLastModifiedMillis(long lastModifiedMillis) {
 		this.lastModifiedMillis = lastModifiedMillis;}
 	public void setName(String name){this.name = name;}

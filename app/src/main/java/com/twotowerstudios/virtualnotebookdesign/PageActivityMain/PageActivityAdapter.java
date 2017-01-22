@@ -1,16 +1,25 @@
 package com.twotowerstudios.virtualnotebookdesign.PageActivityMain;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
+import com.twotowerstudios.virtualnotebookdesign.Misc.SharedPrefs;
 import com.twotowerstudios.virtualnotebookdesign.Objects.ChildBase;
+import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
 import com.twotowerstudios.virtualnotebookdesign.R;
 
 import java.io.File;
@@ -22,12 +31,13 @@ public class PageActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 	private Context context;
 	private ArrayList<ChildBase> list;
 	private PageAdapterToAct interf;
+	private Activity mActivity = null;
+	private int pos;
 
 	private final int TEXT = 0, IMAGE = 1, DRIVE = 2;
 
 	public interface PageAdapterToAct {
 		void clickListener(String uid);
-		void selectionListener();
 	}
 
 	public class ViewHolderText extends RecyclerView.ViewHolder {
@@ -49,6 +59,7 @@ public class PageActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 			super(v);
 			ivChildImage = (ImageView) v.findViewById(R.id.ivChildImage);
 			tvChildImage = (TextView) v.findViewById(R.id.tvChildImage);
+
 		}
 	}
 
@@ -87,10 +98,11 @@ public class PageActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 		return -1;
 	}
 
-	public PageActivityAdapter(Context context, ArrayList<ChildBase> list, PageAdapterToAct interf) {
+	public PageActivityAdapter(Context context, ArrayList<ChildBase> list, PageAdapterToAct interf, Activity activity) {
 		this.context = context;
 		this.list = list;
 		this.interf = interf;
+		mActivity = activity;
 	}
 
 	@Override
@@ -122,13 +134,14 @@ public class PageActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 	@Override
 	public void onBindViewHolder(RecyclerView.ViewHolder Vholder, int position) {
 		Log.d("PageActivityAdapter", "onBindViewHolder: start");
+		pos = position;
 		switch (Vholder.getItemViewType()) {
 			case TEXT:
 				Log.d("PageActivityAdapter", "onBindViewHolder: TEXT Itemviewtype");
 				ViewHolderText holder = (ViewHolderText) Vholder;
 				ChildBase child = list.get(position);
 				holder.tvChild.setText("" + child.getText());
-				if (child.getTitle() == null||child.getTitle().equals("")) {        //if theres no title, make Title disappear
+				if (child.getTitle() == null || child.getTitle().equals("")) {        //if theres no title, make Title disappear
 					holder.tvChildTextTitle.setVisibility(View.GONE);
 				} else { //make title appear
 					holder.tvChildTextTitle.setVisibility(View.VISIBLE);
@@ -136,12 +149,14 @@ public class PageActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 				}
 				//configureViewHolderText(vhText, position);
 				break;
+
+			//===============================================================================================================
 			case IMAGE:
 				final ViewHolderImage holderImage = (ViewHolderImage) Vholder;
-				ChildBase childImage = list.get(position);
+				final ChildBase childImage = list.get(position);
 				final String imageUID = childImage.getUID16();
-				if (!childImage.getTitle().equals("")||childImage.getTitle()==null) {
-					holderImage.tvChildImage.setText(""+childImage.getTitle());
+				if (!childImage.getTitle().equals("") || childImage.getTitle() == null) {
+					holderImage.tvChildImage.setText("" + childImage.getTitle());
 				} else {
 					holderImage.tvChildImage.setVisibility(View.GONE);
 				}
@@ -170,11 +185,54 @@ public class PageActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 						interf.clickListener(imageUID);
 					}
 				});
+
 				holderImage.ivChildImage.setOnLongClickListener(new View.OnLongClickListener() {
 					@Override
 					public boolean onLongClick(View v) {
-						holderImage.ivChildImage.setSelected(true);
-						interf.selectionListener();
+						View checkBoxView = null;
+						checkBoxView = View.inflate(context, R.layout.checkbox, null);
+						CheckBox checkBox = (CheckBox) checkBoxView.findViewById(R.id.mcheckBox);
+						checkBox.setChecked(true);
+						SharedPrefs.setBoolean(context, "deleteFileCheck", true);
+						checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+							@Override
+							public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+								SharedPrefs.setBoolean(context, "deleteFileCheck", isChecked);
+							}
+						});
+
+						new AlertDialog.Builder(mActivity)
+								.setTitle("Do you want to delete this image?")
+								.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										list.remove(pos);
+										Page newpage = Helpers.getPageFromUID(childImage.getPageUID(), childImage.getNotebookUID(), context);
+										newpage.removeFromPage(pos);
+										Helpers.addPageFromUID16(newpage.getParentUID(), newpage, context);
+										if (SharedPrefs.getBoolean(context, "deleteFileCheck")) {
+											File fdelete = new File(childImage.getUri().getPath());
+											if (fdelete.exists()) {
+												if (fdelete.delete()) {
+													Toast.makeText(context, "file deleted :" + childImage.getUri().getPath(), Toast.LENGTH_SHORT).show();
+												} else {
+													Toast.makeText(context, "file not deleted :" + childImage.getUri().getPath(), Toast.LENGTH_SHORT).show();
+
+												}
+											}
+										}
+										notifyItemRemoved(pos);
+									}
+								})
+								.setView(checkBoxView)
+
+								.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+
+									}
+								}).show();
+
 						return false;
 					}
 				});

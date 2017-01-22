@@ -23,4 +23,5 @@ http://stackoverflow.com/questions/2535124/how-to-sort-an-arraylist-of-objects-b
 https://github.com/code-troopers/android-betterpickers
 https://developers.google.com/drive/v3/web/branding
 http://www.materialdoc.com/bottom-sheets/
-getExternalFilesDir(Environment.DIRECTORY_PICTURES), ".nomedia"
+http://stackoverflow.com/questions/9763643/how-to-add-a-check-box-to-an-alert-dialog
+http://stackoverflow.com/questions/24659704/how-do-i-delete-files-programmatically-on-android

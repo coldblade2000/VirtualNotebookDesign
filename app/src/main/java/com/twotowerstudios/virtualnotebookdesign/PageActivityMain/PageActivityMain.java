@@ -49,32 +49,47 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 	boolean isMainfabOpen;
 	/*LinearLayout bottom_drawer;
 	BottomSheetBehavior bottomSheetBehavior;*/
-	FloatingActionButton fabPageMain1, fabTextChild, fabImageChild, fabDriveChild;
+	FloatingActionButton fabPageMain1, fabTextChild, fabImageChild;
 	private boolean allowCamera;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		page = Parcels.unwrap(getIntent().getParcelableExtra("page"));
-		contents=page.getContent();
+		contents = page.getContent();
+		//DEBUG, REMOVE
+		/**if (true) {
+			ArrayList<ChildBase> newcontent = new ArrayList<>();
+			for (ChildBase a : contents) {
+				if (a.getPageUID() == null) {
+					a.setPageUID(page.getUID());
+					a.setNotebookUID(page.getParentUID());
+
+				}
+				newcontent.add(a);
+			}
+			page.setContent(newcontent);
+			Helpers.addPageFromUID16(page.getParentUID(), page, getApplicationContext());
+		}*/
+
 		notebookUID16 = getIntent().getStringExtra("notebookUID16");
 		setContentView(R.layout.activity_page_main);
 
 		allowCamera = ContextCompat.checkSelfPermission(this,
 				Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
-			tbpagemain = (Toolbar) findViewById(R.id.tbpagemain);
+		tbpagemain = (Toolbar) findViewById(R.id.tbpagemain);
 		rvpagemain = (RecyclerView) findViewById(R.id.rvpagemain);
 		setSupportActionBar(tbpagemain);
 		tbpagemain.inflateMenu(R.menu.pagemainmenu);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		getSupportActionBar().setTitle("" + page.getName());
-		if (page.getDateMillis()!=0) {
-			getSupportActionBar().setSubtitle(""+Helpers.millisDateToString(page.getDateMillis(),2));
+		if (page.getDateMillis() != 0) {
+			getSupportActionBar().setSubtitle("" + Helpers.millisDateToString(page.getDateMillis(), 2));
 		}
 		//===============================================================================================================
 		StaggeredGridLayoutManager lmpagemain = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
 		rvpagemain.setLayoutManager(lmpagemain);
-		rvpagemain.setAdapter(new PageActivityAdapter(getApplicationContext(), contents, this));
+		rvpagemain.setAdapter(new PageActivityAdapter(getApplicationContext(), contents, this, this));
 
 		fabPageMain1 = (FloatingActionButton) findViewById(R.id.fabPageMain1);
 		isMainfabOpen = false;
@@ -189,10 +204,11 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 		}
 		return true;
 	}
+
 	@Override
 	public void returnTextChildInfo(String title, String text) {
 		Log.d("PageActivityMain", "returnTextChildInfo called.");
-		ChildBase newChild = new ChildBase(title, text, page.getParentUID());
+		ChildBase newChild = new ChildBase(title, text, page.getParentUID(), page.getUID());
 		page.addToPage(newChild);
 		Helpers.addPageFromUID16(page.getParentUID(), page, getApplicationContext());
 		//((PageActivityAdapter) rvpagemain.getAdapter()).refreshList(newChild);
@@ -204,7 +220,7 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 		final String newImageName = "i" + Helpers.generateUniqueId(16);
 		if (tag.equals("camera")) {
 			locationpermission();
-			if(SharedPrefs.getBoolean(getApplicationContext(),"deleteNoticeShown")){
+			if (SharedPrefs.getBoolean(getApplicationContext(), "deleteNoticeShown")) {
 				if (allowCamera) {
 					Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 					if (takePicture.resolveActivity(getPackageManager()) != null) {
@@ -228,13 +244,13 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 									MY_PERMISSIONS_REQUEST_CAMERA);
 
 						}
-						ChildBase newImage = new ChildBase("" + title, newImageName, page.getParentUID(), photoURI, getApplicationContext());
+						ChildBase newImage = new ChildBase("" + title, newImageName, page.getParentUID(), page.getUID(), photoURI, getApplicationContext());
 						page.addToPage(newImage);
 						Helpers.addPageFromUID16(page.getParentUID(), page, getApplicationContext());
 						rvpagemain.invalidate();
 					}
 				}
-			}else{
+			} else {
 				new AlertDialog.Builder(this)
 						.setTitle("Notice")
 						.setMessage("Some phones will automatically copy every picture taken here to the gallery. Feel free to delete those copies from your gallery. The photos in this app won't be affected")
@@ -263,7 +279,7 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 													MY_PERMISSIONS_REQUEST_CAMERA);
 
 										}
-										ChildBase newImage = new ChildBase("" + title, newImageName, page.getParentUID(), photoURI, getApplicationContext());
+										ChildBase newImage = new ChildBase("" + title, newImageName, page.getParentUID(), page.getUID(), photoURI, getApplicationContext());
 										page.addToPage(newImage);
 										Helpers.addPageFromUID16(page.getParentUID(), page, getApplicationContext());
 										rvpagemain.invalidate();
@@ -329,17 +345,19 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 
 	@Override
 	public void clickListener(String uid) {
-		ChildBase child=null;
-		for(ChildBase a:contents){
-			if(a.getUID16().equals(uid)){
-				child=a;
+		ChildBase child = null;
+		for (ChildBase a : contents) {
+			if (a.getUID16().equals(uid)) {
+				child = a;
 				break;
 			}
 		}
-		if (child!=null) {
+		if (child != null) {
 			Intent intent = new Intent(this, ImageZoomActivity.class);
 			intent.putExtra("imagechild", Parcels.wrap(child));
 			startActivity(intent);
 		}
 	}
+
+
 }

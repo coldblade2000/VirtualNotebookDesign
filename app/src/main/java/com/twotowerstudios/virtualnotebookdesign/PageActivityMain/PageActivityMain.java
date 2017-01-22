@@ -3,6 +3,7 @@ package com.twotowerstudios.virtualnotebookdesign.PageActivityMain;
 import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -15,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.RecyclerView;
@@ -26,6 +28,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
+import com.twotowerstudios.virtualnotebookdesign.Misc.SharedPrefs;
 import com.twotowerstudios.virtualnotebookdesign.Objects.ChildBase;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
 import com.twotowerstudios.virtualnotebookdesign.R;
@@ -197,40 +200,82 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 	}
 
 	@Override
-	public void returnDecision(String tag, String title) {
-		String newImageName = "i" + Helpers.generateUniqueId(16);
+	public void returnDecision(String tag, final String title) {
+		final String newImageName = "i" + Helpers.generateUniqueId(16);
 		if (tag.equals("camera")) {
 			locationpermission();
-			if (allowCamera) {
-				Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-				if (takePicture.resolveActivity(getPackageManager()) != null) {
-					File nomedia = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), ".nomedia");
-					if(!nomedia.exists()){
-						try {
-							nomedia.createNewFile();
-						} catch (IOException e) {
-							e.printStackTrace();
+			if(SharedPrefs.getBoolean(getApplicationContext(),"deleteNoticeShown")){
+				if (allowCamera) {
+					Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+					if (takePicture.resolveActivity(getPackageManager()) != null) {
+						File nomedia = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), ".nomedia");
+						if (!nomedia.exists()) {
+							try {
+								nomedia.createNewFile();
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
 						}
-					}
-					File photo = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), newImageName + ".png");
-					Uri photoURI = Uri.fromFile(photo);
-					takePicture.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-					try {
-						startActivityForResult(takePicture, 1);
-					} catch (SecurityException e) {
-						e.printStackTrace();
-						ActivityCompat.requestPermissions((Activity) getApplicationContext(),
-								new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-								MY_PERMISSIONS_REQUEST_CAMERA);
+						File photo = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), newImageName + ".png");
+						Uri photoURI = Uri.fromFile(photo);
+						takePicture.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+						try {
+							startActivityForResult(takePicture, 1);
+						} catch (SecurityException e) {
+							e.printStackTrace();
+							ActivityCompat.requestPermissions((Activity) getApplicationContext(),
+									new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+									MY_PERMISSIONS_REQUEST_CAMERA);
 
+						}
+						ChildBase newImage = new ChildBase("" + title, newImageName, page.getParentUID(), photoURI, getApplicationContext());
+						page.addToPage(newImage);
+						Helpers.addPageFromUID16(page.getParentUID(), page, getApplicationContext());
+						rvpagemain.invalidate();
 					}
-					ChildBase newImage = new ChildBase(""+title, newImageName, page.getParentUID(), photoURI, getApplicationContext());
-					page.addToPage(newImage);
-					Helpers.addPageFromUID16(page.getParentUID(), page, getApplicationContext());
-					contents.add(newImage);
-					rvpagemain.getAdapter().notifyDataSetChanged();
 				}
+			}else{
+				new AlertDialog.Builder(this)
+						.setTitle("Notice")
+						.setMessage("Some phones will automatically copy every picture taken here to the gallery. Feel free to delete those copies from your gallery. The photos in this app won't be affected")
+						.setPositiveButton("I understand", new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								if (allowCamera) {
+									Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+									if (takePicture.resolveActivity(getPackageManager()) != null) {
+										File nomedia = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), ".nomedia");
+										if (!nomedia.exists()) {
+											try {
+												nomedia.createNewFile();
+											} catch (IOException e) {
+												e.printStackTrace();
+											}
+										}
+										File photo = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), newImageName + ".png");
+										Uri photoURI = Uri.fromFile(photo);
+										takePicture.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+										try {
+											startActivityForResult(takePicture, 1);
+										} catch (SecurityException e) {
+											e.printStackTrace();
+											ActivityCompat.requestPermissions((Activity) getApplicationContext(),
+													new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+													MY_PERMISSIONS_REQUEST_CAMERA);
+
+										}
+										ChildBase newImage = new ChildBase("" + title, newImageName, page.getParentUID(), photoURI, getApplicationContext());
+										page.addToPage(newImage);
+										Helpers.addPageFromUID16(page.getParentUID(), page, getApplicationContext());
+										rvpagemain.invalidate();
+										SharedPrefs.setBoolean(getApplicationContext(), "deleteNoticeShown", true);
+									}
+								}
+							}
+						})
+						.show();
 			}
+
+
 		} else if (tag.equals("gallery")) {
 
 		}

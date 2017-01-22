@@ -34,6 +34,7 @@ import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 
 public class NotebookMainActivity extends AppCompatActivity implements NewPageFragment.OnFragmentInteractionListener, NotebookAdapterToAct{
 
@@ -53,9 +54,23 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 	LinearLayout notEmptyNotebook;
 
 	@Override
-	public void clickListener(int position) {
+	public void clickListener(int position, boolean onlyFavorites) {
 		Intent intent = new Intent(this, PageActivityMain.class);
-		intent.putExtra("page", Parcels.wrap(pageList.get(position)));
+
+
+		if(onlyFavorites){
+			ArrayList<Page> favPageList = new ArrayList<>();
+			for(Page p: pageList) {
+				if(p.isFavorite()){
+					favPageList.add(p);
+				}
+			}
+			Collections.sort(favPageList);
+			intent.putExtra("page", Parcels.wrap(favPageList.get(position)));
+
+		}else{
+			intent.putExtra("page", Parcels.wrap(pageList.get(position)));
+		}
 		intent.putExtra("notebookUID16", notebookUID16);
 		intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		startActivity(intent);
@@ -120,7 +135,8 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 			emptyNotebook.setVisibility(View.GONE);
 			notEmptyNotebook.setVisibility(View.VISIBLE);
 			viewPager = (ViewPager) findViewById(R.id.viewpager);
-			viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(),pageList,this));
+
+			viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(),pageList,Helpers.getSingleColorAccent(this,notebook.getColor()),this));
 
 			tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
 			tabLayout.setupWithViewPager(viewPager);
@@ -185,11 +201,12 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 		}else{
 			pageList.clear();
 			pageList.addAll(Helpers.getNotebookFromUID(notebookUID16, getApplicationContext()).getPages());
-			viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), pageList, this));
+			viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), pageList, Helpers.getSingleColorAccent(this,notebook.getColor()), this));
 			tabLayout.setupWithViewPager(viewPager);
 		}
 	}
 
+	@SuppressWarnings("WrongConstant")
 	@Override
 	public void onFragmentInteraction(String name, int pageNum, Calendar cal) {
 		if (cal.get(Calendar.YEAR) != 1970) {
@@ -209,7 +226,7 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 		emptyNotebook.setVisibility(View.GONE);
 		notEmptyNotebook.setVisibility(View.VISIBLE);
 		viewPager = (ViewPager) findViewById(R.id.viewpager);
-		viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(),pageList, this);
+		viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(),pageList, notebook.getColor(), this);
 		viewPager.setAdapter(viewPagerAdapter);
 
 		tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);

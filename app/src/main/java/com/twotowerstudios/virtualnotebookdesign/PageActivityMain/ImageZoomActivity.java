@@ -38,6 +38,7 @@ public class ImageZoomActivity extends AppCompatActivity {
 			}
 		});
 		ivFullscreenPage = (SubsamplingScaleImageView) findViewById(R.id. ivFullscreenPage);
+		ivFullscreenPage.setOrientation(SubsamplingScaleImageView.ORIENTATION_USE_EXIF);
 		ivFullscreenPage.setImage(ImageSource.uri(image.getUri()));
 		ivFullscreenPage.setOnClickListener(new View.OnClickListener() {
 			@Override

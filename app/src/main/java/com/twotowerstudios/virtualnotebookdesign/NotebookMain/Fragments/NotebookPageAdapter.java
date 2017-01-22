@@ -1,6 +1,7 @@
 package com.twotowerstudios.virtualnotebookdesign.NotebookMain.Fragments;
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,7 @@ public class NotebookPageAdapter extends RecyclerView.Adapter<NotebookPageAdapte
 	private Context context;
 	private ArrayList<Page> pageList = new ArrayList<>();
 	private NotebookAdapterToAct interf;
+	private int color;
 	private boolean onlyFavorites;
 
 	class ViewHolder extends RecyclerView.ViewHolder {
@@ -49,10 +51,11 @@ public class NotebookPageAdapter extends RecyclerView.Adapter<NotebookPageAdapte
 
 
 	public NotebookPageAdapter(){}
-	public NotebookPageAdapter(Context context, ArrayList<Page> list, NotebookAdapterToAct interf, boolean onlyFavorites){
+	public NotebookPageAdapter(Context context, ArrayList<Page> list, NotebookAdapterToAct interf, int color,boolean onlyFavorites){
 		this.onlyFavorites = onlyFavorites;
 		this.context = context;
 		this.interf=interf;
+		this.color=color;
 		pageList = list;
 	}
 	@Override
@@ -68,9 +71,11 @@ public class NotebookPageAdapter extends RecyclerView.Adapter<NotebookPageAdapte
 		holder.llpagelistitem.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				interf.clickListener(newpos);
+				interf.clickListener(newpos, onlyFavorites);
 			}
 		});
+		holder.tvFavSub.setTextColor(color);
+		holder.ivFavStar.setColorFilter(color, PorterDuff.Mode.MULTIPLY);
 		if (!(page.getPageNumber()==100404)) {
 			holder.tvFavPage.setText(""+page.getPageNumber());
 		} else {

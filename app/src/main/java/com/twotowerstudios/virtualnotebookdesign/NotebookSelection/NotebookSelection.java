@@ -40,10 +40,12 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
     private ArrayList<Notebook> notebookSelectionCardList;
 	private FloatingActionButton fabSelection, fabAddBook;
 	static boolean isMainfabOpen;
+	private boolean isFirstTime;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notebook_selection);
+		isFirstTime=true;
 		SharedPrefs.setBoolean(getApplicationContext(), "debug", false);
 		File nomedia = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), ".nomedia");
 		if(!nomedia.exists()){
@@ -238,9 +240,14 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 
     @Override
     protected void onResume() {
+		if(isFirstTime){
+			isFirstTime=false;
+		}else{
+			notebookSelectionCardList.clear();
+			notebookSelectionCardList.addAll(Helpers.getNotebookList(getApplicationContext()));
+			rvNotebookSelectionAdapter.notifyDataSetChanged();
+		}
         super.onResume();
-        notebookSelectionCardList.clear();
-        notebookSelectionCardList.addAll(Helpers.getNotebookList(getApplicationContext()));
-        rvNotebookSelectionAdapter.notifyDataSetChanged();
+
     }
 }

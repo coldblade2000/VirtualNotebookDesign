@@ -81,6 +81,8 @@
 				android:layout_height="?attr/actionBarSize"
 				android:background="?attr/colorPrimary"
 				android:id="@+id/tbpagemain"
+				app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+				app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
 				android:elevation="4dp" />
 				<android.support.v7.widget.RecyclerView
 					android:layout_width="match_parent"

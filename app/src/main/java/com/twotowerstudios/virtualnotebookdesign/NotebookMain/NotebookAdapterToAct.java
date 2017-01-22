@@ -9,5 +9,5 @@ public interface NotebookAdapterToAct{
 	 * 1 = everypage
 	 * 2 = favorites
 	 */
-	void clickListener(int position);
+	void clickListener(int position, boolean onlyFavorites);
 }

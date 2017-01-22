@@ -25,7 +25,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:text="Modified 5 days ago. 12 items"
-			android:textColor="@color/accent"
+			android:textColor="@color/colorAccent"
 			android:id="@+id/tvFavSub"
 			android:layout_toRightOf="@id/tvFavPage"
 			android:layout_below="@+id/tvFavName"
@@ -46,7 +46,7 @@
 			android:textColor="?android:attr/textColorPrimary"/>
 
 		<ImageView
-			app:srcCompat="@drawable/ic_star_black_24dp"
+			app:srcCompat="@drawable/ic_star_white_24dp"
 			android:id="@+id/ivFavStar"
 			android:tint="@color/colorAccent"
 			android:layout_alignParentRight="true"

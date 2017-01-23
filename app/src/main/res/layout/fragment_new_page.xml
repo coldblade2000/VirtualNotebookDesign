@@ -39,7 +39,7 @@
 				<EditText
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:inputType="textPersonName"
+					android:inputType="textCapSentences"
 					android:id="@+id/teNewpageName"
 					android:hint="Page Name"
 					android:selectAllOnFocus="false"

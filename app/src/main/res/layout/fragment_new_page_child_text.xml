@@ -28,7 +28,7 @@
             android:layout_weight="1"
             android:id="@+id/etTitlePageChild"
 
-            />
+			android:inputType="textCapSentences"/>
     </android.support.design.widget.TextInputLayout>
 
 	<android.support.design.widget.TextInputLayout
@@ -40,6 +40,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/etBodyPageChild"
             android:hint="Text here..."
+			android:inputType="textCapSentences"
 			android:scrollbars="vertical"
 			android:maxLines="5"
             android:layout_weight="1"

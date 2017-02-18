@@ -293,7 +293,19 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 
 
 		} else if (tag.equals("gallery")) {
+			Intent intent = new Intent();
+			intent.setType("image/*");
+			intent.setAction(Intent.ACTION_GET_CONTENT);
+			startActivityForResult(Intent.createChooser(intent,
+					"Select Picture"), 1);
+		}
+	}
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode == RESULT_OK) {
+			if (requestCode == 1) {
+				Uri selectedImageUri = data.getData();
 
+			}
 		}
 	}
 

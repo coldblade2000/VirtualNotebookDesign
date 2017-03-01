@@ -1,0 +1,4248 @@
+%%InitNotebooks.java
+
+package com.twotowerstudios.virtualnotebookdesign.Initialization;
+
+import android.content.Context;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
+
+import com.google.gson.Gson;
+import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
+import com.twotowerstudios.virtualnotebookdesign.Misc.SharedPrefs;
+import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
+import com.twotowerstudios.virtualnotebookdesign.R;
+
+import java.util.ArrayList;
+
+public class InitNotebooks {
+
+	public static boolean isDebug(Context context){
+		return SharedPrefs.getBoolean(context, "debug");
+	}
+	private static boolean doDebugBooksExist(Context context){
+		try {
+			ArrayList<Notebook> list = Helpers.getNotebookList(context);
+			for(Notebook n :list){
+				if(n.getName().equalsIgnoreCase("debug")){
+					Log.d("DebugBook", "Debug book exists");
+					return true;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		Log.d("DebugBook", "Debug book doesnt exist GRACE");
+		return false;
+	}
+	public static void populateDebugBooks(Context context, boolean isDebugTrue){
+		if (isDebugTrue && !doDebugBooksExist(context)&& Helpers.getNotebookList(context).isEmpty()){
+
+			try {
+				ArrayList<Notebook> list = Helpers.getNotebookList(context);
+
+				Notebook a = new Notebook("debug", ContextCompat.getColor(context, R.color.md_grey_500), 404, Helpers.stringDataToMillis("2016/01/01"),context);list.add(a);
+				a = new Notebook("Science",ContextCompat.getColor(context, R.color.md_brown_500), 29, Helpers.stringDataToMillis("2016/11/10"),context);list.add(a);
+				a = new Notebook("ECL",ContextCompat.getColor(context, R.color.md_blue_grey_500), 18, Helpers.stringDataToMillis("2016/12/26"),context);list.add(a);
+				a = new Notebook("Art",ContextCompat.getColor(context, R.color.md_indigo_500), 32, Helpers.stringDataToMillis("2016/08/15"),context);list.add(a);
+				a = new Notebook("Science",ContextCompat.getColor(context, R.color.md_cyan_500), 22, Helpers.stringDataToMillis("2016/01/20"),context);list.add(a);
+				a = new Notebook("Science",ContextCompat.getColor(context, R.color.md_lime_500), 44, Helpers.stringDataToMillis("2016/12/07"),context);list.add(a);
+				a = new Notebook("Biology",ContextCompat.getColor(context, R.color.md_teal_500), 65, Helpers.stringDataToMillis("2016/04/29"),context);list.add(a);
+				a = new Notebook("Robotics",ContextCompat.getColor(context, R.color.md_brown_500), 11, Helpers.stringDataToMillis("2016/06/06"),context);list.add(a);
+				a = new Notebook("English",ContextCompat.getColor(context, R.color.md_pink_500), 65, Helpers.stringDataToMillis("2016/07/18"),context);list.add(a);
+				a = new Notebook("Biology",ContextCompat.getColor(context, R.color.md_purple_500), 83, Helpers.stringDataToMillis("2016/01/15"),context);list.add(a);
+				a = new Notebook("Economy",ContextCompat.getColor(context, R.color.md_blue_grey_500), 47, Helpers.stringDataToMillis("2016/11/04"),context);list.add(a);
+				a = new Notebook("Politics",ContextCompat.getColor(context, R.color.md_orange_500), 50, Helpers.stringDataToMillis("2016/05/22"),context);list.add(a);
+				a = new Notebook("Politics",ContextCompat.getColor(context, R.color.md_amber_500), 28, Helpers.stringDataToMillis("2016/12/27"),context);list.add(a);
+				a = new Notebook("Politics",ContextCompat.getColor(context, R.color.md_cyan_500), 95, Helpers.stringDataToMillis("2016/11/02"),context);list.add(a);
+				a = new Notebook("Science",ContextCompat.getColor(context, R.color.md_yellow_500), 30, Helpers.stringDataToMillis("2016/07/21"),context);list.add(a);
+				a = new Notebook("Robotics",ContextCompat.getColor(context, R.color.md_orange_500), 78, Helpers.stringDataToMillis("2016/10/29"),context);list.add(a);Log.d("populateDebugBooks", "successfully wrote all debug books");
+				Gson gson = new Gson();
+
+				Helpers.writeStringToFile(gson.toJson(list), context, "Notebooks.json");
+			} catch (Exception e) {
+				ArrayList<Notebook> list = new ArrayList<>();
+
+				Notebook a = new Notebook("debug", ContextCompat.getColor(context, R.color.md_grey_500), 404, Helpers.stringDataToMillis("2016/01/01"),context);list.add(a);
+				a = new Notebook("Science",ContextCompat.getColor(context, R.color.md_brown_500), 29, Helpers.stringDataToMillis("2016/11/10"),context);list.add(a);
+				a = new Notebook("ECL",ContextCompat.getColor(context, R.color.md_yellow_500), 18, Helpers.stringDataToMillis("2016/12/26"),context);list.add(a);
+				a = new Notebook("Art",ContextCompat.getColor(context, R.color.md_indigo_500), 32, Helpers.stringDataToMillis("2016/08/15"),context);list.add(a);
+				a = new Notebook("Science",ContextCompat.getColor(context, R.color.md_cyan_500), 22, Helpers.stringDataToMillis("2016/01/20"),context);list.add(a);
+				a = new Notebook("Science",ContextCompat.getColor(context, R.color.md_lime_500), 44, Helpers.stringDataToMillis("2016/12/07"),context);list.add(a);
+				a = new Notebook("Biology",ContextCompat.getColor(context, R.color.md_teal_500), 65, Helpers.stringDataToMillis("2016/04/29"),context);list.add(a);
+				a = new Notebook("Robotics",ContextCompat.getColor(context, R.color.md_brown_500), 11, Helpers.stringDataToMillis("2016/06/06"),context);list.add(a);
+				a = new Notebook("English",ContextCompat.getColor(context, R.color.md_pink_500), 65, Helpers.stringDataToMillis("2016/07/18"),context);list.add(a);
+				a = new Notebook("Biology",ContextCompat.getColor(context, R.color.md_purple_500), 83, Helpers.stringDataToMillis("2016/01/15"),context);list.add(a);
+				a = new Notebook("Economy",ContextCompat.getColor(context, R.color.md_brown_500), 47, Helpers.stringDataToMillis("2016/11/04"),context);list.add(a);
+				a = new Notebook("Politics",ContextCompat.getColor(context, R.color.md_orange_500), 50, Helpers.stringDataToMillis("2016/05/22"),context);list.add(a);
+				a = new Notebook("Politics",ContextCompat.getColor(context, R.color.md_amber_500), 28, Helpers.stringDataToMillis("2016/12/27"),context);list.add(a);
+				a = new Notebook("Politics",ContextCompat.getColor(context, R.color.md_cyan_500), 95, Helpers.stringDataToMillis("2016/11/02"),context);list.add(a);
+				a = new Notebook("Science",ContextCompat.getColor(context, R.color.md_yellow_500), 30, Helpers.stringDataToMillis("2016/07/21"),context);list.add(a);
+				a = new Notebook("Robotics",ContextCompat.getColor(context, R.color.md_orange_500), 78, Helpers.stringDataToMillis("2016/10/29"),context);list.add(a);Log.d("populateDebugBooks", "successfully wrote all debug books");
+
+				Log.d("populateDebugBooks", "successfully wrote all debug books");
+				Gson gson = new Gson();
+
+				Helpers.writeStringToFile(gson.toJson(list), context, "Notebooks.json");
+			}
+		}
+	}
+	/*public static ArrayList<Page> populateDebugNotebookPages(ArrayList<Page> list, int reps){
+		String TAG="InitNotebooks";
+		if (list == null||list.size()==0) {
+			Random r = new Random();
+			reps = r.nextInt(reps);
+			String[] names = {"Art","Biology","Chemistry",
+					"DT","ECL","English",
+					"History","Math","PE",
+					"Physics","Science","Spanish",
+					"Philosphy","Geography","Politics",
+					"Economy","I.C.T.","Robotics"};
+			int namesLength = names.length;
+			for(int i=0;i<reps;i++){
+                Page a = new Page(names[r.nextInt(namesLength)],r.nextInt(100)); list.add(a);
+				Log.d(TAG, "populateDebugNotebookPages: added new page.");
+			}
+			Log.d(TAG, "populateDebugNotebookPages: returned list");
+			return list;
+		} else {
+			Log.d("Helpers","PopulateDebugNotebookPages: list is not null or size != 0, returning list as-is");
+			return list;
+		}
+	}*/
+}
+
+%%MainActivity.java
+package com.twotowerstudios.virtualnotebookdesign.MainMenu;
+
+import android.animation.ObjectAnimator;
+import android.content.Intent;
+import android.graphics.PorterDuff;
+import android.os.Bundle;
+import android.os.Environment;
+import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
+import android.view.View;
+
+import com.bumptech.glide.Glide;
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
+import com.twotowerstudios.virtualnotebookdesign.Misc.FirstBookLightOffsetDecoration;
+import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
+import com.twotowerstudios.virtualnotebookdesign.Misc.SharedPrefs;
+import com.twotowerstudios.virtualnotebookdesign.NotebookMain.NotebookMainActivity;
+import com.twotowerstudios.virtualnotebookdesign.NotebookSelection.NotebookSelection;
+import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
+import com.twotowerstudios.virtualnotebookdesign.R;
+
+import org.parceler.Parcels;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+
+public class MainActivity extends AppCompatActivity implements BookLightAdapter.MainMenuToNotebook{
+
+    //https://github.com/mikepenz/MaterialDrawer
+
+    private AccountHeader accountHeader;
+    RecyclerView bookLightRecyclerView;
+    ArrayList<Notebook> notebookList;
+    private FloatingActionButton fab1, fabShoot, fabImage, fabPage;
+	//private RecyclerView.LayoutManager CommonBooksCardLayoutManager;
+
+
+    boolean isMainfabOpen;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+		SharedPrefs.setBoolean(getApplicationContext(), "debug", true);
+//File photo = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), newImageName + ".png");
+
+		File nomedia = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), ".nomedia");
+        if(!nomedia.exists()){
+			try {
+				nomedia.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		if(Helpers.getStringFromFile("Notebooks.json", getApplicationContext()).equals("")){
+			new File(getFilesDir(), "Notebooks.json");
+		}
+		/*if(InitNotebooks.isDebug(getApplicationContext())){
+			Log.d("isDebugNoteSelect", "DEBUG MODE = true;");
+			InitNotebooks.populateDebugBooks(getApplicationContext(), InitNotebooks.isDebug(getApplicationContext()));
+		}*/
+           //    ============================
+
+		bookLightRecyclerView = (RecyclerView) findViewById(R.id.rvCommonBooks);
+
+        final LinearLayoutManager BookLightLayoutManager = new LinearLayoutManager(this);
+        BookLightLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        bookLightRecyclerView.setLayoutManager(BookLightLayoutManager);
+        notebookList = Helpers.getNotebookList(getApplicationContext());
+		RecyclerView.Adapter bookLightAdapter = new BookLightAdapter(this, notebookList, this);
+        bookLightRecyclerView.setAdapter(bookLightAdapter);
+        //==================
+        isMainfabOpen = false;
+        fab1 = (FloatingActionButton) findViewById(R.id.fabMain);
+        fabShoot = (FloatingActionButton) findViewById(R.id.fabShoot);
+        fabImage = (FloatingActionButton) findViewById(R.id.fabImage);
+        fabPage = (FloatingActionButton) findViewById(R.id.fabPage);
+        fab1.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                if (!isMainfabOpen) {
+
+                    fabShoot.show();
+                    fabImage.show();
+                    fabPage.show();
+                    isMainfabOpen = true;
+                    ObjectAnimator openFirstSubfab = ObjectAnimator.ofFloat(fabShoot, View.TRANSLATION_Y, 200,0); openFirstSubfab.start();
+                    ObjectAnimator openSecondSubfab = ObjectAnimator.ofFloat(fabImage, View.TRANSLATION_Y, 400,0); openSecondSubfab.start();
+                    ObjectAnimator openThirdSubfab = ObjectAnimator.ofFloat(fabPage, View.TRANSLATION_Y, 600, 0); openThirdSubfab.start();
+                    ObjectAnimator rotateMainfab = ObjectAnimator.ofFloat(fab1, View.ROTATION, 0, 135); rotateMainfab.start();
+
+                } else if(isMainfabOpen){
+                    isMainfabOpen = false;
+                    ObjectAnimator rotateMainfab = ObjectAnimator.ofFloat(fab1, View.ROTATION, 135, 270); rotateMainfab.start();
+                    ObjectAnimator closeFirstSubfab = ObjectAnimator.ofFloat(fabShoot, View.TRANSLATION_Y, 0,200); closeFirstSubfab.start();
+                    ObjectAnimator closeSecondSubfab = ObjectAnimator.ofFloat(fabImage, View.TRANSLATION_Y, 0,400); closeSecondSubfab.start();
+                    ObjectAnimator closeThirdSubfab = ObjectAnimator.ofFloat(fabPage, View.TRANSLATION_Y, 0,600); closeThirdSubfab.start();
+                    fabShoot.hide();
+                    fabImage.hide();
+                    fabPage.hide();
+                }
+            }
+
+
+        });
+
+        /**PrimaryDrawerItem item1 = new PrimaryDrawerItem().withIdentifier(1).withName("Primary one");
+        SecondaryDrawerItem item2 = new SecondaryDrawerItem().withIdentifier(2).withName("Secondary One");*/
+        final IProfile h1 = new ProfileDrawerItem().withName("Header 1");
+        final IProfile h2 = new ProfileDrawerItem().withName("Header 2");
+        final IProfile h3 = new ProfileDrawerItem().withName("Header 3");
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+		getSupportActionBar().setTitle("Virtual Notebooks");
+        //PrimaryDrawerItem diNotebooks= new PrimaryDrawerItem().withName("Notebooks").withDescription("Full list of notebooks");
+        accountHeader = new AccountHeaderBuilder()
+                .withActivity(this)
+                .withHeaderBackground(R.drawable.header)
+                .addProfiles(
+                        h1,h2,h3
+                )
+                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
+                    @Override
+                    public boolean onProfileChanged(View view, IProfile profile, boolean current) {
+                        if (profile == h1){
+                            Glide.with(getApplicationContext()).load(R.drawable.header).into(accountHeader.getHeaderBackgroundView());
+                        } else if (profile == h2){
+                            Glide.with(getApplicationContext()).load(R.drawable.header2).into(accountHeader.getHeaderBackgroundView());
+                        } else if (profile == h3){
+                            Glide.with(getApplicationContext()).load(R.drawable.header3).into(accountHeader.getHeaderBackgroundView());
+                        }
+                        return false;
+                    }
+                })
+                .build();
+        new DrawerBuilder()
+                .withActivity(this)
+                .withToolbar(toolbar)
+                .withAccountHeader(accountHeader)
+                .addDrawerItems(
+						new PrimaryDrawerItem().withName("Main Menu").withIdentifier(1),
+						new PrimaryDrawerItem().withName("Notebooks").withDescription("Full list of notebooks").withIdentifier(2),
+						new DividerDrawerItem(),
+                        new SecondaryDrawerItem().withName("I'm secondary #1").withDescription("I'm a bit more faded"),
+                        new SecondaryDrawerItem().withName("I'm secondary #2").withDescription("I'm also just as faded as my brother, but I'm very long cause fuck it")
+
+                )
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        /**if (drawerItem != null) {
+                         Intent intent = null;
+                         if (drawerItem.getIdentifier() == 1) {
+                         intent = new Intent(DrawerActivity.this, CompactHeaderDrawerActivity.class);
+                         }*/
+                        if (drawerItem != null){
+                            Intent intent = null;
+                            if (position == 2){
+                                intent = new Intent(MainActivity.this, NotebookSelection.class);
+                            }
+                            if (intent != null){
+                                //intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                startActivity(intent);
+								finish();
+                            }
+                        }
+                        return false;
+                    }
+                })
+
+                .build();
+        Glide.with(this).load(R.drawable.header2).into(accountHeader.getHeaderBackgroundView());
+        /**Color.parseColor("#00FFFF")*/
+		FirstBookLightOffsetDecoration firstBookLightOffsetDecoration = new FirstBookLightOffsetDecoration((int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, getResources().getDisplayMetrics()));
+   		bookLightRecyclerView.addItemDecoration(firstBookLightOffsetDecoration);
+    }
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        accountHeader.getHeaderBackgroundView().setColorFilter(ContextCompat.getColor(this, R.color.colorAccent), PorterDuff.Mode.MULTIPLY);
+        super.onPostCreate(savedInstanceState);
+    }
+
+    @Override
+    public void openNotebook(Notebook notebook) {
+        Intent intent = new Intent(this, NotebookMainActivity.class);
+        intent.putExtra("notebook", Parcels.wrap(notebook));
+        intent.putExtra("parent", "MainActivity");
+        startActivity(intent);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        notebookList.clear();
+        notebookList.addAll(Helpers.getNotebookList(getApplicationContext()));
+        bookLightRecyclerView.getAdapter().notifyDataSetChanged();
+    }
+}
+
+%%BookLightAdapter.java
+package com.twotowerstudios.virtualnotebookdesign.MainMenu;
+
+import android.content.Context;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
+import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
+import com.twotowerstudios.virtualnotebookdesign.R;
+
+import java.util.ArrayList;
+
+class BookLightAdapter  extends RecyclerView.Adapter<BookLightAdapter.ViewHolder>{
+
+	private BookLightAdapter.MainMenuToNotebook Interface;
+
+	interface MainMenuToNotebook{
+		void openNotebook(Notebook notebook);
+	}
+
+	protected Context context;
+	private ArrayList<Notebook> bookList = new ArrayList<>();
+	static class ViewHolder extends RecyclerView.ViewHolder {
+		// each data item is just a string in this case
+		ImageView ivBook;
+		RelativeLayout rvBookLight;
+		TextView tvName;
+		ViewHolder(View view) {
+			super(view);
+			rvBookLight = (RelativeLayout) view.findViewById(R.id.rvBookLight);
+			ivBook = (ImageView) view.findViewById(R.id.ivBookLight);
+			tvName = (TextView) view.findViewById(R.id.tvName);
+		}
+	}
+	BookLightAdapter(Context context, ArrayList<Notebook> bookList, MainMenuToNotebook openNotebook){
+		this.bookList = bookList;
+		this.context = context;
+		Interface=openNotebook;
+	}
+	@Override
+	public BookLightAdapter.ViewHolder onCreateViewHolder (ViewGroup parent, int viewType){
+		View v = LayoutInflater.from(parent.getContext())
+				.inflate(R.layout.booklight, parent, false);
+		return new ViewHolder(v);
+	}
+	@Override
+	public void onBindViewHolder(ViewHolder holder, int position){
+		Log.d("", "onBindViewHolder: position = "+position);
+		final int position2 = position;
+		holder.tvName.setText(bookList.get(position).getName());
+		holder.ivBook.setColorFilter(bookList.get(position).getColor());
+		holder.rvBookLight.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				if(bookList==null){
+					Log.d("" ,"onClick: booklist == null");
+				}
+				Interface.openNotebook(bookList.get(position2));
+			}
+		});
+	}
+
+	@Override
+	public int getItemCount() {
+		return bookList.size();
+	}
+}
+%%SharedPrefs.java
+
+package com.twotowerstudios.virtualnotebookdesign.Misc;
+
+import android.content.Context;
+import android.preference.PreferenceManager;
+
+/**
+ * Source https://github.com/coldblade2000/Clickr/blob/master/app/src/main/java/com/twotowerstudios/clickr/SharedPrefs.java
+ */
+
+public class SharedPrefs {
+
+	public static void setInt(Context context, String key, int input) {
+		android.content.SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+		editor.putInt(key, input);
+		editor.commit();
+	}
+
+	public static void setString(Context context, String key, String input) {
+		android.content.SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+		editor.putString(key, input);
+		editor.commit();
+	}
+
+	public static void setBoolean(Context context, String key, boolean input) {
+		android.content.SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+		editor.putBoolean(key, input);
+		editor.commit();
+	}
+
+
+	public static int getInt(Context context, String s) {
+		return PreferenceManager.getDefaultSharedPreferences(context).getInt(s, -1);
+	}
+
+	public static boolean getBoolean(Context context, String s) {
+		return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(s, false);
+	}
+
+}
+%%Helpers.java
+package com.twotowerstudios.virtualnotebookdesign.Misc;
+
+import android.content.Context;
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
+import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
+import com.twotowerstudios.virtualnotebookdesign.R;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Random;
+
+public class Helpers {
+
+	static Gson gson = new Gson();
+	private static Random random = new Random();
+	private static final String POSSIBILITY = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_?";
+	public static long stringDataToMillis(String date) {
+		//source: http://stackoverflow.com/questions/9671085/convert-date-to-miliseconds
+		long millis;
+		SimpleDateFormat formatter;
+		formatter = new SimpleDateFormat("yyyy/MM/dd");
+		formatter.setLenient(true);
+		Log.d("string2millis", "Date is: " + date);
+		try {
+			Date tempDate = formatter.parse(date);
+			millis = tempDate.getTime();
+			Log.d("string2millis", "Millis is: " + millis);
+		} catch (java.text.ParseException e) {
+			return 0;
+		}
+		return millis;
+	}
+
+	/**
+	 * Format meanings
+	 * 1: yyyy/MM/dd, HH:mm:ss
+	 * 2: yyyy/MM/dd
+	 */
+	public static String millisDateToString(Long millis, int format) {
+		SimpleDateFormat formatter;
+		switch(format){
+			case 1:
+				formatter = new SimpleDateFormat("yyyy/MM/dd, HH:mm:ss");
+				break;
+			case 2:
+				formatter = new SimpleDateFormat("yuyyy/MM/dd");
+				break;
+			default:
+				formatter = new SimpleDateFormat("yyyy/MM/dd, HH:mm:ss");
+		}
+
+		formatter.setLenient(false);
+
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(millis);
+		return formatter.format(calendar.getTime());
+	}
+	public static long getCurrentTimeInMillis(){
+		Calendar cal = Calendar.getInstance();
+
+		return cal.getTimeInMillis();
+	}
+	public static void writeStringToFile(String input, Context context, String name) {
+		FileOutputStream outputStream;
+		try {
+			outputStream = context.openFileOutput(name, Context.MODE_PRIVATE);
+			outputStream.write(input.getBytes());
+			outputStream.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static String getStringFromFile(String filename, Context context) {
+		BufferedReader input = null;
+		try {
+			input = new BufferedReader(new InputStreamReader(context.openFileInput(filename)));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		String line;
+		StringBuilder buffer = new StringBuilder();
+		try {
+			while ((line = input.readLine()) != null) {
+				buffer.append(line + "\n");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return buffer.toString();
+	}
+
+	public static ArrayList<Notebook> getNotebookList(Context context){
+		ArrayList<Notebook> notebookList;
+		Log.d("Helpers", "context = "+context.getPackageCodePath());
+		String fileString = getStringFromFile("Notebooks.json", context);
+		int reps = (fileString.length()/4000)+1;
+		for (int i = 0; i < reps; i++) {
+			if((i+1)*4000>fileString.length()) {
+				Log.v("Helpers", "getNotebookList: \n" + fileString.substring(i * 4000, fileString.length()));
+			}else{
+				Log.v("Helpers", "getNotebookList: \n" + fileString.substring(i * 4000, (i + 1) * 4000));
+
+			}
+		}
+		if (!fileString.equalsIgnoreCase("")) {
+			Type type = new TypeToken<ArrayList<Notebook>>(){}.getType();
+			notebookList = gson.fromJson(fileString,type);
+		} else {
+			Log.d("getNotebookList", "notebooks.json is empty, returning empty arraylist");
+			notebookList = new ArrayList<>();
+		}
+		return notebookList;
+	}
+
+	static void writeListToFile(Context context, ArrayList<Notebook> notebookList){
+		String outputString = gson.toJson(notebookList);
+		writeStringToFile(outputString, context, "Notebooks.json");
+	}
+	public static void addToNotebookList(Notebook notebook, Context context){
+		ArrayList<Notebook> list = getNotebookList(context);
+		boolean bookalreadyexists=false;
+		try {
+			for(Notebook a: list){
+				if(a.getUID16().equals(notebook.getUID16())){
+					bookalreadyexists=true;
+					//Toast.makeText(context, "Can't add notebook, already exists", Toast.LENGTH_SHORT).show();
+					list.set(list.indexOf(a), notebook);
+					break;
+				}
+			}
+			for(int i=0; i<list.size(); i++){
+				if(list.get(i).getName().equalsIgnoreCase(notebook.getName().toLowerCase())){
+					bookalreadyexists=true;
+					//Toast.makeText(context, "Can't add notebook, already exists", Toast.LENGTH_SHORT).show();
+					list.set(i,notebook);
+					break;
+				}
+			}
+		} catch (NullPointerException e) {
+			Log.d("NewNotebookFrag","Notebooklist was empty, adding notebook");
+		}
+		if (!bookalreadyexists) {
+			list.add(notebook);
+		}
+		writeListToFile(context,list);
+	}
+
+	public static ArrayList<Integer> getPossibleColors(Context context){
+		ArrayList<Integer> colors = new ArrayList<>();
+		colors.add(ContextCompat.getColor(context,R.color.md_red_500));
+		colors.add(ContextCompat.getColor(context,R.color.md_pink_500));
+		colors.add(ContextCompat.getColor(context,R.color.md_purple_500));
+		colors.add(ContextCompat.getColor(context,R.color.md_deep_purple_500));
+		colors.add(ContextCompat.getColor(context,R.color.md_indigo_500));
+		colors.add(ContextCompat.getColor(context,R.color.md_blue_500));
+		colors.add(ContextCompat.getColor(context,R.color.md_light_blue_500));
+		colors.add(ContextCompat.getColor(context,R.color.md_cyan_500));
+		colors.add(ContextCompat.getColor(context,R.color.md_teal_500));
+		colors.add(ContextCompat.getColor(context,R.color.md_green_500));
+		colors.add(ContextCompat.getColor(context,R.color.md_light_green_500));
+		colors.add(ContextCompat.getColor(context,R.color.md_lime_500));
+		colors.add(ContextCompat.getColor(context,R.color.md_yellow_500));
+		colors.add(ContextCompat.getColor(context,R.color.md_amber_500));
+		colors.add(ContextCompat.getColor(context,R.color.md_orange_500));
+		colors.add(ContextCompat.getColor(context,R.color.md_deep_orange_500));
+		colors.add(ContextCompat.getColor(context,R.color.md_brown_500));
+		colors.add(ContextCompat.getColor(context,R.color.md_grey_500));
+
+		return colors;
+	}
+
+	private static ArrayList<Integer> getColorAccents(Context context){
+		ArrayList<Integer> colors = new ArrayList<>();
+		colors.add(ContextCompat.getColor(context,R.color.md_light_blue_A200));
+		colors.add(ContextCompat.getColor(context,R.color.md_green_A200));
+		colors.add(ContextCompat.getColor(context,R.color.md_green_A200));
+		colors.add(ContextCompat.getColor(context,R.color.md_orange_A200));
+		colors.add(ContextCompat.getColor(context,R.color.md_amber_A200));
+		colors.add(ContextCompat.getColor(context,R.color.md_amber_A200));
+		colors.add(ContextCompat.getColor(context,R.color.md_pink_A200));
+		colors.add(ContextCompat.getColor(context,R.color.md_orange_A200));
+		colors.add(ContextCompat.getColor(context,R.color.md_deep_orange_A200));
+		colors.add(ContextCompat.getColor(context,R.color.md_deep_orange_A200));
+		colors.add(ContextCompat.getColor(context,R.color.md_pink_A200));
+		colors.add(ContextCompat.getColor(context,R.color.md_red_A200));
+		colors.add(ContextCompat.getColor(context,R.color.md_purple_A200));
+		colors.add(ContextCompat.getColor(context,R.color.md_blue_A200));
+		colors.add(ContextCompat.getColor(context,R.color.md_light_blue_A200));
+		colors.add(ContextCompat.getColor(context,R.color.md_deep_orange_A200));
+		colors.add(ContextCompat.getColor(context,R.color.md_indigo_A200));
+		colors.add(ContextCompat.getColor(context,R.color.md_pink_A200));
+
+		return colors;
+	}
+
+	public static int getSingleColorAccent(Context context, int color){
+		ArrayList<Integer> colors = getPossibleColors(context);
+		String TAG = "getSingleColorAccent";
+		Log.d(TAG, "colors.size()== "+colors.size());
+		return getColorAccents(context).get(colors.indexOf(color));
+	}
+
+	public static String generateUniqueId(int length){
+		/** BTW to ease confusion:
+		 * n prefix = Notebook
+		 * p prefix = Page
+		 * i prefix = Image file
+		 * t prefix = ChildText
+		 * d prefix = ChildDriveDoc
+		 * c prefix = ChildImage
+		 */
+		String result="";
+		for(int i=0;i<length;i++){
+			result=result+POSSIBILITY.charAt(random.nextInt(63));
+		}
+		return result;
+	}
+
+	public static Notebook getNotebookFromUID(String UID16, Context context){
+		ArrayList<Notebook> list=Helpers.getNotebookList(context);
+		for(Notebook a: list){
+			if(a.getUID16().equals(UID16)){
+				return a;
+			}
+		}
+		return null;
+	}
+
+	public static Page getPageFromUID(String UID16,String parentUID ,Context context){
+		ArrayList<Page> list= getNotebookFromUID(parentUID,context).getPages();
+		for(Page a:list){
+			if(a.getUID().equals(UID16)){
+				return a;
+			}
+		}
+		return null;
+	}
+	public static void addPageFromUID16(String parentUID, Page page, Context context){
+		Notebook notebook = getNotebookFromUID(parentUID, context);
+		ArrayList<Page> pageList = notebook.getPages();
+		boolean doesPageExistAlready = false;
+		for(int i=0;i<pageList.size();i++){
+			if(pageList.get(i).getUID().equals(page.getUID())){
+				pageList.set(i,page);
+				doesPageExistAlready=true;
+				break;
+			}
+		}
+		if (!doesPageExistAlready) {
+			pageList.add(page);
+		}
+		notebook.setPages(pageList);
+		addToNotebookList(notebook, context);
+	}
+	/**
+	This isColorDark method was copied word for word from the "Spectrum" library, written by
+	Nathan Walters (and 5 other contributors), published to GitHub with an explicit MIT
+	license, which has no restrictions, except that the creator is not liable for anything,
+	and both the license and copyright notices must be written somewhere. This will be done
+	 in the journal, references.txt and report.
+
+	 The MIT License (MIT)
+
+	 Copyright (c) 2016 The Blue Alliance
+
+	 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+	 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+	 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+	 *
+	 * Walters, N. (2016). the-blue-alliance/spectrum. GitHub. Retrieved 15 November 2016, from https://github.com/the-blue-alliance/spectrum/blob/master/spectrum/src/main/java/com/thebluealliance/spectrum/internal/ColorUtil.java
+	 */
+	 public static boolean isColorDark(int color){
+		double brightness = Color.red(color) * 0.299 +
+				Color.green(color) * 0.587 +
+				Color.blue(color) * 0.114;
+		return brightness < 160;
+	}
+}
+%%FirstBookLightOffsetDecoration
+
+package com.twotowerstudios.virtualnotebookdesign.Misc;
+
+import android.graphics.Rect;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+
+public class FirstBookLightOffsetDecoration extends RecyclerView.ItemDecoration {
+	private int firstItemOffset;
+
+	public FirstBookLightOffsetDecoration(int beginningOffset) {
+		firstItemOffset = beginningOffset;}
+
+	@Override
+	public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+		super.getItemOffsets(outRect, view, parent, state);
+		int dataSize = state.getItemCount();
+		int position = parent.getChildAdapterPosition(view);
+		if (dataSize > 0 && position ==  0) {
+			outRect.set(firstItemOffset, 0, 0, 0);
+		} else {
+			outRect.set(0, 0, 0, 0);
+		}
+		/**if (dataSize > 0 && position == dataSize-1){
+			outRect.set(0,0,mBottomOffset,0);
+		}else {
+			outRect.set(0, 0, 0, 0);
+		}*/
+
+	}
+}
+%%NewNotebookAdapter.java
+package com.twotowerstudios.virtualnotebookdesign.NewNotebookDialog;
+
+import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import com.twotowerstudios.virtualnotebookdesign.R;
+
+import java.util.ArrayList;
+
+/**
+ * Created by Panther II on 10/11/2016.
+ */
+
+public class NewNotebookAdapter extends RecyclerView.Adapter<NewNotebookAdapter.ViewHolder>{
+	Context context;
+	ArrayList<Integer> colors = new ArrayList<>();
+	int activeColor;
+	FromAdapterInterface clickListener;
+	public NewNotebookAdapter(){
+
+	}
+
+	public interface FromAdapterInterface {
+		void clickListener(int color);
+	}
+	public static class ViewHolder extends RecyclerView.ViewHolder{
+		public ImageView ivSwatch;
+		public Toolbar toolbar;
+		public ViewHolder(View itemView) {
+			super(itemView);
+			ivSwatch = (ImageView) itemView.findViewById(R.id.ivSwatch);
+			toolbar = (Toolbar) itemView.findViewById(R.id.newnotebooktoolbar);
+		}
+	}
+	public NewNotebookAdapter(Context context, ArrayList<Integer> colors, int activeColor, FromAdapterInterface clickListener){
+		this.context=context;
+		this.colors=colors;
+		this.activeColor=activeColor;
+		this.clickListener = clickListener;
+	}
+
+	@Override
+	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+		View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.colorcircle,parent,false);
+		return new ViewHolder(v);
+	}
+
+
+	@Override
+	public void onBindViewHolder(ViewHolder holder, final int position) {
+
+		Drawable drawablefull = ContextCompat.getDrawable(context,R.drawable.colorcircle);
+		Drawable drawableHollow = ContextCompat.getDrawable(context,R.drawable.coloroutlinecircle);
+		if (position==activeColor){
+			holder.ivSwatch.setImageDrawable(drawablefull.mutate());
+		}else if (position!=activeColor){
+			holder.ivSwatch.setImageDrawable(drawableHollow.mutate());
+		}
+		holder.ivSwatch.setColorFilter(colors.get(position));
+
+		holder.ivSwatch.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				clickListener.clickListener(position);
+				notifyDataSetChanged();
+				activeColor=position;
+			}
+		});
+	}
+	/**
+	 * Returns the total number of items in the data set held by the adapter.
+	 *
+	 * @return The total number of items in this adapter.
+	 */
+	@Override
+	public int getItemCount() {
+		return colors.size();
+	}
+}
+%%NewNotebookFragment.java
+package com.twotowerstudios.virtualnotebookdesign.NewNotebookDialog;
+
+
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.Switch;
+import android.widget.Toast;
+
+import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
+import com.twotowerstudios.virtualnotebookdesign.NotebookSelection.NotebookSelection;
+import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
+import com.twotowerstudios.virtualnotebookdesign.R;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+
+public class NewNotebookFragment extends DialogFragment implements NewNotebookAdapter.FromAdapterInterface {
+
+	RecyclerView rvNewNotebook;
+	int activeColorIndex, activeColor;
+	ArrayList<Integer> colors;
+	ArrayList<Notebook> notebookList;
+	Toolbar toolbar;
+	Switch swColors;
+	EditText etNewName;
+	/**ToAdapterInterface refresh;
+
+	public interface ToAdapterInterface {
+		void refreshData();
+	}*/
+
+		@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+							 Bundle savedInstanceState) {
+		return inflater.inflate(R.layout.fragment_new_notebook,container,false);
+	}
+
+	@Override
+	public void onViewCreated(View v, Bundle savedInstanceState){
+
+		colors= Helpers.getPossibleColors(getContext());
+		activeColorIndex =new Random().nextInt(colors.size());
+		activeColor = colors.get(activeColorIndex);
+		swColors = (Switch) v.findViewById(R.id.switch1);
+
+		etNewName = (EditText) v.findViewById(R.id.etNewName);
+		notebookList = Helpers.getNotebookList(getContext());
+		toolbar = (Toolbar) v.findViewById(R.id.newnotebooktoolbar);
+		toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+			@Override
+			public boolean onMenuItemClick(MenuItem item) {
+				Log.d("Dialog", "onMenuItemClick: ");
+				String nameLow=etNewName.getText().toString().toLowerCase();
+				String nameReal=etNewName.getText().toString();
+				if(nameLow.equalsIgnoreCase("")){
+					Toast.makeText(getContext(),"Name can't be empty", Toast.LENGTH_SHORT).show();
+					return false;
+				}else{
+					boolean notebookExists=false;
+					try {
+						for(int i=0;i<notebookList.size();i++){
+							if (nameLow.equalsIgnoreCase(notebookList.get(i).getName())){
+								Toast.makeText(getContext(),"Notebook already exists", Toast.LENGTH_SHORT).show();
+								notebookExists=true;
+								break;
+							}
+						}
+					} catch (NullPointerException e) {
+						Log.d("NewNotebookFrag","Notebooklist was empty, adding notebook");
+					}
+					if (!notebookExists){
+						Toast.makeText(getContext(),"Created notebook called: \""+nameReal+"\"", Toast.LENGTH_SHORT).show();
+						Log.d("NewNotebookFrag","Created notebook called:"+nameReal);
+						((NotebookSelection)getActivity()).refreshData(new Notebook(nameReal,colors.get(activeColorIndex), Helpers.getSingleColorAccent(getContext(), activeColor)));
+						dismiss();
+						//refresh.refreshData();
+					}
+
+				}
+				return false;
+			}
+		});
+		toolbar.inflateMenu(R.menu.newnotebook);
+		toolbar.setTitle("Create new Notebook");
+
+		if(Helpers.isColorDark(activeColor)){
+			toolbar.setTitleTextColor(getResources().getColor(R.color.md_dark_primary_text));
+		}else{
+			toolbar.setTitleTextColor(getResources().getColor(R.color.md_light_primary_text));
+		}
+		rvNewNotebook = (RecyclerView) v.findViewById(R.id.rvNewNotebook);
+		final GridLayoutManager rvNotebookManager = new GridLayoutManager(getContext(),6);
+		rvNewNotebook.setLayoutManager(rvNotebookManager);
+		NewNotebookAdapter adapter= new NewNotebookAdapter(getContext(), Helpers.getPossibleColors(getContext()), activeColorIndex, this);
+		rvNewNotebook.setVisibility(View.GONE);
+		toolbar.setBackgroundColor(activeColor);
+		rvNewNotebook.setAdapter(adapter);
+		Log.d("onViewCreated", ""+rvNewNotebook.getWidth());
+
+		swColors.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener(){
+			@Override
+			public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+				if (b){
+					rvNewNotebook.setVisibility(View.VISIBLE);
+				}else{
+					rvNewNotebook.setVisibility(View.GONE);
+				}
+			}
+		});
+	}
+	@Override
+	public void onResume(){
+		super.onResume();
+		/*DisplayMetrics displaymetrics = new DisplayMetrics();
+		getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+		int height = displaymetrics.heightPixels;
+		int width = displaymetrics.widthPixels;
+		getDialog().getWindow().setLayout((int)(width*0.9),(int)(height*0.8));*/
+		DisplayMetrics displaymetrics = new DisplayMetrics();
+		getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+		int height = displaymetrics.heightPixels;
+		int width = displaymetrics.widthPixels;
+		WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+		lp.copyFrom(getDialog().getWindow().getAttributes());
+		lp.width = (int)(width*0.9);
+		lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+		getDialog().getWindow().setAttributes(lp);
+	}
+	public static NewNotebookFragment newInstance() {
+			NewNotebookFragment f = new NewNotebookFragment();
+			return f;
+	}
+	public void changeColor(int position){
+		if(Helpers.isColorDark(colors.get(position))){
+			toolbar.setTitleTextColor(getResources().getColor(R.color.md_dark_primary_text));
+		}else{
+			toolbar.setTitleTextColor(getResources().getColor(R.color.md_light_primary_text));
+		}
+		toolbar.setBackgroundColor(colors.get(position));
+		this.activeColorIndex =position;
+		this.activeColor= colors.get(activeColorIndex);
+	}
+
+	@Override
+	public void onDismiss(DialogInterface dialog) {
+		super.onDismiss(dialog);
+	}
+
+	@Override
+	public void clickListener(int color) {
+		changeColor(color);
+	}
+}
+%%NotebookAdapterToAct.java
+package com.twotowerstudios.virtualnotebookdesign.NotebookMain;
+
+/**
+ * Created by Panther II on 24/12/2016.
+ */
+
+public interface NotebookAdapterToAct{
+	/**Type:
+	 * 1 = everypage
+	 * 2 = favorites
+	 */
+	void clickListener(int position, boolean onlyFavorites);
+}
+%%NotebookMainActivity.java
+package com.twotowerstudios.virtualnotebookdesign.NotebookMain;
+
+import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.text.format.DateUtils;
+import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
+import com.twotowerstudios.virtualnotebookdesign.NotebookMain.Fragments.NewPage.NewPageFragment;
+import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
+import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
+import com.twotowerstudios.virtualnotebookdesign.PageActivityMain.PageActivityMain;
+import com.twotowerstudios.virtualnotebookdesign.R;
+
+import org.parceler.Parcels;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+
+public class NotebookMainActivity extends AppCompatActivity implements NewPageFragment.OnFragmentInteractionListener, NotebookAdapterToAct{
+
+	Toolbar toolbar;
+	Notebook notebook;
+	FloatingActionButton fabnotebookmain;
+	CollapsingToolbarLayout collapsingToolbarLayout;
+	String parent;
+	String notebookUID16;
+	TextView tvSub;
+	ViewPager viewPager;
+	boolean isFirstTime;
+	TabLayout tabLayout;
+	ArrayList<Page> pageList;
+	ViewPagerAdapter viewPagerAdapter;
+	RelativeLayout emptyNotebook;
+	LinearLayout notEmptyNotebook;
+
+	@Override
+	public void clickListener(int position, boolean onlyFavorites) {
+		Intent intent = new Intent(this, PageActivityMain.class);
+
+
+		if(onlyFavorites){
+			ArrayList<Page> favPageList = new ArrayList<>();
+			for(Page p: pageList) {
+				if(p.isFavorite()){
+					favPageList.add(p);
+				}
+			}
+			Collections.sort(favPageList);
+			intent.putExtra("page", Parcels.wrap(favPageList.get(position)));
+
+		}else{
+			intent.putExtra("page", Parcels.wrap(pageList.get(position)));
+		}
+		intent.putExtra("notebookUID16", notebookUID16);
+		intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		startActivity(intent);
+	}
+
+
+	@Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_notebook_main);
+		isFirstTime=true;
+		if (notebook==null) {
+			Log.d("NotebookMainActivity", "notebook == null");
+			if (getIntent().getStringExtra("parent").equals("NotebookSelection")
+					||(getIntent().getStringExtra("parent").equals("MainActivity"))) {
+				notebook = Parcels.unwrap(getIntent().getParcelableExtra("notebook"));
+			}else if(getIntent().getStringExtra("parent").equals("PageActivityMain")){
+				notebook = Helpers.getNotebookFromUID(getIntent().getStringExtra("notebookUID16"), getApplicationContext());
+			}
+
+		}
+		pageList = notebook.getPages();
+		notebookUID16=notebook.getUID16();
+		emptyNotebook = (RelativeLayout) findViewById(R.id.emptyNotebook);
+		notEmptyNotebook = (LinearLayout) findViewById(R.id.notEmptyNotebook);
+		fabnotebookmain = (FloatingActionButton) findViewById(R.id.fabnotebookmain);
+		fabnotebookmain.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+				Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
+				if (prev != null) {
+					ft.remove(prev);
+				}
+				ft.addToBackStack(null);
+
+				// Create and show the dialog.
+				NewPageFragment newFragment = NewPageFragment.newInstance(pageList, notebook.getAccentColor());
+				newFragment.show(ft, "dialog");
+			}
+		});
+		if (pageList.size()==0||pageList==null){ //if notebook is empty
+			//pageList = InitNotebooks.populateDebugNotebookPages(pageList, 15);
+			emptyNotebook.setVisibility(View.VISIBLE);
+			fabnotebookmain.setVisibility(View.GONE);
+			notEmptyNotebook.setVisibility(View.GONE);
+			emptyNotebook.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+					Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
+					if (prev != null) {
+						ft.remove(prev);
+					}
+					ft.addToBackStack(null);
+					NewPageFragment newFragment = NewPageFragment.newInstance(pageList, notebook.getAccentColor());
+					newFragment.show(ft, "dialog");
+
+				}
+			});
+		}else{ //if notebook is NOT empty
+			emptyNotebook.setVisibility(View.GONE);
+			notEmptyNotebook.setVisibility(View.VISIBLE);
+			viewPager = (ViewPager) findViewById(R.id.viewpager);
+
+			viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(),pageList,Helpers.getSingleColorAccent(this,notebook.getColor()),this));
+
+			tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+			tabLayout.setupWithViewPager(viewPager);
+		}
+		parent = getIntent().getExtras().getString("parent");
+		Toast.makeText(getApplicationContext(), "Parent is: "+ parent, Toast.LENGTH_SHORT).show();
+		tvSub = (TextView) findViewById(R.id.tvSub);
+		tvSub.setText("Last Modified: "+ DateUtils.getRelativeTimeSpanString(notebook.getLastModified(), Helpers.getCurrentTimeInMillis(), DateUtils.SECOND_IN_MILLIS));
+
+		AppBarLayout appbarlayoutNotebook = (AppBarLayout) findViewById(R.id.appbarlayoutNotebook);
+		appbarlayoutNotebook.setBackgroundColor(notebook.getColor());
+		collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapseToolbarNotebook);
+		toolbar = (Toolbar) findViewById(R.id.toolbarNotebook);
+		setSupportActionBar(toolbar);
+		toolbar.setBackgroundColor(notebook.getColor());
+		getSupportActionBar().setTitle(notebook.getName());
+		getSupportActionBar().setSubtitle("Last modified: " + DateUtils.getRelativeTimeSpanString(notebook.getLastModified(), Helpers.getCurrentTimeInMillis(), DateUtils.SECOND_IN_MILLIS));
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		if(Helpers.isColorDark(notebook.getColor())){
+			collapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplicationContext(), R.color.md_white_1000));
+			collapsingToolbarLayout.setCollapsedTitleTextColor(ContextCompat.getColor(getApplicationContext(), R.color.md_white_1000));
+			tvSub.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.md_white_1000));
+		}else{
+			collapsingToolbarLayout.setExpandedTitleColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
+			collapsingToolbarLayout.setCollapsedTitleTextColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
+			tvSub.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
+		}
+		toolbar.setTitleTextColor(Color.parseColor("#ffffff"));
+		fabnotebookmain.setBackgroundTintList(ColorStateList.valueOf(Helpers.getSingleColorAccent(getApplicationContext(),notebook.getColor())));
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			// Respond to the action bar's Up/Home button
+			case android.R.id.home:
+				// Launch the correct Activity here
+				finish();
+				/*if (parent.equals("MainActivity")) {
+					Intent intent = new Intent(this, NotebookSelection.class);
+					intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+					startActivity(intent);
+					finish();
+					return true;
+				}else if(parent.equals("NotebookSelection")){
+					Intent intent = new Intent(this, MainActivity.class);
+					intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+					startActivity(intent);
+					finish();
+					return true;
+				}*/
+
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if(isFirstTime){
+			isFirstTime=false;
+		}else{
+			pageList.clear();
+			pageList.addAll(Helpers.getNotebookFromUID(notebookUID16, getApplicationContext()).getPages());
+			viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), pageList, Helpers.getSingleColorAccent(this,notebook.getColor()), this));
+			tabLayout.setupWithViewPager(viewPager);
+		}
+	}
+
+	@SuppressWarnings("WrongConstant")
+	@Override
+	public void onFragmentInteraction(String name, int pageNum, Calendar cal) {
+		if (cal.get(Calendar.YEAR) != 1970) {
+			pageList.add(new Page(name, pageNum, cal.getTimeInMillis()+43200000, notebook.getUID16()));
+		} else {
+			pageList.add(new Page(name, pageNum, 0, notebook.getUID16()));
+		}
+		notebook.setLastModified(Helpers.getCurrentTimeInMillis());
+		notebook.setPages(pageList);
+		Helpers.addToNotebookList(notebook, getApplicationContext());
+		tvSub.setText("Last Modified: "+ DateUtils.getRelativeTimeSpanString(notebook.getLastModified(), Helpers.getCurrentTimeInMillis(), DateUtils.SECOND_IN_MILLIS));
+		getSupportActionBar().setSubtitle("Last modified: " + DateUtils.getRelativeTimeSpanString(notebook.getLastModified(), Helpers.getCurrentTimeInMillis(), DateUtils.SECOND_IN_MILLIS));
+
+		if (notebook == null) {
+			Log.d("OnFragmentInteraction", "notebook == null");
+		}
+		emptyNotebook.setVisibility(View.GONE);
+		notEmptyNotebook.setVisibility(View.VISIBLE);
+		viewPager = (ViewPager) findViewById(R.id.viewpager);
+		viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(),pageList, notebook.getColor(), this);
+		viewPager.setAdapter(viewPagerAdapter);
+
+		tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+		tabLayout.setupWithViewPager(viewPager);
+		fabnotebookmain.setVisibility(View.VISIBLE);
+	}
+}
+%%ViewPagerAdapter.java
+package com.twotowerstudios.virtualnotebookdesign.NotebookMain;
+
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+
+import com.twotowerstudios.virtualnotebookdesign.NotebookMain.Fragments.EveryPageFragment;
+import com.twotowerstudios.virtualnotebookdesign.NotebookMain.Fragments.FavoritesFragment;
+import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
+
+import java.util.ArrayList;
+
+
+public class ViewPagerAdapter extends FragmentStatePagerAdapter {
+	private static final int NUM_ITEMS = 2;
+	private ArrayList<Page> pageList;
+	private int color;
+	private NotebookAdapterToAct interf;
+	private final String titles[] = {"All Pages", "Favorites"};
+
+
+	public ViewPagerAdapter(FragmentManager fm, ArrayList<Page> list, int color, NotebookAdapterToAct interf) {
+		super(fm);
+		pageList = list;
+		this.color=color;
+		this.interf = interf;
+	}
+	@Override
+	public Fragment getItem(int position) {
+		switch (position) {
+			case 0:
+				return EveryPageFragment.newInstance(0, titles[0], pageList,color, interf);
+			case 1:
+				return FavoritesFragment.newInstance(1, titles[1], pageList,color, interf);
+			default:
+				return null;
+		}
+	}
+
+	@Override
+	public CharSequence getPageTitle(int position) {
+		return titles[position];
+	}
+
+	@Override
+	public int getCount() {
+		return NUM_ITEMS;
+	}
+
+	@Override
+	public int getItemPosition(Object object) {
+		return POSITION_NONE;
+	}
+	public void refreshList(ArrayList<Page> list){
+		pageList.clear();
+		pageList.addAll(list);
+		notifyDataSetChanged();
+	}
+}
+%%NotebookSelection.java
+package com.twotowerstudios.virtualnotebookdesign.NotebookSelection;
+
+import android.animation.ObjectAnimator;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Environment;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
+import com.twotowerstudios.virtualnotebookdesign.Initialization.InitNotebooks;
+import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
+import com.twotowerstudios.virtualnotebookdesign.Misc.SharedPrefs;
+import com.twotowerstudios.virtualnotebookdesign.NewNotebookDialog.NewNotebookFragment;
+import com.twotowerstudios.virtualnotebookdesign.NotebookMain.NotebookMainActivity;
+import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
+import com.twotowerstudios.virtualnotebookdesign.R;
+
+import org.parceler.Parcels;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+
+public class NotebookSelection extends AppCompatActivity implements NotebookSelectionAdapter.SelectionToNotebookInterface {
+    private AccountHeader accountHeader;
+    private RecyclerView rvNotebookSelection;
+    private RecyclerView.Adapter rvNotebookSelectionAdapter;
+    private ArrayList<Notebook> notebookSelectionCardList;
+	private FloatingActionButton fabSelection, fabAddBook;
+	static boolean isMainfabOpen;
+	private boolean isFirstTime;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_notebook_selection);
+		isFirstTime=true;
+		SharedPrefs.setBoolean(getApplicationContext(), "debug", false);
+		File nomedia = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), ".nomedia");
+		if(!nomedia.exists()){
+			try {
+				nomedia.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		if(Helpers.getStringFromFile("Notebooks.json", getApplicationContext()).equals("")){
+			File file = new File(getFilesDir(),"Notebooks.json");
+		}
+		if(InitNotebooks.isDebug(getApplicationContext())){
+			Log.d("isDebugNoteSelect", "DEBUG MODE = true;");
+			InitNotebooks.populateDebugBooks(getApplicationContext(), InitNotebooks.isDebug(getApplicationContext()));
+		}
+
+
+		//================================================
+		isMainfabOpen = false;
+		fabSelection = (FloatingActionButton) findViewById(R.id.fabSelection);
+		fabAddBook = (FloatingActionButton) findViewById(R.id.fabAddBlock);
+		fabSelection.setOnClickListener(new View.OnClickListener(){
+			@Override
+			public void onClick(View view) {
+				if (!isMainfabOpen) {
+
+					fabAddBook.show();
+
+					isMainfabOpen = true;
+					ObjectAnimator openAddBookfab = ObjectAnimator.ofFloat(fabAddBook, View.TRANSLATION_Y, 200,0); openAddBookfab.start();
+					ObjectAnimator rotateMainfab = ObjectAnimator.ofFloat(fabSelection, View.ROTATION, 0, 135); rotateMainfab.start();
+
+				} else if(isMainfabOpen){
+					isMainfabOpen = false;
+					ObjectAnimator rotateMainfab = ObjectAnimator.ofFloat(fabSelection, View.ROTATION, 135, 270); rotateMainfab.start();
+					ObjectAnimator closeFirstSubfab = ObjectAnimator.ofFloat(fabAddBook, View.TRANSLATION_Y, 0,200); closeFirstSubfab.start();
+					fabAddBook.hide();
+				}
+			}
+
+
+		});
+		fabAddBook.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+                showDialog();
+
+			}
+		});
+		//============================================
+		rvNotebookSelection = (RecyclerView) findViewById(R.id.rvnotebookselection);
+        final LinearLayoutManager rvNotebookSelectionManager = new LinearLayoutManager(this);
+        rvNotebookSelection.setLayoutManager(rvNotebookSelectionManager);
+		notebookSelectionCardList = Helpers.getNotebookList(getApplicationContext());
+        //prepareNotebookSelectionCards();
+        rvNotebookSelectionAdapter = new NotebookSelectionAdapter(this, notebookSelectionCardList, this);
+        rvNotebookSelection.setAdapter(rvNotebookSelectionAdapter);
+		//===================================================================
+        final IProfile h1 = new ProfileDrawerItem().withName("Header 1");
+        final IProfile h2 = new ProfileDrawerItem().withName("Header 2");
+        final IProfile h3 = new ProfileDrawerItem().withName("Header 3");
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+		getSupportActionBar().setTitle("Notebooks");
+        /**accountHeader = new AccountHeaderBuilder()
+                .withActivity(this)
+                .withHeaderBackground(R.drawable.header)
+                .addProfiles(
+                        h1,h2,h3
+                )
+                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
+                    @Override
+                    public boolean onProfileChanged(View view, IProfile profile, boolean current) {
+                        if (profile == h1){
+                            Glide.with(getApplicationContext()).load(R.drawable.header).into(accountHeader.getHeaderBackgroundView());
+                        } else if (profile == h2){
+                            Glide.with(getApplicationContext()).load(R.drawable.header2).into(accountHeader.getHeaderBackgroundView());
+                        } else if (profile == h3){
+                            Glide.with(getApplicationContext()).load(R.drawable.header3).into(accountHeader.getHeaderBackgroundView());
+                        }
+                        return false;
+                    }
+                })
+                .build();
+        Drawer drawer = new DrawerBuilder()
+                .withActivity(this)
+                .withToolbar(toolbar)
+
+                .withAccountHeader(accountHeader)
+                .addDrawerItems(
+                        new PrimaryDrawerItem().withName("Main Menu").withIdentifier(1),
+                        new PrimaryDrawerItem().withName("Notebooks").withDescription("Full list of notebooks").withIdentifier(2),
+                        new DividerDrawerItem(),
+                        new SecondaryDrawerItem().withName("I'm secondary #1").withDescription("I'm a bit more faded"),
+                        new SecondaryDrawerItem().withName("I'm secondary #2").withDescription("I'm also just as faded as my brother, but I'm very long cause fuck it")
+
+                )
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        //if (drawerItem != null) {
+                         //Intent intent = null;
+                         //if (drawerItem.getIdentifier() == 1) {
+                         //intent = new Intent(DrawerActivity.this, CompactHeaderDrawerActivity.class);
+                         //}
+                        if (drawerItem != null){
+                            Intent intent = null;
+                            if (position == 1){
+                                intent = new Intent(NotebookSelection.this, MainActivity.class);
+                            }else if (position == 2){
+
+                            }
+                            if (intent != null){
+                                //intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                startActivity(intent);
+								finish();
+                            }
+                        }
+                        return false;
+                    }
+                })
+                .build();
+		drawer.setSelection(2);*/
+		//=========================================================
+//        Glide.with(this).load(R.drawable.header2).into(accountHeader.getHeaderBackgroundView());
+
+    }
+
+    private void showDialog() {
+
+        // DialogFragment.show() will take care of adding the fragment
+        // in a transaction.  We also want to remove any currently showing
+        // dialog, so make our own transaction and take care of that here.
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        NewNotebookFragment newFragment = NewNotebookFragment.newInstance();
+
+        newFragment.show(ft, "dialog");
+
+
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_delete) {
+            //showEditDialog();
+            getApplicationContext().deleteFile("Notebooks.json");
+            notebookSelectionCardList.clear();
+            rvNotebookSelectionAdapter.notifyDataSetChanged();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+	public static boolean isMainfabOpen(){
+		return isMainfabOpen;
+	}
+
+	public void refreshData(Notebook newNotebook) {
+		Helpers.addToNotebookList(newNotebook, getApplicationContext());
+		notebookSelectionCardList.clear();
+		notebookSelectionCardList.addAll(Helpers.getNotebookList(getApplicationContext()));
+		rvNotebookSelectionAdapter.notifyDataSetChanged();
+		rvNotebookSelection.getLayoutManager().scrollToPosition(notebookSelectionCardList.size());
+	}
+
+	@Override
+	public void openNotebookActivity(int position) {
+		Intent intent = new Intent(this, NotebookMainActivity.class);
+		intent.putExtra("notebook", Parcels.wrap(notebookSelectionCardList.get(position)));
+        intent.putExtra("parent","NotebookSelection");
+		startActivity(intent);
+	}
+
+    @Override
+    protected void onResume() {
+		if(isFirstTime){
+			isFirstTime=false;
+		}else{
+			notebookSelectionCardList.clear();
+			notebookSelectionCardList.addAll(Helpers.getNotebookList(getApplicationContext()));
+			rvNotebookSelectionAdapter.notifyDataSetChanged();
+		}
+        super.onResume();
+
+    }
+}
+%%NotebookSelectionAdapter.java
+package com.twotowerstudios.virtualnotebookdesign.NotebookSelection;
+
+import android.content.Context;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
+import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
+import com.twotowerstudios.virtualnotebookdesign.R;
+
+import java.util.List;
+
+/**
+ * Created by Panther II on 22/10/2016.
+ */
+
+public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelectionAdapter.ViewHolder> /*implements NewNotebookFragment.ToAdapterInterface*/{
+	Context context;
+	List<Notebook> notebookList;
+
+	SelectionToNotebookInterface Interface;
+
+	public interface SelectionToNotebookInterface{
+		void openNotebookActivity(int position);
+	}
+
+	public static class ViewHolder extends RecyclerView.ViewHolder{
+
+		public TextView tvCardNameSel, tvCardSub, tvPageCount;
+		public ImageView ivCardImage;
+		public CardView card;
+
+		public ViewHolder(View view){
+			super(view);
+			ivCardImage = (ImageView) view.findViewById(R.id.tvCardImage);
+			tvCardNameSel = (TextView) view.findViewById(R.id.tvCardNameSel);
+			tvCardSub = (TextView) view.findViewById(R.id.tvCardSub);
+			tvPageCount = (TextView) view.findViewById(R.id.tvPageCount);
+			card = (CardView) view.findViewById(R.id.notebookSelectionCard);
+		}
+	}
+	public NotebookSelectionAdapter(Context context, List<Notebook> list, SelectionToNotebookInterface Interface){
+		this.context = context;
+		this.notebookList = list;
+		this.Interface=Interface;
+	}
+	@Override
+	public NotebookSelectionAdapter.ViewHolder onCreateViewHolder (ViewGroup parent, int viewType){
+	View v = LayoutInflater.from(parent.getContext())
+	.inflate(R.layout.notebookselectioncard, parent, false);
+	return new ViewHolder(v);
+	}
+
+
+	 @Override
+	 public void onBindViewHolder(ViewHolder holder,  int position){
+	 	 Notebook notebookSelection = notebookList.get(position);
+		 final int position2 = position;
+	 	 holder.tvCardNameSel.setText(""+notebookSelection.getName());
+	 	 holder.tvCardSub.setText("Last modified: "+
+				 DateUtils.getRelativeTimeSpanString(notebookSelection.getLastModified(), Helpers.getCurrentTimeInMillis(), DateUtils.SECOND_IN_MILLIS));
+	 	 holder.tvPageCount.setText("" +notebookSelection.getNumberOfPages() + " Pages");
+	 	 holder.ivCardImage.setColorFilter(notebookSelection.getColor());
+		 holder.card.setOnClickListener(new View.OnClickListener() {
+			 @Override
+			 public void onClick(View view) {
+				 Interface.openNotebookActivity(position2);
+			 }
+		 });
+	 }
+	 @Override
+	 public int getItemCount() {
+	 	return notebookList.size();
+	 }
+	/**@Override
+	public void refreshData() {
+		notifyDataSetChanged();
+	}*/
+}
+%%ScrollAwareFABBehaviour.java
+package com.twotowerstudios.virtualnotebookdesign.NotebookSelection;
+
+import android.content.Context;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.ViewCompat;
+import android.util.AttributeSet;
+import android.view.View;
+
+import com.twotowerstudios.virtualnotebookdesign.R;
+
+/**
+ * Created by Panther II on 15/11/2016.
+ */
+
+public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
+
+	@Override
+	public boolean onStartNestedScroll(CoordinatorLayout coordinatorLayout,
+									   FloatingActionButton child, View directTargetChild, View target, int nestedScrollAxes) {
+		return nestedScrollAxes == ViewCompat.SCROLL_AXIS_VERTICAL ||
+				super.onStartNestedScroll(coordinatorLayout, child, directTargetChild, target,
+						nestedScrollAxes);
+	}
+
+	@Override
+	public void onNestedScroll(CoordinatorLayout coordinatorLayout, FloatingActionButton child,
+							   View target, int dxConsumed, int dyConsumed, int dxUnconsumed, int dyUnconsumed) {
+		super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed,
+				dyUnconsumed);
+
+		if (dyConsumed > 0 && child.getVisibility() == View.VISIBLE) {
+			child.hide();
+
+		} else if (dyConsumed < 0 && child.getVisibility() != View.VISIBLE) {
+			if (child.getId()== R.id.fabAddBlock){
+				if(NotebookSelection.isMainfabOpen()){
+					child.show();
+				}else{
+
+				}
+			}else{
+				child.show();
+			}
+
+		}
+	}
+	public ScrollAwareFABBehavior(Context context, AttributeSet attrs) {
+		super();
+	}
+}
+%%Page.java
+package com.twotowerstudios.virtualnotebookdesign.Objects;
+
+import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
+
+import org.parceler.Parcel;
+
+import java.util.ArrayList;
+
+
+@Parcel
+public class Page implements Comparable<Page>{
+	public ArrayList<ChildBase> content;
+	private String name;
+	int pageNumber;
+	long lastModifiedMillis;
+	long dateMillis;
+	boolean isFavorite;
+	String UID16;
+
+	public void setContent(ArrayList<ChildBase> content) {
+		this.content = content;
+	}
+
+	String parentUID;
+
+	public Page(String name, int pageNumber, String parentUID){
+		this.name = name;
+		this.pageNumber = pageNumber;
+		this.content = new ArrayList<ChildBase>();
+		this.lastModifiedMillis = Helpers.getCurrentTimeInMillis();
+		this.isFavorite=false;
+		this.dateMillis=0;
+		this.parentUID=parentUID;
+		UID16 ="p"+Helpers.generateUniqueId(16);
+	}
+	public Page(String name, int pageNumber, long dateMillis, String parentUID){
+		this.name = name;
+		this.pageNumber = pageNumber;
+		this.content = new ArrayList<ChildBase>();
+		this.lastModifiedMillis = Helpers.getCurrentTimeInMillis();
+		this.isFavorite=false;
+		this.parentUID=parentUID;
+		this.dateMillis=dateMillis;
+		UID16 ="p"+Helpers.generateUniqueId(16);
+	}
+	public Page(){}
+
+	public String getUID() {
+		return UID16;
+	}
+
+	public String getParentUID() {return parentUID;}
+
+	public void setParentUID(String parentUID) {this.parentUID = parentUID;}
+
+	public void setUID16(String UID16) {this.UID16 = UID16;}
+
+	public void addToPage(ChildBase newObject){content.add(newObject);}
+	public void removeFromPage(ChildBase object){content.remove(object);}
+	public void removeFromPage(int index){content.remove(index);}
+	public void setLastModifiedMillis(long lastModifiedMillis) {
+		this.lastModifiedMillis = lastModifiedMillis;}
+	public void setName(String name){this.name = name;}
+	public void setPageNumber(int pageNumber){this.pageNumber = pageNumber;}
+	public ArrayList<ChildBase> getContent(){return content;}
+	public int getPageNumber(){return pageNumber;}
+	public long getLastModifiedMillis() {return lastModifiedMillis;}
+	public String getName(){return name;}
+	public int getNumberOfItems(){return content.size();}
+	public boolean isFavorite(){return isFavorite;}
+	public void setIsFavorite(boolean isFavorite){this.isFavorite=isFavorite;}
+
+	public void setDateMillis(long dateMillis) {this.dateMillis = dateMillis;}
+
+	public long getDateMillis() {return dateMillis;}
+
+	@Override
+	public int compareTo(Page page) {
+
+		return this.pageNumber-page.pageNumber;
+	}
+}
+%%ChildBase.java
+package com.twotowerstudios.virtualnotebookdesign.Objects;
+
+import android.content.Context;
+import android.net.Uri;
+import android.os.Environment;
+
+import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
+
+import org.parceler.Parcel;
+
+@Parcel
+public class ChildBase {
+	//public final int TEXT=0,IMAGE=1,DRIVE=2;
+	String title;
+	String UID16;
+	String pageUID;
+	String notebookUID;
+
+	String uri;
+
+
+
+	public ChildBase(){}
+	int childType;
+	/**Drive*/
+	String driveId;
+	int driveType;
+
+	public Uri getUri() {
+		return Uri.parse(uri);
+	}
+
+	public boolean doesUriExist(){
+		return !(uri == null || uri.equals(""));
+	}
+	public void setUri(Uri uri) {
+		this.uri = uri.toString();
+	}
+
+	public ChildBase(int driveType, String name, String notebookUID, String pageUID, String driveId){
+		this.driveType=driveType;
+		this.title=name;
+		this.driveId=driveId;
+		this.UID16= "d"+ Helpers.generateUniqueId(16);
+		this.pageUID=pageUID;
+		this.notebookUID =notebookUID;
+		this.childType=2;
+	}
+	public int getType(){return driveType;}
+	public void setDriveId(String driveId) {
+		this.driveId = driveId;
+	}
+	public String getDriveId() {
+		return driveId;
+	}
+	/**Image*/
+	String ImageUID;
+	String path;
+	public ChildBase(String name, String ImageUID, String notebookUID, String pageUID, Uri uri, Context context){
+		this.title =name;
+		this.ImageUID=ImageUID;
+		path=context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/"+ImageUID+".png";
+		char[] charar = ImageUID.toCharArray();
+		charar[0]='c';
+		UID16 = charar.toString();
+		this.notebookUID = notebookUID;
+		this.pageUID=pageUID;
+		this.childType=1;
+		this.uri=uri.toString();
+	}
+	public void setPath(String path) {
+		this.path = path;
+	}
+
+	public void setNotebookUID(String notebookUID) {
+		this.notebookUID = notebookUID;
+	}
+
+	public String getPath() {
+		return path;
+	}
+	public String getImageUID() {
+		return ImageUID;
+	}
+	public void setImageUID(String imageUID) {
+		ImageUID = imageUID;
+	}
+
+	/**Text*/
+	String text;
+	public ChildBase(String title, String text, String notebookUID, String pageUID){
+		this.title=title;
+		this.text=text;
+		UID16= "t"+Helpers.generateUniqueId(16);
+		this.notebookUID = notebookUID;
+		this.pageUID=pageUID;
+		this.childType=0;
+	}
+	public String getText() {
+		return text;
+	}
+	public void setText(String text) {
+		this.text = text;
+	}
+
+	/**   */
+	public String getNotebookUID() {
+		return notebookUID;
+	}
+	public String getPageUID() {return pageUID;}
+
+	public void setPageUID(String pageUID) {
+		this.pageUID = pageUID;
+	}
+
+	public String getUID16() {
+		return UID16;
+	}
+	public String getTitle() {
+		return title;
+	}
+
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	public int getChildType() {return childType;}
+
+}
+%%Notebook.java
+package com.twotowerstudios.virtualnotebookdesign.Objects;
+
+import android.content.Context;
+
+import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
+
+import org.parceler.Parcel;
+
+import java.util.ArrayList;
+
+@Parcel
+public class Notebook {
+	String name;
+	int color,accentColor;
+	long lastModified;
+	String UID16;
+	ArrayList<Page> pages;
+
+	public Notebook(String name, int color,
+					int debugNumOfPages, long lastModified, Context context){
+		this.name = name;
+		this.lastModified = lastModified;
+		this.color = color;
+		this.accentColor=Helpers.getSingleColorAccent(context,color);
+		this.pages = new ArrayList<>();
+		this.UID16 = "n"+Helpers.generateUniqueId(16);
+	}
+	public Notebook(String name, int color, int accentColor){
+		this.name=name;
+		this.color=color;
+		this.lastModified=Helpers.getCurrentTimeInMillis();
+		this.accentColor=accentColor;
+		this.pages = new ArrayList<>();
+		this.UID16 = "n"+Helpers.generateUniqueId(16);
+	}
+	public Notebook(){}
+	public int getColor() {return  color;}
+
+	public String getUID16() {return UID16;}
+
+	public void setUID16(String UID16) {this.UID16 = UID16;}
+
+	public void setColor(int color) {this.color = color;}
+
+	public int getAccentColor() {return accentColor;}
+
+	public void setAccentColor(int accentColor) {this.accentColor = accentColor;}
+
+	public String getName() {return  name;}
+
+	public void setName(String name) { this.name = name;}
+
+	public long getLastModified() {return  lastModified;}
+
+	public void setLastModified(long lastModified) {
+		this.lastModified = lastModified;
+	}
+
+
+	public int getNumberOfPages(){return pages.size();}
+
+
+	public ArrayList<Page> getPages() {
+		return pages;
+	}
+	public void setPages(ArrayList<Page> list){pages=list;
+	}
+	public void addPage(Page page){
+		pages.add(page);
+	}
+}
+%%ImageZoomActivity.java
+package com.twotowerstudios.virtualnotebookdesign.PageActivityMain;
+
+import android.graphics.Color;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+
+import com.davemorrissey.labs.subscaleview.ImageSource;
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
+import com.twotowerstudios.virtualnotebookdesign.Objects.ChildBase;
+import com.twotowerstudios.virtualnotebookdesign.R;
+
+import org.parceler.Parcels;
+
+public class ImageZoomActivity extends AppCompatActivity {
+	ChildBase image;
+	Toolbar tbfullimage;
+	SubsamplingScaleImageView ivFullscreenPage;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.fragment_image_zoom);
+		image = Parcels.unwrap(getIntent().getParcelableExtra("imagechild"));
+
+
+		tbfullimage = (Toolbar)findViewById(R.id.tbfullimage);
+		setSupportActionBar(tbfullimage);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setTitle(image.getTitle());
+		tbfullimage.setTitleTextColor(Color.parseColor("#ffffff"));
+		tbfullimage.setNavigationIcon(R.drawable.ic_close_white_24dp);
+		tbfullimage.setNavigationOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
+		ivFullscreenPage = (SubsamplingScaleImageView) findViewById(R.id. ivFullscreenPage);
+		ivFullscreenPage.setOrientation(SubsamplingScaleImageView.ORIENTATION_USE_EXIF);
+		ivFullscreenPage.setImage(ImageSource.uri(image.getUri()));
+		ivFullscreenPage.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+	}
+}
+%%PageActivityMain
+package com.twotowerstudios.virtualnotebookdesign.PageActivityMain;
+
+import android.Manifest;
+import android.animation.ObjectAnimator;
+import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.content.res.AppCompatResources;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+
+import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
+import com.twotowerstudios.virtualnotebookdesign.Misc.SharedPrefs;
+import com.twotowerstudios.virtualnotebookdesign.Objects.ChildBase;
+import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
+import com.twotowerstudios.virtualnotebookdesign.R;
+
+import org.parceler.Parcels;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+
+public class PageActivityMain extends AppCompatActivity implements PageActivityAdapter.PageAdapterToAct, NewPageChildFragment.OnFragmentInteractionListener, ModalBottomSheet.OnModalBottomSheetListener {
+
+	Toolbar tbpagemain;
+	RecyclerView rvpagemain;
+	Page page;
+	ArrayList<ChildBase> contents = new ArrayList<>();
+	String notebookUID16;
+	boolean isMainfabOpen;
+	/*LinearLayout bottom_drawer;
+	BottomSheetBehavior bottomSheetBehavior;*/
+	FloatingActionButton fabPageMain1, fabTextChild, fabImageChild;
+	private boolean allowCamera;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		page = Parcels.unwrap(getIntent().getParcelableExtra("page"));
+		contents = page.getContent();
+		//DEBUG, REMOVE
+		/**if (true) {
+			ArrayList<ChildBase> newcontent = new ArrayList<>();
+			for (ChildBase a : contents) {
+				if (a.getPageUID() == null) {
+					a.setPageUID(page.getUID());
+					a.setNotebookUID(page.getParentUID());
+
+				}
+				newcontent.add(a);
+			}
+			page.setContent(newcontent);
+			Helpers.addPageFromUID16(page.getParentUID(), page, getApplicationContext());
+		}*/
+
+		notebookUID16 = getIntent().getStringExtra("notebookUID16");
+		setContentView(R.layout.activity_page_main);
+
+		allowCamera = ContextCompat.checkSelfPermission(this,
+				Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
+		tbpagemain = (Toolbar) findViewById(R.id.tbpagemain);
+		rvpagemain = (RecyclerView) findViewById(R.id.rvpagemain);
+		setSupportActionBar(tbpagemain);
+		tbpagemain.inflateMenu(R.menu.pagemainmenu);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setTitle("" + page.getName());
+		if (page.getDateMillis() != 0) {
+			getSupportActionBar().setSubtitle("" + Helpers.millisDateToString(page.getDateMillis(), 2));
+		}
+		//===============================================================================================================
+		StaggeredGridLayoutManager lmpagemain = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+		rvpagemain.setLayoutManager(lmpagemain);
+		rvpagemain.setAdapter(new PageActivityAdapter(getApplicationContext(), contents, this, this));
+
+		fabPageMain1 = (FloatingActionButton) findViewById(R.id.fabPageMain1);
+		isMainfabOpen = false;
+		fabTextChild = ((FloatingActionButton) findViewById(R.id.fabTextChild));
+		fabImageChild = ((FloatingActionButton) findViewById(R.id.fabImageChild));
+		//fabDriveChild = ((FloatingActionButton) findViewById(R.id.fabDriveChild)); UNUSED FOR NOW
+
+		/**bottom_drawer = (LinearLayout) findViewById(R.id.bottom_drawer);
+		 bottomSheetBehavior = BottomSheetBehavior.from(bottom_drawer);
+		 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);*/
+
+		//===============================================================================================================
+		fabPageMain1.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				if (!isMainfabOpen) {
+
+					fabTextChild.show();
+					fabImageChild.show();
+					//fabDriveChild.show();
+					isMainfabOpen = true;
+					ObjectAnimator openFirstSubfab = ObjectAnimator.ofFloat(fabTextChild, View.TRANSLATION_Y, 200, 0);
+					openFirstSubfab.start();
+					ObjectAnimator openSecondSubfab = ObjectAnimator.ofFloat(fabImageChild, View.TRANSLATION_Y, 400, 0);
+					openSecondSubfab.start();
+					//ObjectAnimator openThirdSubfab = ObjectAnimator.ofFloat(fabDriveChild, View.TRANSLATION_Y, 600, 0);
+					//openThirdSubfab.start();
+					ObjectAnimator rotateMainfab = ObjectAnimator.ofFloat(fabPageMain1, View.ROTATION, 0, 135);
+					rotateMainfab.start();
+
+				} else if (isMainfabOpen) {
+					isMainfabOpen = false;
+					ObjectAnimator rotateMainfab = ObjectAnimator.ofFloat(fabPageMain1, View.ROTATION, 135, 270);
+					rotateMainfab.start();
+					ObjectAnimator closeFirstSubfab = ObjectAnimator.ofFloat(fabTextChild, View.TRANSLATION_Y, 0, 200);
+					closeFirstSubfab.start();
+					ObjectAnimator closeSecondSubfab = ObjectAnimator.ofFloat(fabImageChild, View.TRANSLATION_Y, 0, 400);
+					closeSecondSubfab.start();
+					//ObjectAnimator closeThirdSubfab = ObjectAnimator.ofFloat(fabDriveChild, View.TRANSLATION_Y, 0, 600);
+					//closeThirdSubfab.start();
+					fabTextChild.hide();
+					fabImageChild.hide();
+					//fabDriveChild.hide();
+				}
+			}
+
+
+		});
+		fabTextChild.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				//On clicking fab
+				FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+				Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
+				if (prev != null) {
+					ft.remove(prev);
+				}
+				ft.addToBackStack(null);
+				// Create and show the dialog.
+				NewPageChildFragment newFragment = NewPageChildFragment.newInstance('t', page);
+				newFragment.show(ft, "dialog");
+			}
+		});
+		fabImageChild.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				//bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+				ModalBottomSheet modalBottomSheet = new ModalBottomSheet();
+				modalBottomSheet.show(getSupportFragmentManager(), "bottom sheet");
+			}
+		});
+		//===============================================================================================================
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.pagemainmenu, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		if (page.isFavorite()) {
+			menu.findItem(R.id.mPageFav).setIcon(AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_star_white_24dp));
+		} else {
+			menu.findItem(R.id.mPageFav).setIcon(AppCompatResources.getDrawable(getApplicationContext(), R.drawable.ic_star_border_white_24dp));
+		}
+		return super.onPrepareOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.mPageFav:
+				if (page.isFavorite()) {
+					page.setIsFavorite(false);
+				} else {
+					page.setIsFavorite(true);
+				}
+				invalidateOptionsMenu();
+				Helpers.addPageFromUID16(page.getParentUID(), page, getApplicationContext());
+				break;
+			case android.R.id.home:
+				/**Intent intent = new Intent(this, NotebookMainActivity.class);
+				 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+				 intent.putExtra("notebookUID16", notebookUID16);
+				 intent.putExtra("parent", "PageActivityMain");
+				 startActivity(intent);*/
+				finish();
+				return true;
+
+		}
+		return true;
+	}
+
+	@Override
+	public void returnTextChildInfo(String title, String text) {
+		Log.d("PageActivityMain", "returnTextChildInfo called.");
+		ChildBase newChild = new ChildBase(title, text, page.getParentUID(), page.getUID());
+		page.addToPage(newChild);
+		Helpers.addPageFromUID16(page.getParentUID(), page, getApplicationContext());
+		//((PageActivityAdapter) rvpagemain.getAdapter()).refreshList(newChild);
+		rvpagemain.getAdapter().notifyDataSetChanged();
+	}
+
+	@Override
+	public void returnDecision(String tag, final String title) {
+		final String newImageName = "i" + Helpers.generateUniqueId(16);
+		if (tag.equals("camera")) {
+			locationpermission();
+			if (SharedPrefs.getBoolean(getApplicationContext(), "deleteNoticeShown")) {
+				if (allowCamera) {
+					Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+					if (takePicture.resolveActivity(getPackageManager()) != null) {
+						File nomedia = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), ".nomedia");
+						if (!nomedia.exists()) {
+							try {
+								nomedia.createNewFile();
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
+						File photo = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), newImageName + ".png");
+						Uri photoURI = Uri.fromFile(photo);
+						takePicture.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+						try {
+							startActivityForResult(takePicture, 1);
+						} catch (SecurityException e) {
+							e.printStackTrace();
+							ActivityCompat.requestPermissions((Activity) getApplicationContext(),
+									new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+									MY_PERMISSIONS_REQUEST_CAMERA);
+
+						}
+						ChildBase newImage = new ChildBase("" + title, newImageName, page.getParentUID(), page.getUID(), photoURI, getApplicationContext());
+						page.addToPage(newImage);
+						Helpers.addPageFromUID16(page.getParentUID(), page, getApplicationContext());
+						rvpagemain.invalidate();
+					}
+				}
+			} else {
+				new AlertDialog.Builder(this)
+						.setTitle("Notice")
+						.setMessage("Some phones will automatically copy every picture taken here to the gallery. Feel free to delete those copies from your gallery. The photos in this app won't be affected")
+						.setPositiveButton("I understand", new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, int which) {
+								if (allowCamera) {
+									Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+									if (takePicture.resolveActivity(getPackageManager()) != null) {
+										File nomedia = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), ".nomedia");
+										if (!nomedia.exists()) {
+											try {
+												nomedia.createNewFile();
+											} catch (IOException e) {
+												e.printStackTrace();
+											}
+										}
+										File photo = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), newImageName + ".png");
+										Uri photoURI = Uri.fromFile(photo);
+										takePicture.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+										try {
+											startActivityForResult(takePicture, 1);
+										} catch (SecurityException e) {
+											e.printStackTrace();
+											ActivityCompat.requestPermissions((Activity) getApplicationContext(),
+													new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+													MY_PERMISSIONS_REQUEST_CAMERA);
+
+										}
+										ChildBase newImage = new ChildBase("" + title, newImageName, page.getParentUID(), page.getUID(), photoURI, getApplicationContext());
+										page.addToPage(newImage);
+										Helpers.addPageFromUID16(page.getParentUID(), page, getApplicationContext());
+										rvpagemain.invalidate();
+										SharedPrefs.setBoolean(getApplicationContext(), "deleteNoticeShown", true);
+									}
+								}
+							}
+						})
+						.show();
+			}
+
+
+		} else if (tag.equals("gallery")) {
+			Intent intent = new Intent();
+			intent.setType("image/*");
+			intent.setAction(Intent.ACTION_GET_CONTENT);
+			startActivityForResult(Intent.createChooser(intent,
+					"Select Picture"), 1);
+		}
+	}
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode == RESULT_OK) {
+			if (requestCode == 1) {
+				Uri selectedImageUri = data.getData();
+
+			}
+		}
+	}
+
+	private static final int MY_PERMISSIONS_REQUEST_CAMERA = 0;
+
+	private void locationpermission() {
+		// Here, thisActivity is the current activity
+		if (ContextCompat.checkSelfPermission(this
+				,
+				Manifest.permission.CAMERA)
+				!= PackageManager.PERMISSION_GRANTED) {
+
+			// Should we show an explanation?
+			if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+					Manifest.permission.CAMERA)) {
+
+				// Show an expanation to the user *asynchronously* -- don't block
+				// this thread waiting for the user's response! After the user
+				// sees the explanation, try again to request the permission.
+
+			} else {
+
+				// No explanation needed, we can request the permission.
+
+				ActivityCompat.requestPermissions(this,
+						new String[]{Manifest.permission.CAMERA},
+						MY_PERMISSIONS_REQUEST_CAMERA);
+
+				// MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
+				// app-defined int constant. The callback method gets the
+				// result of the request.
+			}
+		}
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+		switch (requestCode) {
+			case MY_PERMISSIONS_REQUEST_CAMERA:
+				// permission was granted, yay! Do the
+// contacts-related task you need to do.
+// permission denied, boo! Disable the
+// functionality that depends on this permission.
+				allowCamera = grantResults.length > 0
+						&& grantResults[0] == PackageManager.PERMISSION_GRANTED;
+				return;
+		}
+	}
+
+	@Override
+	public void clickListener(String uid) {
+		ChildBase child = null;
+		for (ChildBase a : contents) {
+			if (a.getUID16().equals(uid)) {
+				child = a;
+				break;
+			}
+		}
+		if (child != null) {
+			Intent intent = new Intent(this, ImageZoomActivity.class);
+			intent.putExtra("imagechild", Parcels.wrap(child));
+			startActivity(intent);
+		}
+	}
+
+
+}
+%%ModalBottomSheet.java
+package com.twotowerstudios.virtualnotebookdesign.PageActivityMain;
+
+
+import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetDialogFragment;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+
+import com.twotowerstudios.virtualnotebookdesign.R;
+
+public class ModalBottomSheet extends BottomSheetDialogFragment {
+	LinearLayout bottomGalleryButton, bottomCameraButton;
+	OnModalBottomSheetListener mListener;
+	EditText etImageTitle;
+	public interface OnModalBottomSheetListener{
+		void returnDecision(String tag, String title);
+	}
+	public ModalBottomSheet() {
+		// Required empty public constructor
+	}
+
+	BottomSheetDialogFragment newinstance(){return new BottomSheetDialogFragment();}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+							 Bundle savedInstanceState) {
+		// Inflate the layout for this fragment
+		return inflater.inflate(R.layout.fragment_modal_bottom_sheet, container, false);
+	}
+
+	@Override
+	public void onAttach(Context context) {
+		super.onAttach(context);
+		if(context instanceof OnModalBottomSheetListener){
+			mListener = (OnModalBottomSheetListener) context;
+		}else{
+			throw new RuntimeException(context.toString()
+					+ " must implement OnModalBottomSheetListener");
+		}
+	}
+
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		mListener = null;
+	}
+
+	@Override
+	public void onViewCreated(View v, @Nullable Bundle savedInstanceState) {
+		bottomCameraButton = (LinearLayout) v.findViewById(R.id.bottomCameraButton);
+		bottomGalleryButton = (LinearLayout) v.findViewById(R.id.bottomGalleryButton);
+		etImageTitle=(EditText)v.findViewById(R.id.etImageTitle);
+
+		bottomCameraButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mListener.returnDecision("camera",etImageTitle.getText().toString());
+				dismiss();
+			}
+		});
+		bottomGalleryButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mListener.returnDecision("gallery",etImageTitle.getText().toString());
+				dismiss();
+			}
+		});
+	}
+}
+%%NewPageChildFragment.java
+package com.twotowerstudios.virtualnotebookdesign.PageActivityMain;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
+import android.support.v7.widget.Toolbar;
+import android.text.method.ScrollingMovementMethod;
+import android.util.DisplayMetrics;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.EditText;
+
+import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
+import com.twotowerstudios.virtualnotebookdesign.R;
+
+import org.parceler.Parcels;
+
+
+public class NewPageChildFragment extends DialogFragment {
+
+    private OnFragmentInteractionListener mListener;
+
+    char type;
+    Page page;
+
+    public NewPageChildFragment() {
+        // Required empty public constructor
+    }
+
+    public static NewPageChildFragment newInstance(char type, Page page) {
+        NewPageChildFragment fragment = new NewPageChildFragment();
+        Bundle args = new Bundle();
+        args.putChar("type", type);
+        args.putParcelable("page", Parcels.wrap(page));
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            type = getArguments().getChar("type");
+            page = Parcels.unwrap(getArguments().getParcelable("page"));
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        if(type == 't'){
+            return inflater.inflate(R.layout.fragment_new_page_child_text, container, false);
+        }/*else if(type == 'i'){
+            return inflater.inflate(R.layout.fragment_new_page_child_image, container, false);
+        }else if(type == 'd'){
+            return inflater.inflate(R.layout.fragment_new_page_child_drive, container, false);
+        }*/else{return inflater.inflate(R.layout.fragment_new_page_child_text, container, false);}
+    }
+
+    @Override
+    public void onViewCreated(View v, @Nullable Bundle savedInstanceState) {
+        if (type=='t') {
+            Toolbar tbNewpagechild = (Toolbar) v.findViewById(R.id.tbNewpagechild);
+			final EditText etTitlePageChild = (EditText) v.findViewById(R.id.etTitlePageChild);
+			final EditText etBodyPageChild = (EditText) v.findViewById(R.id.etBodyPageChild);
+			etTitlePageChild.setMovementMethod(new ScrollingMovementMethod());
+			tbNewpagechild.inflateMenu(R.menu.newpage);
+            tbNewpagechild.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.action_newpage:
+							mListener.returnTextChildInfo(etTitlePageChild.getText().toString(), etBodyPageChild.getText().toString());
+							dismiss();
+                            break;
+                    }return false;
+                }
+            });
+        }else{
+
+        }
+    }
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		DisplayMetrics displaymetrics = new DisplayMetrics();
+		getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+		int height = displaymetrics.heightPixels;
+		int width = displaymetrics.widthPixels;
+		WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+		lp.copyFrom(getDialog().getWindow().getAttributes());
+		lp.width = (int)(width*0.9);
+		lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+		getDialog().getWindow().setAttributes(lp);
+	}
+
+	@Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnFragmentInteractionListener) {
+            mListener = (OnFragmentInteractionListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
+    }
+    public interface OnFragmentInteractionListener {
+        void returnTextChildInfo(String title, String  text);
+    }
+}
+%%PageActivityAdapter
+package com.twotowerstudios.virtualnotebookdesign.PageActivityMain;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
+import com.twotowerstudios.virtualnotebookdesign.Misc.SharedPrefs;
+import com.twotowerstudios.virtualnotebookdesign.Objects.ChildBase;
+import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
+import com.twotowerstudios.virtualnotebookdesign.R;
+
+import java.io.File;
+import java.util.ArrayList;
+
+
+public class PageActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+	private Context context;
+	private ArrayList<ChildBase> list;
+	private PageAdapterToAct interf;
+	private Activity mActivity = null;
+	private int pos;
+
+	private final int TEXT = 0, IMAGE = 1, DRIVE = 2;
+
+	public interface PageAdapterToAct {
+		void clickListener(String uid);
+	}
+
+	public class ViewHolderText extends RecyclerView.ViewHolder {
+		private TextView tvChild;
+		private TextView tvChildTextTitle;
+
+		public ViewHolderText(View v) {
+			super(v);
+			tvChild = (TextView) v.findViewById(R.id.tvChild);
+			tvChildTextTitle = (TextView) v.findViewById(R.id.tvChildTextTitle);
+		}
+	}
+
+	public class ViewHolderImage extends RecyclerView.ViewHolder {
+		private ImageView ivChildImage;
+		private TextView tvChildImage;
+
+		public ViewHolderImage(View v) {
+			super(v);
+			ivChildImage = (ImageView) v.findViewById(R.id.ivChildImage);
+			tvChildImage = (TextView) v.findViewById(R.id.tvChildImage);
+
+		}
+	}
+
+	public class ViewHolderDrive extends RecyclerView.ViewHolder {
+		private ImageView ivChildDrive;
+		private TextView tvChildDrive;
+
+		public ViewHolderDrive(View v) {
+			super(v);
+			ivChildDrive = (ImageView) v.findViewById(R.id.ivChildDrive);
+			tvChildDrive = (TextView) v.findViewById(R.id.tvChildDrive);
+		}
+	}
+
+	/**
+	 * @Override public int getItemViewType(int position) {
+	 * if(((ChildBase)list.get(position)).getUID16().charAt(0)=='t'){
+	 * return TEXT;
+	 * }else if(((ChildBase)list.get(position)).getUID16().charAt(0)=='c'){
+	 * return IMAGE;
+	 * }else if(((ChildBase)list.get(position)).getUID16().charAt(0)=='d'){
+	 * return DRIVE;
+	 * }
+	 * return -1;
+	 * }
+	 */
+	@Override
+	public int getItemViewType(int position) {
+		if (list.get(position).getChildType() == 0) {
+			return TEXT;
+		} else if (list.get(position).getChildType() == 1) {
+			return IMAGE;
+		} else if (list.get(position).getChildType() == 2) {
+			return DRIVE;
+		}
+		return -1;
+	}
+
+	public PageActivityAdapter(Context context, ArrayList<ChildBase> list, PageAdapterToAct interf, Activity activity) {
+		this.context = context;
+		this.list = list;
+		this.interf = interf;
+		mActivity = activity;
+	}
+
+	@Override
+	public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+		RecyclerView.ViewHolder viewHolder;
+		LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+
+		switch (viewType) {
+			case 0:
+				View v1 = inflater.inflate(R.layout.pchild_text, parent, false);
+				viewHolder = new ViewHolderText(v1);
+				break;
+			case 1:
+				View v2 = inflater.inflate(R.layout.pchild_image, parent, false);
+				viewHolder = new ViewHolderImage(v2);
+				break;
+			case 3:
+				View v3 = inflater.inflate(R.layout.pchild_drive, parent, false);
+				viewHolder = new ViewHolderImage(v3);
+				break;
+			default:
+				View v4 = inflater.inflate(R.layout.pchild_text, parent, false);
+				viewHolder = new ViewHolderImage(v4);
+				break;
+		}
+		return viewHolder;
+	}
+
+	@Override
+	public void onBindViewHolder(RecyclerView.ViewHolder Vholder, int position) {
+		Log.d("PageActivityAdapter", "onBindViewHolder: start");
+		pos = position;
+		switch (Vholder.getItemViewType()) {
+			case TEXT:
+				Log.d("PageActivityAdapter", "onBindViewHolder: TEXT Itemviewtype");
+				ViewHolderText holder = (ViewHolderText) Vholder;
+				ChildBase child = list.get(position);
+				holder.tvChild.setText("" + child.getText());
+				if (child.getTitle() == null || child.getTitle().equals("")) {        //if theres no title, make Title disappear
+					holder.tvChildTextTitle.setVisibility(View.GONE);
+				} else { //make title appear
+					holder.tvChildTextTitle.setVisibility(View.VISIBLE);
+					holder.tvChildTextTitle.setText(child.getTitle());
+				}
+				//configureViewHolderText(vhText, position);
+				break;
+
+			//===============================================================================================================
+			case IMAGE:
+				final ViewHolderImage holderImage = (ViewHolderImage) Vholder;
+				final ChildBase childImage = list.get(position);
+				final String imageUID = childImage.getUID16();
+				if (!childImage.getTitle().equals("") || childImage.getTitle() == null) {
+					holderImage.tvChildImage.setText("" + childImage.getTitle());
+				} else {
+					holderImage.tvChildImage.setVisibility(View.GONE);
+				}
+
+				Glide.with(context)
+						//.load(childImage.getUri())
+						.load(childImage.getUri().toString())
+						.centerCrop()
+						.error(R.drawable.ic_broken_image_red_24dp)
+						.placeholder(R.drawable.ic_image_black_24dp)
+						.into(holderImage.ivChildImage);
+
+				File newFile = new File(childImage.getUri().getPath());
+				//File fileuri = new File(childImage.getUri().getPath());
+
+				/**try {
+				 holderImage.ivChildImage.setImageBitmap(MediaStore.Images.Media.getBitmap(context.getContentResolver(), childImage.getUri()));
+				 } catch (IOException e) {
+				 e.printStackTrace();
+				 }*/
+				Log.d("PageActivityAdapter", "onBindViewHolder: uri exists: " + childImage.getUri().toString());
+				Log.d("PageActivityAdapter", "onBindViewHolder: uri path: " + childImage.getUri().getPath());
+				holderImage.ivChildImage.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						interf.clickListener(imageUID);
+					}
+				});
+
+				holderImage.ivChildImage.setOnLongClickListener(new View.OnLongClickListener() {
+					@Override
+					public boolean onLongClick(View v) {
+						View checkBoxView = null;
+						checkBoxView = View.inflate(context, R.layout.checkbox, null);
+						CheckBox checkBox = (CheckBox) checkBoxView.findViewById(R.id.mcheckBox);
+						checkBox.setChecked(true);
+						SharedPrefs.setBoolean(context, "deleteFileCheck", true);
+						checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+							@Override
+							public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+								SharedPrefs.setBoolean(context, "deleteFileCheck", isChecked);
+							}
+						});
+
+						new AlertDialog.Builder(mActivity)
+								.setTitle("Do you want to delete this image?")
+								.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										list.remove(pos);
+										Page newpage = Helpers.getPageFromUID(childImage.getPageUID(), childImage.getNotebookUID(), context);
+										newpage.removeFromPage(pos);
+										Helpers.addPageFromUID16(newpage.getParentUID(), newpage, context);
+										if (SharedPrefs.getBoolean(context, "deleteFileCheck")) {
+											File fdelete = new File(childImage.getUri().getPath());
+											if (fdelete.exists()) {
+												if (fdelete.delete()) {
+													Toast.makeText(context, "file deleted :" + childImage.getUri().getPath(), Toast.LENGTH_SHORT).show();
+												} else {
+													Toast.makeText(context, "file not deleted :" + childImage.getUri().getPath(), Toast.LENGTH_SHORT).show();
+
+												}
+											}
+										}
+										notifyItemRemoved(pos);
+									}
+								})
+								.setView(checkBoxView)
+
+								.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+
+									}
+								}).show();
+
+						return false;
+					}
+				});
+				break;
+			case DRIVE:
+				ViewHolderDrive vhDrive = (ViewHolderDrive) Vholder;
+				configureViewHolderDrive(vhDrive, position);
+				break;
+		}
+		Log.d("PageActivityAdapter", "Vholder.getitemviewtype = " + Vholder.getItemViewType());
+	}
+
+	/**
+	 * private void configureViewHolderText(ViewHolderText holder, int position){
+	 * ChildText child = (ChildText) list.get(position);
+	 * holder.tvChild.setText(""+child.getText());
+	 * if(child.getTitle()==null){		//if theres no title, make Title disappear
+	 * holder.tvChildTextTitle.setVisibility(View.GONE);
+	 * }else{ //make title appear
+	 * holder.tvChildTextTitle.setVisibility(View.VISIBLE);
+	 * holder.tvChildTextTitle.setText(child.getTitle());
+	 * }
+	 * }
+	 */
+	//private void configureViewHolderImage(ViewHolderImage holder, int position){
+	private void configureViewHolderDrive(ViewHolderDrive holder, int position) {
+		ChildBase child = list.get(position);
+		holder.tvChildDrive.setText("" + child.getTitle());
+		switch (child.getType()) {
+			case 0:
+				Glide.with(context)
+						.load(R.drawable.drivedocs)
+						.into(holder.ivChildDrive);
+				break;
+			case 1:
+				Glide.with(context)
+						.load(R.drawable.drivesheets)
+						.into(holder.ivChildDrive);
+				break;
+			case 2:
+				Glide.with(context)
+						.load(R.drawable.driveslides)
+						.into(holder.ivChildDrive);
+				break;
+			default:
+				Glide.with(context)
+						.load(R.drawable.drivedefault)
+						.into(holder.ivChildDrive);
+				break;
+		}
+	}
+
+	@Override
+	public int getItemCount() {
+		return list.size();
+	}
+
+	public void refreshList(ChildBase newChild) {
+		list.add(newChild);
+		notifyDataSetChanged();
+		Log.d("PageActivityAdapter", "refreshList: called. list.size() == " + list.size());
+
+	}
+}
+%%activity_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.design.widget.CoordinatorLayout android:id="@+id/clMainActivity"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    >
+
+	<RelativeLayout
+		android:id="@+id/activity_main"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
+		<android.support.v7.widget.Toolbar
+			android:id="@+id/toolbar"
+			android:layout_width="match_parent"
+			android:layout_height="?attr/actionBarSize"
+			android:background="?attr/colorPrimary"
+			android:elevation="4dp" />
+
+		<!--<android.support.v7.widget.RecyclerView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:id="@+id/rvMainMenu">
+
+		</android.support.v7.widget.RecyclerView>-->
+		<android.support.design.widget.FloatingActionButton
+			android:id="@+id/fabMain"
+			android:layout_width="56dp"
+			android:layout_height="56dp"
+			android:src="@mipmap/plus"
+			android:layout_marginRight="@dimen/fab_margin_right"
+			android:layout_marginEnd="@dimen/fab_margin_right"
+			android:layout_marginBottom="@dimen/fab_margin_bottom"
+			android:layout_alignParentBottom="true"
+			android:layout_alignParentRight="true"
+			android:layout_alignParentEnd="true"
+			app:fabSize="normal" />
+
+		<android.support.design.widget.FloatingActionButton
+			android:id="@+id/fabShoot"
+			android:layout_width="56dp"
+			android:layout_height="56dp"
+			app:fabSize="mini"
+			android:layout_marginLeft="8dp"
+			app:srcCompat="@drawable/ic_add_a_photo_white_24px"
+			android:tint="@android:color/white"
+			app:backgroundTint="@color/colorPrimary"
+			android:layout_marginBottom="20dp"
+			android:layout_above="@+id/fabMain"
+			android:layout_alignLeft="@+id/fabMain"
+			android:layout_alignStart="@+id/fabMain"
+			android:translationY="60dp"
+			android:visibility="gone"/>
+		<android.support.design.widget.FloatingActionButton
+			android:id="@+id/fabImage"
+			android:layout_width="56dp"
+			android:layout_height="56dp"
+			app:fabSize="mini"
+			android:layout_marginLeft="8dp"
+			app:srcCompat="@drawable/ic_image_white_24px"
+			android:tint="@android:color/white"
+			app:backgroundTint="@color/colorPrimary"
+			android:layout_marginBottom="20dp"
+			android:layout_above="@+id/fabShoot"
+			android:layout_alignLeft="@+id/fabMain"
+			android:layout_alignStart="@+id/fabMain"
+			android:translationY="60dp"
+			android:visibility="gone"/>
+		<android.support.design.widget.FloatingActionButton
+			android:id="@+id/fabPage"
+			android:layout_width="56dp"
+			android:layout_height="56dp"
+			app:fabSize="mini"
+			android:layout_marginLeft="8dp"
+			app:srcCompat="@drawable/ic_note_add_white_24px"
+			android:tint="@android:color/white"
+			app:backgroundTint="@color/colorPrimary"
+			android:layout_marginBottom="20dp"
+			android:layout_above="@+id/fabImage"
+			android:layout_alignLeft="@+id/fabMain"
+			android:layout_alignStart="@+id/fabMain"
+			android:translationY="60dp"
+			android:visibility="gone"/>
+
+		<!--<android.support.v7.widget.CardView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:id="@+id/cvCommonBooksCard"
+			android:elevation="8dp"
+			app:cardCornerRadius="4dp"
+			app:cardUseCompatPadding="true"
+			android:layout_marginTop="40dp"
+			android:layout_below="@+id/toolbar"
+			android:layout_alignParentRight="true"
+			android:layout_alignParentEnd="true"
+			android:layout_marginBottom="40dp">-->
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@+id/toolbar">
+			<RelativeLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:paddingBottom="16dp">
+
+				<RelativeLayout
+					android:layout_width="match_parent"
+					android:layout_height="56dp"
+					android:background="@color/colorPrimaryLight"
+					android:id="@+id/coloredHeader">
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:layout_marginTop="12dp"
+						android:layout_marginLeft="16dp"
+						android:text="Welcome back!"
+						android:textSize="28sp"/>
+
+				</RelativeLayout>
+
+				<TextView
+					android:text="Here are your favorite notebooks: "
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:id="@+id/textView3"
+					android:layout_below="@+id/coloredHeader"
+					android:layout_marginLeft="16dp"
+					android:layout_marginTop="8dp" />
+				<android.support.v7.widget.RecyclerView
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:id="@+id/rvCommonBooks"
+					android:layout_below="@+id/textView3"
+					android:orientation="horizontal"
+					android:layout_marginTop="8dp">
+
+				</android.support.v7.widget.RecyclerView>
+				<!--<ImageView
+					android:layout_width="60dp"
+					android:layout_height="60dp"
+					android:src="@drawable/ic_book_black_36px"
+					android:layout_below="@+id/textView3"
+					android:layout_marginLeft="16dp"
+					android:layout_marginStart="16dp"
+					android:id="@+id/imageView"
+					android:elevation="4dp"
+					android:background="@drawable/image_border1"
+					android:layout_marginTop="8dp"
+					android:layout_marginBottom="16dp"/>-->
+
+			</RelativeLayout>
+		</LinearLayout><!--</android.support.v7.widget.CardView>-->
+
+	</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>
+%%activity_notebook_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.twotowerstudios.virtualnotebookdesign.NotebookMain.NotebookMainActivity">
+
+	<android.support.design.widget.AppBarLayout
+		android:id="@+id/appbarlayoutNotebook"
+		android:layout_width="match_parent"
+		android:layout_height="180dp"
+		android:fitsSystemWindows="true"
+
+		>
+
+		<android.support.design.widget.CollapsingToolbarLayout
+			android:id="@+id/collapseToolbarNotebook"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			app:layout_scrollFlags="scroll|exitUntilCollapsed"
+			android:fitsSystemWindows="true"
+			app:expandedTitleMarginStart="48dp"
+			app:expandedTitleMarginEnd="40dp"
+			app:expandedTitleMarginBottom="60dp"
+
+			>
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginLeft="48dp"
+				android:id="@+id/tvSub"
+				android:layout_marginRight="64dp"
+				android:text="Last modified: 5 hours ago"
+				android:layout_gravity="bottom"
+				android:layout_marginBottom="20dp"/>
+			<android.support.v7.widget.Toolbar
+				android:id="@+id/toolbarNotebook"
+				android:layout_height="?android:attr/actionBarSize"
+				android:layout_width="match_parent"
+				android:title="Title"
+				android:subtitle="Subtitle"
+				app:layout_collapseMode="pin"
+				/>
+		</android.support.design.widget.CollapsingToolbarLayout>
+
+	</android.support.design.widget.AppBarLayout>
+
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+		<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+
+			android:background="#bbbbbb"
+			android:id="@+id/emptyNotebook">
+
+			<ImageView
+				app:srcCompat="@drawable/ic_note_add_white_24px"
+				android:id="@+id/imageView"
+				android:layout_width="88dp"
+				android:layout_height="88dp"
+				android:layout_marginTop="91dp"
+				android:layout_alignParentTop="true"
+				android:layout_centerHorizontal="true"/>
+
+			<TextView
+				android:text="There's nothing here. \nDo you want to add a new page?"
+				android:layout_height="wrap_content"
+				android:id="@+id/textView4"
+				android:layout_marginTop="23dp"
+				android:layout_width="200dp"
+				android:layout_below="@+id/imageView"
+				android:layout_centerHorizontal="true"
+				android:textAppearance="@style/TextAppearance.AppCompat.Title"
+				android:textAlignment="center"
+				android:textSize="20sp"
+				android:textColor="#333333"/>
+
+		</RelativeLayout>
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:orientation="vertical"
+			android:visibility="gone"
+			android:id="@+id/notEmptyNotebook">
+
+			<android.support.design.widget.TabLayout
+				android:id="@+id/sliding_tabs"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				app:tabMode="fixed" />
+
+			<android.support.v4.view.ViewPager
+				android:id="@+id/viewpager"
+				android:layout_width="match_parent"
+				android:layout_height="0px"
+				style="@style/MyCustomTabLayout"
+				android:layout_weight="1"/>
+
+		</LinearLayout>
+	</LinearLayout>
+
+	<android.support.design.widget.FloatingActionButton
+		android:id="@+id/fabnotebookmain"
+		android:layout_width="56dp"
+		android:layout_height="56dp"
+		app:fabSize="normal"
+		app:srcCompat="@drawable/ic_note_add_white_24px"
+		android:tint="@android:color/white"
+		app:backgroundTint="@color/colorPrimary"
+		android:visibility="visible"
+		android:layout_margin="16dp"
+
+		app:layout_anchor="@id/appbarlayoutNotebook"
+		app:layout_anchorGravity="bottom|right|end"
+		/>
+</android.support.design.widget.CoordinatorLayout>
+%%activity_notebook_selection.xml
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:id="@+id/activity_notebook_selection"
+	android:layout_width="match_parent"
+
+	android:layout_height="match_parent"
+	tools:context="com.twotowerstudios.virtualnotebookdesign.NotebookSelection.NotebookSelection">
+
+    <RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:id="@+id/relativeLayout">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+			app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+			app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+            android:elevation="4dp" />
+
+
+
+		<android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/toolbar"
+
+            android:id="@+id/rvnotebookselection"
+			tools:listitem="@layout/notebookselectioncard">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </RelativeLayout>
+
+	<android.support.design.widget.FloatingActionButton
+		android:id="@+id/fabSelection"
+		android:layout_width="56dp"
+		android:layout_height="56dp"
+		android:src="@mipmap/plus"
+		android:elevation="8dp"
+		android:layout_marginRight="@dimen/fab_margin_right"
+		android:layout_marginEnd="@dimen/fab_margin_right"
+		android:layout_marginBottom="@dimen/fab_margin_bottom"
+		android:layout_alignParentBottom="true"
+		android:layout_alignParentRight="true"
+		android:layout_alignParentEnd="true"
+		app:fabSize="normal"
+		app:layout_behavior="com.twotowerstudios.virtualnotebookdesign.NotebookSelection.ScrollAwareFABBehavior"
+		app:layout_anchor="@id/rvnotebookselection"
+		app:layout_anchorGravity="bottom|right"/>
+
+	<android.support.design.widget.FloatingActionButton
+		android:id="@+id/fabAddBlock"
+		android:layout_width="56dp"
+		android:layout_height="56dp"
+		app:fabSize="normal"
+		android:elevation="8dp"
+		app:layout_behavior="com.twotowerstudios.virtualnotebookdesign.NotebookSelection.ScrollAwareFABBehavior"
+		android:layout_marginRight="@dimen/fab_margin_right"
+		android:layout_marginEnd="@dimen/fab_margin_right"
+		android:layout_marginBottom="@dimen/fab_margin_bottom_2nd"
+		app:srcCompat="@drawable/ic_note_add_white_24px"
+		android:tint="@android:color/white"
+		app:backgroundTint="@color/colorPrimary"
+		android:translationY="60dp"
+		android:visibility="gone"
+		app:layout_anchor="@id/rvnotebookselection"
+		app:layout_anchorGravity="bottom|right"/>
+</android.support.design.widget.CoordinatorLayout>
+%%activity_page_main.xml
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/activity_page_main"
+	android:layout_width="match_parent"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_height="match_parent"
+	tools:context="com.twotowerstudios.virtualnotebookdesign.PageActivityMain.PageActivityMain">
+
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+
+		android:layout_height="match_parent">
+		<android.support.design.widget.FloatingActionButton
+			android:layout_width="56dp"
+			android:layout_height="56dp"
+			app:fabSize="normal"
+			android:src="@mipmap/plus"
+			app:elevation="8dp"
+			android:layout_marginRight="@dimen/fab_margin_right"
+			android:layout_marginEnd="@dimen/fab_margin_right"
+			android:layout_marginBottom="@dimen/fab_margin_bottom"
+			android:id="@+id/fabPageMain1"
+			android:layout_alignParentRight="true"
+			android:layout_alignParentBottom="true"
+			android:layout_alignParentEnd="true"/>
+		<android.support.design.widget.FloatingActionButton
+			android:id="@+id/fabTextChild"
+			android:layout_width="56dp"
+			android:layout_height="56dp"
+			app:fabSize="mini"
+			android:layout_marginLeft="8dp"
+			app:srcCompat="@drawable/ic_format_size_black_24dp"
+			android:tint="@android:color/white"
+			app:backgroundTint="@color/colorPrimary"
+			android:layout_marginBottom="20dp"
+			android:layout_above="@+id/fabPageMain1"
+			android:layout_alignLeft="@+id/fabPageMain1"
+			android:layout_alignStart="@+id/fabPageMain1"
+			android:translationY="60dp"
+			android:visibility="gone" />
+		<android.support.design.widget.FloatingActionButton
+			android:id="@+id/fabImageChild"
+			android:layout_width="56dp"
+			android:layout_height="56dp"
+			app:fabSize="mini"
+			android:layout_marginLeft="8dp"
+			app:srcCompat="@drawable/ic_image_white_24px"
+			android:tint="@android:color/white"
+			app:backgroundTint="@color/colorPrimary"
+			android:layout_marginBottom="20dp"
+			android:layout_above="@+id/fabTextChild"
+			android:layout_alignLeft="@+id/fabPageMain1"
+			android:layout_alignStart="@+id/fabPageMain1"
+			android:translationY="60dp"
+			android:visibility="gone" />
+		<android.support.design.widget.FloatingActionButton
+			android:id="@+id/fabDriveChild"
+			android:layout_width="56dp"
+			android:layout_height="56dp"
+			app:fabSize="mini"
+			android:layout_marginLeft="8dp"
+			app:srcCompat="@drawable/monochrome128"
+			android:tint="@android:color/white"
+			app:backgroundTint="@color/colorPrimary"
+			android:layout_marginBottom="20dp"
+			android:layout_above="@+id/fabImageChild"
+			android:layout_alignLeft="@+id/fabPageMain1"
+			android:layout_alignStart="@+id/fabPageMain1"
+			android:translationY="60dp"
+			android:visibility="gone" />
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:orientation="vertical"
+			android:id="@+id/llpagemain">
+			<android.support.v7.widget.Toolbar
+				android:layout_width="match_parent"
+				android:layout_height="?attr/actionBarSize"
+				android:background="?attr/colorPrimary"
+				android:id="@+id/tbpagemain"
+				app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+				app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+				android:elevation="4dp" />
+				<android.support.v7.widget.RecyclerView
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:layout_marginLeft="16dp"
+
+					android:layout_marginRight="16dp"
+					android:id="@+id/rvpagemain"/>
+			</LinearLayout>
+
+	</RelativeLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>
+%%booklight.xml
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="80dp"
+	android:layout_height="wrap_content"
+	android:background="@drawable/image_border1"
+	android:id="@+id/rvBookLight"
+	>
+
+	<TextView
+		android:layout_width="80dp"
+		android:layout_height="20dp"
+		android:text="Spanish"
+		android:textColor="#333333"
+		android:id="@+id/tvName"
+		android:layout_below="@+id/ivBookLight"
+		android:textAlignment="center"/>
+
+	<ImageView
+		android:src="@drawable/ic_book_black_36px"
+		android:tint="@color/colorPrimary"
+		android:layout_width="60dp"
+		android:elevation="4dp"
+		android:layout_height="60dp"
+		android:id="@+id/ivBookLight"
+		android:layout_alignParentTop="true"
+		android:layout_centerHorizontal="true"/>
+</RelativeLayout>
+%%checkbox.xml
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			 android:layout_width="wrap_content"
+			 android:layout_marginLeft="16dp"
+			 android:layout_height="wrap_content">
+
+	<CheckBox
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Also delete the file from storage"
+		android:textColor="#000"
+		android:layout_margin="16dp"
+	android:button="@drawable/customcheckbox"
+		android:id="@+id/mcheckBox"
+		/>
+</FrameLayout>
+%%colorcircle.xml
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.percent.PercentFrameLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_margin="2dp">
+
+	<ImageView
+		android:id="@+id/ivSwatch"
+		app:layout_widthPercent="100%"
+		app:layout_aspectRatio="100%"
+		/>
+</android.support.percent.PercentFrameLayout>
+%%commonbookscard.xml
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:card_view="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:layout_gravity="center"
+	android:id="@+id/cvCommonBooksCard"
+	android:elevation="8dp"
+	card_view:cardCornerRadius="4dp"
+	android:layout_marginBottom="8dp"
+	card_view:cardUseCompatPadding="true"
+	android:layout_margin="4dp">
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="56dp"
+			android:background="@color/colorPrimaryLight"
+			android:id="@+id/coloredHeader">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_margin="16dp"
+				android:text="Welcome back!"
+				android:textSize="24sp"/>
+
+		</RelativeLayout>
+
+		<TextView
+			android:text="Here are your favorite notebooks: "
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:id="@+id/textView3"
+			android:layout_below="@+id/coloredHeader"
+			android:layout_marginLeft="16dp"
+			android:layout_marginTop="8dp" />
+
+		<android.support.v7.widget.RecyclerView
+			android:layout_width="match_parent"
+			android:layout_below="@+id/textView3"
+			android:layout_margin="16dp"
+			android:layout_height="100dp"
+			android:id="@+id/rvCommonBooks" />
+	</RelativeLayout>
+</android.support.v7.widget.CardView>
+%%fragment_delete_notebook.xml
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/edit_name"
+    android:layout_width="wrap_content" android:layout_height="wrap_content"
+    android:layout_gravity="center" android:orientation="vertical"  >
+    <TextView
+        android:id="@+id/label" android:text="What book do you want to delete?"
+        android:layout_width="wrap_content" android:layout_height="wrap_content" />
+    <EditText
+        android:id="@+id/idToDelete"
+        android:layout_width="match_parent"  android:layout_height="wrap_content"
+        android:inputType="text"
+        android:imeOptions="actionDone"
+        android:hint="87"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Delete"
+        android:id="@+id/buttonDelete"
+        android:layout_gravity="center"
+        />
+</LinearLayout>
+%%fragment_favorites.xml
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.twotowerstudios.virtualnotebookdesign.NotebookMain.Fragments.FavoritesFragment">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nothing here...You could favorite some of your notebook's pages."
+		android:textAlignment="center"
+		android:padding="16dp"
+		android:id="@+id/tvFavoritesEmpty"/>
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/rvFavorites">
+    </android.support.v7.widget.RecyclerView>
+</LinearLayout>
+%%fragment_image_zoom.xml
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  xmlns:tools="http://schemas.android.com/tools"
+			  android:layout_width="match_parent"
+			  android:layout_height="match_parent"
+			  tools:context="com.twotowerstudios.virtualnotebookdesign.PageActivityMain.ImageZoomFragment"
+			  android:background="#111111"
+			  android:orientation="vertical">
+	<android.support.v7.widget.Toolbar
+		android:layout_width="match_parent"
+		android:layout_height="?attr/actionBarSize"
+		android:background="@color/md_black_1000"
+		android:theme="@style/MaterialTheme.DarkToolbar.ActionBar.DayNight"
+
+		android:id="@+id/tbfullimage"
+		android:elevation="4dp" />
+
+	<com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
+		android:layout_height="match_parent"
+		android:layout_width="match_parent"
+		android:scaleType="centerCrop"
+		android:adjustViewBounds="true"
+		android:id="@+id/ivFullscreenPage">
+
+	</com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView>
+
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="1px"
+		android:background="#33FF33"/>
+
+</LinearLayout>
+%%fragment_new_page.xml
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  xmlns:app="http://schemas.android.com/apk/res-auto"
+			  xmlns:tools="http://schemas.android.com/tools"
+			  android:layout_width="match_parent"
+			  android:layout_height="match_parent"
+			  android:orientation="vertical"
+			  tools:context="com.twotowerstudios.virtualnotebookdesign.NotebookMain.Fragments.NewPage.NewPageFragment">
+
+	<android.support.v7.widget.Toolbar
+		android:layout_width="match_parent"
+		android:layout_height="?attr/actionBarSize"
+		android:background="@color/accent"
+		android:id="@+id/tbnewpage"
+		android:title="New Page"/>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:layout_marginLeft="16dp"
+		android:layout_marginRight="16dp"
+		>
+		<!--	android:layout_marginLeft="16dp"
+				android:layout_marginRight="16dp" -->
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal">
+			<ImageView
+				app:srcCompat="@drawable/ic_local_offer_black_24dp"
+				android:layout_gravity="center"
+				android:layout_marginRight="16dp"
+				android:layout_width="32dp"
+				android:layout_height="32dp"/>
+
+			<android.support.design.widget.TextInputLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+				<EditText
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:inputType="textCapSentences"
+					android:id="@+id/teNewpageName"
+					android:hint="Page Name"
+					android:selectAllOnFocus="false"
+					android:layout_weight="1"
+					android:maxLines="2"
+					android:textSize="28sp"
+					android:typeface="sans"
+					/>
+			</android.support.design.widget.TextInputLayout>
+		</LinearLayout>
+
+		<View
+			android:layout_width="match_parent"
+			android:background="#999999"
+			android:layout_height="1dp"/>
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal">
+
+			<ImageView
+				android:layout_width="32dp"
+				android:layout_height="32dp"
+				android:layout_gravity="center"
+				android:layout_marginRight="16dp"
+				app:srcCompat="@drawable/ic_bookmark_black_24dp"/>
+
+			<android.support.design.widget.TextInputLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+
+				<EditText
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:inputType="number"
+					android:ems="6"
+					android:id="@+id/teNewpageNumber"
+					android:hint="Page Number"
+					android:selectAllOnFocus="false"
+					android:layout_weight="1"
+					android:maxLines="2"
+					/>
+			</android.support.design.widget.TextInputLayout>
+		</LinearLayout>
+
+		<View android:layout_width="match_parent"
+			  android:background="#999999"
+			  android:layout_height="1dp"/>
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal">
+			<ImageView
+				app:srcCompat="@drawable/ic_event_black_24dp"
+				android:layout_gravity="center"
+				android:layout_width="32dp"
+				android:layout_height="32dp"/>
+
+			<LinearLayout
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal"
+				android:layout_weight="1"
+				android:id="@+id/lldate">
+
+				<TextView
+					android:text="Click to select date..."
+					android:layout_width="wrap_content"
+					android:layout_height="48dp"
+					android:id="@+id/tvDate"
+					android:layout_weight="1"
+					android:textSize="18sp"
+					android:gravity="center_vertical"
+					android:paddingLeft="16dp"/>
+
+				<ImageView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					app:srcCompat="@drawable/ic_arrow_drop_down_black_24dp"
+					android:id="@+id/imageView2"
+					android:layout_gravity="center_vertical"/>
+			</LinearLayout>
+
+		</LinearLayout>
+		<View android:layout_width="match_parent"
+			  android:background="#999999"
+			  android:layout_height="1dp"/>
+	</LinearLayout>
+</LinearLayout>
+%%fragment_new_page_child_text
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center"
+    android:orientation="vertical"
+    tools:context="com.twotowerstudios.virtualnotebookdesign.PageActivityMain.NewPageChildFragment">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/accent"
+        android:id="@+id/tbNewpagechild"
+        app:title="Add text"
+        />
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Title"
+			android:scrollbars="vertical"
+			android:maxLines="2"
+            android:layout_weight="1"
+            android:id="@+id/etTitlePageChild"
+
+			android:inputType="textCapSentences"/>
+    </android.support.design.widget.TextInputLayout>
+
+	<android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp">
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/etBodyPageChild"
+            android:hint="Text here..."
+			android:inputType="textCapSentences"
+			android:scrollbars="vertical"
+			android:maxLines="5"
+            android:layout_weight="1"
+
+            />
+    </android.support.design.widget.TextInputLayout>
+
+</LinearLayout>
+%%fragment_new_notebook.xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  xmlns:app="http://schemas.android.com/apk/res-auto"
+			  android:orientation="vertical"
+			  android:layout_width="wrap_content"
+			  android:layout_height="wrap_content"
+			  android:layout_gravity="center"
+			  android:background="#ffffff"
+			  android:elevation="24dp"
+			  android:animateLayoutChanges="true"
+	>
+
+	<android.support.v7.widget.Toolbar
+		android:layout_width="match_parent"
+		android:layout_height="?attr/actionBarSize"
+		app:title="Create new notebook"
+		android:background="@color/md_amber_400"
+		android:id="@+id/newnotebooktoolbar"
+
+		>
+
+	</android.support.v7.widget.Toolbar>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:layout_marginLeft="24dp"
+		android:layout_marginRight="20dp"
+		android:layout_marginTop="12dp"
+		android:layout_marginBottom="12dp"
+		>
+
+		<android.support.design.widget.TextInputLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+
+			<EditText
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:inputType="textCapSentences"
+				android:ems="10"
+				android:id="@+id/etNewName"
+				android:hint="Name"
+				android:selectAllOnFocus="false"
+				android:layout_weight="1"
+				android:maxLines="1"/>
+
+		</android.support.design.widget.TextInputLayout>
+
+		<LinearLayout
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			>
+
+			<TextView
+				android:text="Custom Color"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:id="@+id/textView6"
+				android:layout_weight="1"
+				android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+				android:textColor="?android:attr/textColorPrimary"/>
+
+			<Space
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_weight="1"/>
+
+			<Switch
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:id="@+id/switch1"
+				android:layout_weight="1"
+
+				android:layout_gravity="center_vertical"/>
+
+		</LinearLayout>
+
+		<android.support.v7.widget.RecyclerView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:id="@+id/rvNewNotebook"
+			android:overScrollMode="never"
+			>
+
+		</android.support.v7.widget.RecyclerView>
+
+	</LinearLayout>
+</LinearLayout>
+%%fragment_modal_bottom_sheet.xml
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:orientation="vertical"
+	android:padding="16dp"
+	app:layout_behavior="@string/bottom_sheet_behavior"
+	android:id="@+id/bottom_drawer">
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="Add picture from..."
+		android:paddingBottom="16dp"
+		android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+		android:textSize="18sp"
+		android:textColor="?android:attr/textColorPrimaryNoDisable"/>
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="1px"
+		android:background="#dddddd"
+		/>
+	<android.support.design.widget.TextInputLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+		<EditText
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:paddingTop="4dp"
+			android:paddingBottom="4dp"
+			android:id="@+id/etImageTitle"
+			android:inputType="textCapSentences"
+			android:hint="Title..."
+			android:selectAllOnFocus="false"
+			android:layout_weight="1"
+			android:maxLines="2"/>
+	</android.support.design.widget.TextInputLayout>
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="1px"
+		android:background="#dddddd"
+		/>
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="80dp"
+		android:layout_marginLeft="32dp"
+		android:layout_marginRight="32dp"
+		android:orientation="horizontal"
+		android:layout_marginTop="16dp">
+		<LinearLayout
+			android:layout_width="56dp"
+			android:layout_height="80dp"
+
+			android:orientation="vertical"
+			android:id="@+id/bottomCameraButton">
+			<ImageView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				app:srcCompat="@drawable/ic_camera_alt_black_24dp"
+				android:tint="#606060"/>
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="Camera"
+				android:textAppearance="@android:style/TextAppearance"
+				android:textAlignment="center"/>
+		</LinearLayout>
+		<Space
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:layout_weight="1"/>
+		<LinearLayout
+			android:layout_width="56dp"
+			android:layout_height="80dp"
+			android:orientation="vertical"
+			android:id="@+id/bottomGalleryButton"
+			android:alpha="0.3">
+			<ImageView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				app:srcCompat="@drawable/ic_collections_black_24dp"
+				android:tint="#606060"
+				/>
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="Gallery"
+				android:textAppearance="@android:style/TextAppearance"
+				android:textAlignment="center"/>
+		</LinearLayout>
+	</LinearLayout>
+</LinearLayout>
+%%navdrawerheader.xml
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_main"
+    android:layout_width="240dp"
+    android:layout_height="144dp"
+    android:background="@drawable/header">
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginBottom="33dp"
+        android:id="@+id/textView2"
+        android:textColor="?android:attr/textColorPrimary" />
+
+    <TextView
+        android:text="TextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:textColor="?android:attr/textColorPrimary"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/textView2"
+        android:layout_alignStart="@+id/textView2" />
+</RelativeLayout>
+%%pagelistitem.xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  xmlns:app="http://schemas.android.com/apk/res-auto"
+			  android:layout_width="match_parent"
+			  android:id="@+id/llpagelistitem"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_margin="16dp">
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="9999"
+			android:ems="2"
+			android:id="@+id/tvFavPage"
+			android:layout_marginRight="8dp"
+			android:textSize="24sp"
+			android:textColor="#777777"
+			android:textStyle="normal|bold|italic"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="Modified 5 days ago. 12 items"
+			android:textColor="@color/colorAccent"
+			android:id="@+id/tvFavSub"
+			android:layout_toRightOf="@id/tvFavPage"
+			android:layout_below="@+id/tvFavName"
+			android:layout_toEndOf="@+id/tvFavPage"
+			android:textSize="16sp"
+			android:fontFamily="sans-serif"/>
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="The study of Genetics and Geriatrics"
+			android:id="@+id/tvFavName"
+			android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+			android:layout_toRightOf="@+id/tvFavPage"
+			android:layout_toLeftOf="@+id/ivFavStar"
+			android:textSize="16sp"
+			android:fontFamily="sans-serif"
+			android:textColor="?android:attr/textColorPrimary"/>
+
+		<ImageView
+			app:srcCompat="@drawable/ic_star_white_24dp"
+			android:id="@+id/ivFavStar"
+			android:tint="@color/colorAccent"
+			android:layout_alignParentRight="true"
+			android:layout_alignParentTop="true"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:visibility="visible"
+			android:layout_alignBottom="@id/tvFavName"/>
+
+		<TextView
+			android:layout_height="wrap_content"
+			android:layout_width="24dp"
+			android:text="87 items"
+			android:textSize="9sp"
+			android:textAlignment="center"
+			android:id="@+id/tvFavItemCount"
+			android:layout_below="@+id/ivFavStar"
+			android:layout_alignRight="@+id/ivFavStar"
+			android:layout_alignTop="@+id/tvFavSub"/>
+
+
+	</RelativeLayout>
+
+	<View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#dddddd"/>
+</LinearLayout>
+%%notebookselectioncard.xml
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_gravity="center"
+    android:elevation="8dp"
+    app:cardCornerRadius="4dp"
+    android:layout_marginLeft="4dp"
+	android:layout_marginTop="4dp"
+    android:layout_marginRight="4dp"
+    app:cardUseCompatPadding="true"
+    android:id="@+id/notebookSelectionCard">
+
+	<RelativeLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:id="@+id/rlcard">
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:text="SUBJECT"
+			android:textSize="18sp"
+			android:layout_marginLeft="16dp"
+			android:layout_marginTop="8dp"
+			android:layout_marginBottom="16dp"
+			android:textColor="@color/md_black_1000"
+			android:id="@+id/tvCardNameSel"
+			/>
+
+		<TextView
+			android:layout_width="200dp"
+			android:layout_height="wrap_content"
+			android:text="Last modified of 1969/12/31, 19:00:00"
+			android:id="@+id/tvCardSub"
+			android:layout_alignTop="@+id/tvCardNameSel"
+			android:layout_alignStart="@+id/tvCardNameSel"
+			android:paddingTop="24dp"
+			android:layout_marginBottom="4dp"
+			android:layout_alignLeft="@+id/tvCardNameSel"
+			android:textSize="14sp" />
+		<ImageView
+			android:contentDescription="notebook"
+			android:layout_width="36dp"
+			android:layout_height="36dp"
+			app:srcCompat="@drawable/ic_book_black_36px"
+			android:id="@+id/tvCardImage"
+			android:layout_centerVertical="true"
+			android:layout_alignParentRight="true"
+			android:layout_alignParentEnd="true"
+			android:layout_marginRight="16dp"
+			android:layout_marginEnd="16dp" />
+
+		<TextView
+			android:text="44 debugNumOfPages"
+			android:layout_width="55dp"
+			android:layout_height="40dp"
+			android:id="@+id/tvPageCount"
+			android:layout_centerVertical="true"
+			android:layout_toLeftOf="@+id/tvCardImage"
+			android:layout_toStartOf="@+id/tvCardImage"
+			android:textStyle="normal|bold"
+			android:textAllCaps="false"
+			android:textAlignment="center"
+			android:textSize="16sp"/>
+	</RelativeLayout>
+
+</android.support.v7.widget.CardView>
+%%pchild_drive.xml
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+	android:layout_height="wrap_content"
+	android:layout_width="match_parent"
+	android:layout_margin="4dp"
+	xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_marginLeft="16dp"
+		android:layout_marginTop="16dp"
+		android:layout_marginBottom="16dp"
+		android:orientation="horizontal">
+		<ImageView
+			android:layout_width="64dp"
+			android:layout_height="64dp"
+			android:id="@+id/ivChildDrive"
+			android:src="@drawable/drivedocs"/>
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:gravity="center_vertical"
+			android:id="@+id/tvChildDrive"
+			android:layout_marginRight="16dp"
+			android:text="This is a placeholder for the document and another thing"
+			android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Title"
+			/>
+	</LinearLayout>
+</android.support.v7.widget.CardView>
+%%pchild_image.xml
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+	android:layout_height="wrap_content"
+	android:layout_width="match_parent"
+	android:layout_margin="8dp"
+	android:foreground="?attr/selectableItemBackground"
+	xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical">
+		<ImageView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:id="@+id/ivChildImage"
+			android:background="#707070"
+			android:scaleType="centerCrop"
+			android:adjustViewBounds="true"/>
+		<TextView
+			android:layout_margin="8dp"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:id="@+id/tvChildImage"
+			android:text="This is a subtitle, I believe you could do important things"/>
+
+	</LinearLayout>
+
+</android.support.v7.widget.CardView>
+%%pchild_text.xml
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+	android:layout_height="wrap_content"
+	android:layout_width="match_parent"
+	android:layout_margin="4dp"
+	xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<LinearLayout
+		android:layout_height="wrap_content"
+		android:layout_width="match_parent"
+		android:padding="8dp"
+		android:orientation="vertical">
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:textAppearance="@style/TextAppearance.AppCompat.SearchResult.Title"
+			android:text="This is a title, btdubs"
+			android:maxLength="50"
+			android:ellipsize="end"
+			android:id="@+id/tvChildTextTitle"
+			android:paddingBottom="4dp"
+			/>
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:id="@+id/tvChild"
+			android:maxLength="250"
+			android:ellipsize="end"
+			android:text="LOREM IPSUM THIS IS A PLACEholder
+		LOREM IPSUM THIS IS A PLACEholder
+		LOREM IPSUM THIS IS A PLACEholder
+		LOREM IPSUM THIS IS A PLACEholder
+		LOREM IPSUM THIS IS A PLACEholder"/>
+	</LinearLayout>
+
+</android.support.v7.widget.CardView>
+
+$$Personal Project Report 2.0
+
+
+

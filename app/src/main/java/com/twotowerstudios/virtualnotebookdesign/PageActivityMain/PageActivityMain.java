@@ -303,7 +303,7 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK) {
 			if (requestCode == 1) {
-				Uri selectedImageUri = data.getData();
+				//Uri selectedImageUri = data.getData();
 
 			}
 		}

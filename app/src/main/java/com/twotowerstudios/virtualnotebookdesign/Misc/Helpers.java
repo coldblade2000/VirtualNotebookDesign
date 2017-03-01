@@ -56,7 +56,7 @@ public class Helpers {
 				formatter = new SimpleDateFormat("yyyy/MM/dd, HH:mm:ss");
 				break;
 			case 2:
-				formatter = new SimpleDateFormat("yuyyy/MM/dd");
+				formatter = new SimpleDateFormat("yyyy/MM/dd");
 				break;
 			default:
 				formatter = new SimpleDateFormat("yyyy/MM/dd, HH:mm:ss");

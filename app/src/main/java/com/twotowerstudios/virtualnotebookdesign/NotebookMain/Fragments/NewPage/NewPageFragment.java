@@ -157,7 +157,7 @@ public class NewPageFragment extends DialogFragment implements CalendarDatePicke
 	 */
 	@Override
 	public void onDateSet(CalendarDatePickerDialogFragment dialog, int year, int monthOfYear, int dayOfMonth) {
-		tvDate.setText(year+"-"+monthOfYear+"-"+dayOfMonth);
+		tvDate.setText(year+"-"+(monthOfYear+1)+"-"+dayOfMonth);
 		Log.d("OnDateSet", "Year == "+year);
 		cal.set(year,monthOfYear, dayOfMonth);
 	}

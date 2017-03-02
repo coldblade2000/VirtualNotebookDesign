@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
@@ -170,8 +171,8 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
                 })
                 .build();
 		drawer.setSelection(2);*/
-		//=========================================================
-//        Glide.with(this).load(R.drawable.header2).into(accountHeader.getHeaderBackgroundView());
+		//=========================================================b
+//        Glide.with(this).load(R.drawable.header2).into(accountHeader.getHeadcerBackgroundView());
 
     }
 
@@ -210,9 +211,11 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_delete) {
             //showEditDialog();
-            getApplicationContext().deleteFile("Notebooks.json");
+            /**getApplicationContext().deleteFile("Notebooks.json");
             notebookSelectionCardList.clear();
-            rvNotebookSelectionAdapter.notifyDataSetChanged();
+            rvNotebookSelectionAdapter.notifyDataSetChanged();*/
+        //TODO  make better the delete option
+            Toast.makeText(this, "Sorry, this feature is disabled during the exhibition!", Toast.LENGTH_SHORT).show();
             return true;
         }
         return super.onOptionsItemSelected(item);

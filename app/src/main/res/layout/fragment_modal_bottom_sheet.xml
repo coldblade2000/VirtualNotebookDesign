@@ -74,14 +74,14 @@
 			android:layout_width="56dp"
 			android:layout_height="80dp"
 			android:orientation="vertical"
-			android:id="@+id/bottomGalleryButton"
-			android:alpha="0.3">
+			android:id="@+id/bottomGalleryButton">
+			<!--android:alpha="0.3"-->
 			<ImageView
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				app:srcCompat="@drawable/ic_collections_black_24dp"
-				android:tint="#606060"
-				/>
+				app:srcCompat="@drawable/ic_collections_black_24dp"/>
+				<!--android:tint="#606060"-->
+
 			<TextView
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"

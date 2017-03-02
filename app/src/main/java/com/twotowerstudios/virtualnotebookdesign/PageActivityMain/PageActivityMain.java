@@ -6,6 +6,9 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -36,6 +39,7 @@ import com.twotowerstudios.virtualnotebookdesign.R;
 import org.parceler.Parcels;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -293,19 +297,50 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 
 
 		} else if (tag.equals("gallery")) {
+			File nomedia = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), ".nomedia");
+			if (!nomedia.exists()) {
+				try {
+					nomedia.createNewFile();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 			Intent intent = new Intent();
 			intent.setType("image/*");
 			intent.setAction(Intent.ACTION_GET_CONTENT);
+			intent.putExtra("title", title);
 			startActivityForResult(Intent.createChooser(intent,
-					"Select Picture"), 1);
+					"Select Picture"), 2);
+
 		}
 	}
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (resultCode == RESULT_OK) {
-			if (requestCode == 1) {
-				//Uri selectedImageUri = data.getData();
+		final String filename = "i"+Helpers.generateUniqueId(16);
+		if (requestCode == 2 && resultCode == RESULT_OK && data != null){
+			File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), filename+".png");
+			Uri selectedImageUri = data.getData();
+			String[] filePathColumn = {MediaStore.Images.Media.DATA};
 
+			Cursor cursor = getContentResolver().query(selectedImageUri, filePathColumn, null, null, null);
+			cursor.moveToFirst();
+			int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+			String filePath = cursor.getString(columnIndex);
+			cursor.close();
+			Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+
+			FileOutputStream outStream = null;
+			try {
+				outStream = new FileOutputStream(file);
+				bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+				outStream.flush();
+				outStream.close();
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
+			ChildBase newImage = new ChildBase("", filename, page.getParentUID(), page.getUID(), Uri.fromFile(file), getApplicationContext());
+			page.addToPage(newImage);
+			Helpers.addPageFromUID16(page.getParentUID(), page, getApplicationContext());
+			rvpagemain.invalidate();
 		}
 	}
 

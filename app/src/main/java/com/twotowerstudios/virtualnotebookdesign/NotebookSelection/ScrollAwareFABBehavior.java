@@ -33,7 +33,7 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
 			child.hide();
 
 		} else if (dyConsumed < 0 && child.getVisibility() != View.VISIBLE) {
-			if (child.getId()== R.id.fabAddBlock){
+			if (child.getId()== R.id.fabSelection){
 				if(NotebookSelection.isMainfabOpen()){
 					child.show();
 				}else{

@@ -103,7 +103,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
         rvNotebookSelection.setLayoutManager(rvNotebookSelectionManager);
 		notebookSelectionCardList = Helpers.getNotebookList(getApplicationContext());
         //prepareNotebookSelectionCards();
-        rvNotebookSelectionAdapter = new NotebookSelectionAdapter(this, notebookSelectionCardList, this);
+        rvNotebookSelectionAdapter = new NotebookSelectionAdapter(this, notebookSelectionCardList, this, this);
         rvNotebookSelection.setAdapter(rvNotebookSelectionAdapter);
 		//===================================================================
         final IProfile h1 = new ProfileDrawerItem().withName("Header 1");
@@ -210,11 +210,11 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_delete) {
-            //showEditDialog();
-            /**getApplicationContext().deleteFile("Notebooks.json");
+            /**showEditDialog();
+            getApplicationContext().deleteFile("Notebooks.json");
             notebookSelectionCardList.clear();
             rvNotebookSelectionAdapter.notifyDataSetChanged();*/
-        //TODO  make better the delete option
+            //TODO make better the delete option
             Toast.makeText(this, "Sorry, this feature is disabled during the exhibition!", Toast.LENGTH_SHORT).show();
             return true;
         }

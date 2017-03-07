@@ -1,6 +1,9 @@
 package com.twotowerstudios.virtualnotebookdesign.NotebookSelection;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
@@ -14,7 +17,7 @@ import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
 import com.twotowerstudios.virtualnotebookdesign.R;
 
-import java.util.List;
+import java.util.ArrayList;
 
 /**
  * Created by Panther II on 22/10/2016.
@@ -22,8 +25,8 @@ import java.util.List;
 
 public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelectionAdapter.ViewHolder> /*implements NewNotebookFragment.ToAdapterInterface*/{
 	Context context;
-	List<Notebook> notebookList;
-
+	ArrayList<Notebook> notebookList;
+	private Activity mActivity = null;
 	SelectionToNotebookInterface Interface;
 
 	public interface SelectionToNotebookInterface{
@@ -45,10 +48,11 @@ public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelec
 			card = (CardView) view.findViewById(R.id.notebookSelectionCard);
 		}
 	}
-	public NotebookSelectionAdapter(Context context, List<Notebook> list, SelectionToNotebookInterface Interface){
+	public NotebookSelectionAdapter(Context context, ArrayList<Notebook> list, SelectionToNotebookInterface Interface, Activity mActivity){
 		this.context = context;
 		this.notebookList = list;
 		this.Interface=Interface;
+		this.mActivity = mActivity;
 	}
 	@Override
 	public NotebookSelectionAdapter.ViewHolder onCreateViewHolder (ViewGroup parent, int viewType){
@@ -59,8 +63,8 @@ public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelec
 
 
 	 @Override
-	 public void onBindViewHolder(ViewHolder holder,  int position){
-	 	 Notebook notebookSelection = notebookList.get(position);
+	 public void onBindViewHolder(final ViewHolder holder, int position){
+	 	 final Notebook notebookSelection = notebookList.get(position);
 		 final int position2 = position;
 	 	 holder.tvCardNameSel.setText(""+notebookSelection.getName());
 	 	 holder.tvCardSub.setText("Last modified: "+
@@ -71,6 +75,35 @@ public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelec
 			 @Override
 			 public void onClick(View view) {
 				 Interface.openNotebookActivity(position2);
+			 }
+		 });
+		 holder.card.setOnLongClickListener(new View.OnLongClickListener() {
+			 @Override
+			 public boolean onLongClick(View v) {
+				 new AlertDialog.Builder(mActivity)
+						 .setTitle("Do you want to delete this image?")
+						 .setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+							 @Override
+							 public void onClick(DialogInterface dialog, int which) {
+								 if (notebookList.get(holder.getAdapterPosition()).getNumberOfPages()<=0) {
+									 notebookList.remove(holder.getAdapterPosition());
+									 Helpers.writeListToFile(context, notebookList);
+									 notifyItemRemoved(holder.getAdapterPosition());
+								 } else {
+
+								 }
+
+							 }
+						 })
+
+						 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+							 @Override
+							 public void onClick(DialogInterface dialog, int which) {
+
+							 }
+						 }).show();
+
+				 return false;
 			 }
 		 });
 	 }

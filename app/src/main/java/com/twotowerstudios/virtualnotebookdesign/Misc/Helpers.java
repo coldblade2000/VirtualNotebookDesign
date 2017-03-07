@@ -126,7 +126,7 @@ public class Helpers {
 		return notebookList;
 	}
 
-	static void writeListToFile(Context context, ArrayList<Notebook> notebookList){
+	public static void writeListToFile(Context context, ArrayList<Notebook> notebookList){
 		String outputString = gson.toJson(notebookList);
 		writeStringToFile(outputString, context, "Notebooks.json");
 	}

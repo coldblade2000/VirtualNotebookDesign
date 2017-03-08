@@ -9,15 +9,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
-import com.twotowerstudios.virtualnotebookdesign.Misc.SharedPrefs;
 import com.twotowerstudios.virtualnotebookdesign.Objects.ChildBase;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
 import com.twotowerstudios.virtualnotebookdesign.R;
@@ -132,7 +129,7 @@ public class PageActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 	}
 
 	@Override
-	public void onBindViewHolder(RecyclerView.ViewHolder Vholder, int position) {
+	public void onBindViewHolder(final RecyclerView.ViewHolder Vholder, int position) {
 		Log.d("PageActivityAdapter", "onBindViewHolder: start");
 		pos = position;
 		switch (Vholder.getItemViewType()) {
@@ -153,7 +150,7 @@ public class PageActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 			//===============================================================================================================
 			case IMAGE:
 				final ViewHolderImage holderImage = (ViewHolderImage) Vholder;
-				final ChildBase childImage = list.get(position);
+				final ChildBase childImage = list.get(Vholder.getAdapterPosition());
 				final String imageUID = childImage.getUID16();
 				if (!childImage.getTitle().equals("") || childImage.getTitle() == null) {
 					holderImage.tvChildImage.setText("" + childImage.getTitle());
@@ -189,43 +186,30 @@ public class PageActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 				holderImage.ivChildImage.setOnLongClickListener(new View.OnLongClickListener() {
 					@Override
 					public boolean onLongClick(View v) {
-						View checkBoxView = null;
-						checkBoxView = View.inflate(context, R.layout.checkbox, null);
-						CheckBox checkBox = (CheckBox) checkBoxView.findViewById(R.id.mcheckBox);
-						checkBox.setChecked(true);
-						SharedPrefs.setBoolean(context, "deleteFileCheck", true);
-						checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-							@Override
-							public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-								SharedPrefs.setBoolean(context, "deleteFileCheck", isChecked);
-							}
-						});
-
 						new AlertDialog.Builder(mActivity)
 								.setTitle("Do you want to delete this image?")
 								.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
 									@Override
 									public void onClick(DialogInterface dialog, int which) {
-										list.remove(pos);
+										list.remove(Vholder.getAdapterPosition());
 										Page newpage = Helpers.getPageFromUID(childImage.getPageUID(), childImage.getNotebookUID(), context);
-										newpage.removeFromPage(pos);
+										newpage.removeFromPage(Vholder.getAdapterPosition());
 										Helpers.addPageFromUID16(newpage.getParentUID(), newpage, context);
-										if (SharedPrefs.getBoolean(context, "deleteFileCheck")) {
-											File fdelete = new File(childImage.getUri().getPath());
-											if (fdelete.exists()) {
-												if (fdelete.delete()) {
-													Toast.makeText(context, "file deleted :" + childImage.getUri().getPath(), Toast.LENGTH_SHORT).show();
-												} else {
-													Toast.makeText(context, "file not deleted :" + childImage.getUri().getPath(), Toast.LENGTH_SHORT).show();
+										File fdelete = new File(childImage.getUri().getPath());
+										if (fdelete.exists()) {
+											Log.d("PageActivityAdapter", "onClick: fdelete exists");
+											if (fdelete.delete()) {
+												Toast.makeText(context, "file deleted :" + childImage.getUri().getPath(), Toast.LENGTH_SHORT).show();
+											} else {
+												Toast.makeText(context, "file not deleted :" + childImage.getUri().getPath(), Toast.LENGTH_SHORT).show();
 
-												}
 											}
+										}else{
+											Log.d("PageActivityAdapter", "onClick: fdelete doesnt exist");
 										}
-										notifyItemRemoved(pos);
+										notifyItemRemoved(Vholder.getAdapterPosition());
 									}
 								})
-								.setView(checkBoxView)
-
 								.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 									@Override
 									public void onClick(DialogInterface dialog, int which) {

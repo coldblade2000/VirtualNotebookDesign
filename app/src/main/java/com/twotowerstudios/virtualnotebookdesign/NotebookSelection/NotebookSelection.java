@@ -58,6 +58,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 		}
 		if(Helpers.getStringFromFile("Notebooks.json", getApplicationContext()).equals("")){
 			File file = new File(getFilesDir(),"Notebooks.json");
+			Log.d("NotebookSelection", file.getPath());
 		}
 		if(InitNotebooks.isDebug(getApplicationContext())){
 			Log.d("isDebugNoteSelect", "DEBUG MODE = true;");

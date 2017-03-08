@@ -56,7 +56,7 @@ public class ChildBase {
 	/**Image*/
 	String ImageUID;
 	String path;
-	public ChildBase(String name, String ImageUID, String notebookUID, String pageUID, Uri uri, Context context){
+	public  ChildBase(String name, String ImageUID, String notebookUID, String pageUID, Uri uri, Context context){
 		this.title =name;
 		this.ImageUID=ImageUID;
 		path=context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/"+ImageUID+".png";

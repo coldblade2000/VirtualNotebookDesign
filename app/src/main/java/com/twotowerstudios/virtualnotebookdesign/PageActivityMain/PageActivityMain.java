@@ -6,9 +6,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -19,6 +17,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.content.res.AppCompatResources;
@@ -228,17 +227,12 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 				if (allowCamera) {
 					Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 					if (takePicture.resolveActivity(getPackageManager()) != null) {
-						File nomedia = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), ".nomedia");
-						if (!nomedia.exists()) {
-							try {
-								nomedia.createNewFile();
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
-						}
 						File photo = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), newImageName + ".png");
-						Uri photoURI = Uri.fromFile(photo);
+						Log.d("PageActivityMain", "does photo exist? "+photo.exists());
+						//Uri photoURI = Uri.fromFile(photo);
+						Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), "com.twotowerstudios.virtualnotebookdesign.fileprovider", photo);
 						takePicture.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+						takePicture.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 						try {
 							startActivityForResult(takePicture, 1);
 						} catch (SecurityException e) {
@@ -252,6 +246,8 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 						page.addToPage(newImage);
 						Helpers.addPageFromUID16(page.getParentUID(), page, getApplicationContext());
 						rvpagemain.invalidate();
+						SharedPrefs.setBoolean(getApplicationContext(), "deleteNoticeShown", true);
+
 					}
 				}
 			} else {
@@ -272,8 +268,11 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 											}
 										}
 										File photo = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), newImageName + ".png");
-										Uri photoURI = Uri.fromFile(photo);
+										Log.d("PageActivityMain", "does photo exist? "+photo.exists());
+										//Uri photoURI = Uri.fromFile(photo);
+										Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), "com.twotowerstudios.virtualnotebookdesign.fileprovider", photo);
 										takePicture.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+										takePicture.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 										try {
 											startActivityForResult(takePicture, 1);
 										} catch (SecurityException e) {
@@ -319,14 +318,17 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 		if (requestCode == 2 && resultCode == RESULT_OK && data != null){
 			File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), filename+".png");
 			Uri selectedImageUri = data.getData();
-			String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
-			Cursor cursor = getContentResolver().query(selectedImageUri, filePathColumn, null, null, null);
+			/**Cursor cursor = getContentResolver().query(selectedImageUri, filePathColumn, null, null, null);
 			cursor.moveToFirst();
 			int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
 			String filePath = cursor.getString(columnIndex);
-			cursor.close();
-			Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+			cursor.close();*/
+			Bitmap bitmap = null;
+			try {
+				bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 
 			FileOutputStream outStream = null;
 			try {

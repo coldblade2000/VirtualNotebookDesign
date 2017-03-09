@@ -3,6 +3,7 @@ package com.twotowerstudios.virtualnotebookdesign.PageActivityMain;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -195,7 +196,7 @@ public class PageActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 										Page newpage = Helpers.getPageFromUID(childImage.getPageUID(), childImage.getNotebookUID(), context);
 										newpage.removeFromPage(Vholder.getAdapterPosition());
 										Helpers.addPageFromUID16(newpage.getParentUID(), newpage, context);
-										File fdelete = new File(childImage.getUri().getPath());
+										File fdelete = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)+childImage.getUri().getPath());
 										if (fdelete.exists()) {
 											Log.d("PageActivityAdapter", "onClick: fdelete exists");
 											if (fdelete.delete()) {

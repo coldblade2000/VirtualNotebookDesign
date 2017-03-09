@@ -115,11 +115,12 @@ public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelec
 					if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
 						dialog.setMessage(Html.fromHtml("You will have to type out the exact name of the notebook to confirm." + "<br>" + "<b>" + notebookSelection.getName() + "</b>", Html.FROM_HTML_MODE_LEGACY));
 					}else {
-						dialog.setMessage(Html.fromHtml("You will have to type out the exact name of the notebook to confirm." + "<br>" + "<b>" + notebookSelection.getName() + "</b>"));
+						dialog.setMessage(Html.fromHtml("You will have to type out the exact name of the notebook to confirm. The name is case and space sensitive." + "<br>" + "<b>" + notebookSelection.getName() + "</b>"));
 					}dialog.setView(edittext);
 					dialog.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
+							if(edittext.getText().toString().trim().equals(notebookSelection.getName().trim()))
 							for(Page a: notebookSelection.getPages()){
 								for (ChildBase b: a.getContent()) {
 									if(b.getChildType()==1){

@@ -3,7 +3,6 @@ package com.twotowerstudios.virtualnotebookdesign.PageActivityMain;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -131,7 +130,6 @@ public class PageActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
 	@Override
 	public void onBindViewHolder(final RecyclerView.ViewHolder Vholder, int position) {
-		Log.d("PageActivityAdapter", "onBindViewHolder: start");
 		pos = position;
 		switch (Vholder.getItemViewType()) {
 			case TEXT:
@@ -177,6 +175,8 @@ public class PageActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 				 }*/
 				Log.d("PageActivityAdapter", "onBindViewHolder: uri exists: " + childImage.getUri().toString());
 				Log.d("PageActivityAdapter", "onBindViewHolder: uri path: " + childImage.getUri().getPath());
+				Log.d("PageActivityAdapter", "onBindViewHolder: normal path: " + childImage.getPath());
+
 				holderImage.ivChildImage.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {
@@ -196,13 +196,13 @@ public class PageActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 										Page newpage = Helpers.getPageFromUID(childImage.getPageUID(), childImage.getNotebookUID(), context);
 										newpage.removeFromPage(Vholder.getAdapterPosition());
 										Helpers.addPageFromUID16(newpage.getParentUID(), newpage, context);
-										File fdelete = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)+childImage.getUri().getPath());
+										File fdelete = new File(childImage.getPath());
 										if (fdelete.exists()) {
 											Log.d("PageActivityAdapter", "onClick: fdelete exists");
 											if (fdelete.delete()) {
-												Toast.makeText(context, "file deleted :" + childImage.getUri().getPath(), Toast.LENGTH_SHORT).show();
+												Toast.makeText(context, "file deleted :" + childImage.getPath(), Toast.LENGTH_SHORT).show();
 											} else {
-												Toast.makeText(context, "file not deleted :" + childImage.getUri().getPath(), Toast.LENGTH_SHORT).show();
+												Toast.makeText(context, "file not deleted :" + childImage.getPath(), Toast.LENGTH_SHORT).show();
 
 											}
 										}else{

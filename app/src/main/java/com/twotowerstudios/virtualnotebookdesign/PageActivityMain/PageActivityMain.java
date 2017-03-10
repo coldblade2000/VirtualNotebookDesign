@@ -227,6 +227,14 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 				if (allowCamera) {
 					Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 					if (takePicture.resolveActivity(getPackageManager()) != null) {
+						File nomedia = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), ".nomedia");
+						if (!nomedia.exists()) {
+							try {
+								nomedia.createNewFile();
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
 						File photo = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), newImageName + ".png");
 						Log.d("PageActivityMain", "does photo exist? "+photo.exists());
 						//Uri photoURI = Uri.fromFile(photo);
@@ -318,11 +326,6 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 		if (requestCode == 2 && resultCode == RESULT_OK && data != null){
 			File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), filename+".png");
 			Uri selectedImageUri = data.getData();
-			/**Cursor cursor = getContentResolver().query(selectedImageUri, filePathColumn, null, null, null);
-			cursor.moveToFirst();
-			int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-			String filePath = cursor.getString(columnIndex);
-			cursor.close();*/
 			Bitmap bitmap = null;
 			try {
 				bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
@@ -333,7 +336,7 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 			FileOutputStream outStream = null;
 			try {
 				outStream = new FileOutputStream(file);
-				bitmap.compress(Bitmap.CompressFormat.PNG, 100, outStream);
+				bitmap.compress(Bitmap.CompressFormat.PNG, 97, outStream);
 				outStream.flush();
 				outStream.close();
 			} catch (Exception e) {

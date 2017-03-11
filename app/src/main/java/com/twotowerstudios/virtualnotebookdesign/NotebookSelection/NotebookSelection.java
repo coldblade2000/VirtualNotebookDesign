@@ -15,10 +15,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.mikepenz.materialdrawer.AccountHeader;
-import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 import com.twotowerstudios.virtualnotebookdesign.Misc.SharedPrefs;
 import com.twotowerstudios.virtualnotebookdesign.NewNotebookDialog.NewNotebookFragment;
@@ -34,6 +33,7 @@ import java.util.ArrayList;
 
 public class NotebookSelection extends AppCompatActivity implements NotebookSelectionAdapter.SelectionToNotebookInterface {
     private AccountHeader accountHeader;
+	private RelativeLayout emptyList;
     private RecyclerView rvNotebookSelection;
     private RecyclerView.Adapter rvNotebookSelectionAdapter;
     private ArrayList<Notebook> notebookSelectionCardList;
@@ -58,51 +58,63 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 			File file = new File(getFilesDir(),"Notebooks.json");
 			Log.d("NotebookSelection", file.getPath());
 		}
-
-		//================================================
-		isMainfabOpen = false;
-		fabSelection = (FloatingActionButton) findViewById(R.id.fabSelection);
-		fabAddBook = (FloatingActionButton) findViewById(R.id.fabAddBlock);
-		fabSelection.setOnClickListener(new View.OnClickListener(){
-			@Override
-			public void onClick(View view) {
-				if (!isMainfabOpen) {
-
-					fabAddBook.show();
-
-					isMainfabOpen = true;
-					ObjectAnimator openAddBookfab = ObjectAnimator.ofFloat(fabAddBook, View.TRANSLATION_Y, 200,0); openAddBookfab.start();
-					ObjectAnimator rotateMainfab = ObjectAnimator.ofFloat(fabSelection, View.ROTATION, 0, 135); rotateMainfab.start();
-
-				} else if(isMainfabOpen){
-					isMainfabOpen = false;
-					ObjectAnimator rotateMainfab = ObjectAnimator.ofFloat(fabSelection, View.ROTATION, 135, 270); rotateMainfab.start();
-					ObjectAnimator closeFirstSubfab = ObjectAnimator.ofFloat(fabAddBook, View.TRANSLATION_Y, 0,200); closeFirstSubfab.start();
-					fabAddBook.hide();
-				}
-			}
-
-
-		});
-		fabAddBook.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-                showDialog();
-
-			}
-		});
-		//============================================
-		rvNotebookSelection = (RecyclerView) findViewById(R.id.rvnotebookselection);
-        final LinearLayoutManager rvNotebookSelectionManager = new LinearLayoutManager(this);
-        rvNotebookSelection.setLayoutManager(rvNotebookSelectionManager);
+		//===============================================================================================================
 		notebookSelectionCardList = Helpers.getNotebookList(getApplicationContext());
-        //prepareNotebookSelectionCards();
-        rvNotebookSelectionAdapter = new NotebookSelectionAdapter(this, notebookSelectionCardList, this, this);
-        rvNotebookSelection.setAdapter(rvNotebookSelectionAdapter);
+		fabSelection = (FloatingActionButton) findViewById(R.id.fabSelection);
+		emptyList = (RelativeLayout) findViewById(R.id.emptyFile);
+		rvNotebookSelection = (RecyclerView) findViewById(R.id.rvnotebookselection);
+		final LinearLayoutManager rvNotebookSelectionManager = new LinearLayoutManager(this);
+		rvNotebookSelection.setLayoutManager(rvNotebookSelectionManager);
+		rvNotebookSelectionAdapter = new NotebookSelectionAdapter(this, notebookSelectionCardList, this, this);
+		rvNotebookSelection.setAdapter(rvNotebookSelectionAdapter);
+		//===============================================================================================================
+		if (!notebookSelectionCardList.isEmpty()) {
+			//
+			emptyList.setVisibility(View.GONE);
+			rvNotebookSelection.setVisibility(View.VISIBLE);
+			//================================================
+			isMainfabOpen = false;
+
+			fabAddBook = (FloatingActionButton) findViewById(R.id.fabAddBlock);
+			fabSelection.setOnClickListener(new View.OnClickListener(){
+				@Override
+				public void onClick(View view) {
+					if (!isMainfabOpen) {
+
+						fabAddBook.show();
+
+						isMainfabOpen = true;
+						ObjectAnimator openAddBookfab = ObjectAnimator.ofFloat(fabAddBook, View.TRANSLATION_Y, 200,0); openAddBookfab.start();
+						ObjectAnimator rotateMainfab = ObjectAnimator.ofFloat(fabSelection, View.ROTATION, 0, 135); rotateMainfab.start();
+
+					} else if(isMainfabOpen){
+						isMainfabOpen = false;
+						ObjectAnimator rotateMainfab = ObjectAnimator.ofFloat(fabSelection, View.ROTATION, 135, 270); rotateMainfab.start();
+						ObjectAnimator closeFirstSubfab = ObjectAnimator.ofFloat(fabAddBook, View.TRANSLATION_Y, 0,200); closeFirstSubfab.start();
+						fabAddBook.hide();
+					}
+				}
+
+
+			});
+			fabAddBook.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View view) {
+					showDialog();
+				}
+			});
+			//============================================
+
+		} else {
+			fabSelection.setVisibility(View.GONE);
+			emptyList.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					showDialog();
+				}
+			});
+		}
 		//===================================================================
-        final IProfile h1 = new ProfileDrawerItem().withName("Header 1");
-        final IProfile h2 = new ProfileDrawerItem().withName("Header 2");
-        final IProfile h3 = new ProfileDrawerItem().withName("Header 3");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 		getSupportActionBar().setTitle("Notebooks");
@@ -132,7 +144,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        //getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -164,6 +176,8 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 		notebookSelectionCardList.addAll(Helpers.getNotebookList(getApplicationContext()));
 		rvNotebookSelectionAdapter.notifyDataSetChanged();
 		rvNotebookSelection.getLayoutManager().scrollToPosition(notebookSelectionCardList.size());
+		emptyList.setVisibility(View.GONE);
+		rvNotebookSelection.setVisibility(View.VISIBLE);
 	}
 
 	@Override

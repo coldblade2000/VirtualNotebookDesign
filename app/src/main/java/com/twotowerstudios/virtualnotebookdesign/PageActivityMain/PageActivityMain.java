@@ -46,6 +46,7 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 
 	Toolbar tbpagemain;
 	RecyclerView rvpagemain;
+	PageActivityAdapter pageAdapter;
 	Page page;
 	ArrayList<ChildBase> contents = new ArrayList<>();
 	String notebookUID16;
@@ -92,7 +93,8 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 		//===============================================================================================================
 		StaggeredGridLayoutManager lmpagemain = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
 		rvpagemain.setLayoutManager(lmpagemain);
-		rvpagemain.setAdapter(new PageActivityAdapter(getApplicationContext(), contents, this, this));
+		pageAdapter = new PageActivityAdapter(getApplicationContext(), contents, this, this);
+		rvpagemain.setAdapter(pageAdapter);
 
 		fabPageMain1 = (FloatingActionButton) findViewById(R.id.fabPageMain1);
 		isMainfabOpen = false;
@@ -100,7 +102,7 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 		fabImageChild = ((FloatingActionButton) findViewById(R.id.fabImageChild));
 		//fabDriveChild = ((FloatingActionButton) findViewById(R.id.fabDriveChild)); UNUSED FOR NOW
 
-		/**bottom_drawer = (LinearLayout) findViewById(R.id.bottom_drawer);
+		/* bottom_drawer = (LinearLayout) findViewById(R.id.bottom_drawer);
 		 bottomSheetBehavior = BottomSheetBehavior.from(bottom_drawer);
 		 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);*/
 
@@ -196,7 +198,7 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 				Helpers.addPageFromUID16(page.getParentUID(), page, getApplicationContext());
 				break;
 			case android.R.id.home:
-				/**Intent intent = new Intent(this, NotebookMainActivity.class);
+				/*Intent intent = new Intent(this, NotebookMainActivity.class);
 				 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 				 intent.putExtra("notebookUID16", notebookUID16);
 				 intent.putExtra("parent", "PageActivityMain");
@@ -343,9 +345,10 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 				e.printStackTrace();
 			}
 			ChildBase newImage = new ChildBase("", filename, page.getParentUID(), page.getUID(), Uri.fromFile(file), getApplicationContext());
-			page.addToPage(newImage);
+			contents.add(newImage);
+			page.setContent(contents);
 			Helpers.addPageFromUID16(page.getParentUID(), page, getApplicationContext());
-			rvpagemain.invalidate();
+			pageAdapter.notifyItemInserted(contents.size()-1);
 		}
 	}
 

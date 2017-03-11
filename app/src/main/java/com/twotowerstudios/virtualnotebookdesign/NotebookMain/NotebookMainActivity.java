@@ -142,7 +142,6 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 			tabLayout.setupWithViewPager(viewPager);
 		}
 		parent = getIntent().getExtras().getString("parent");
-		Toast.makeText(getApplicationContext(), "Parent is: "+ parent, Toast.LENGTH_SHORT).show();
 		tvSub = (TextView) findViewById(R.id.tvSub);
 		tvSub.setText("Last Modified: "+ DateUtils.getRelativeTimeSpanString(notebook.getLastModified(), Helpers.getCurrentTimeInMillis(), DateUtils.SECOND_IN_MILLIS));
 

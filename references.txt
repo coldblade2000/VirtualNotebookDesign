@@ -1,7 +1,6 @@
-https://github.com/mikepenz/MaterialDrawer
+
 https://github.com/coldblade2000/
 http://www.androidhive.info/2016/05/android-working-with-card-view-and-recycler-view/ Important
-https://github.com/bumptech/glide
 http://www.developer.com/ws/android/storing-app-related-data-in-your-android-apps.html Important
 http://stackoverflow.com/questions/7363112/best-way-to-work-with-dates-in-android-sqlite
 http://stackoverflow.com/questions/9671085/convert-date-to-miliseconds
@@ -11,7 +10,6 @@ http://stackoverflow.com/questions/31231609/creating-a-button-in-android-toolbar
 https://guides.codepath.com/android/Using-the-App-ToolBar
 https://guides.codepath.com/android/Using-DialogFragment
 https://futurestud.io/tutorials/gson-getting-started-with-java-json-serialization-deserialization
-https://github.com/google/gson
 http://www.truiton.com/2015/04/android-action-bar-dialog-using-toolbar/
 https://github.com/chiuki/android-recyclerview/blob/master/app/src/main/java/com/sqisland/android/recyclerview/GridLayoutVariableSpanSizeActivity.java
 https://github.com/the-blue-alliance/spectrum/blob/master/spectrum/src/main/java/com/thebluealliance/spectrum/internal/ColorUtil.java
@@ -20,8 +18,16 @@ http://stackoverflow.com/questions/40601129/how-to-change-colors-of-parent-fragm
 http://saulmm.github.io/mastering-coordinator
 http://stackoverflow.com/questions/32655342/how-to-randomly-receive-a-material-design-color
 http://stackoverflow.com/questions/2535124/how-to-sort-an-arraylist-of-objects-by-a-property
-https://github.com/code-troopers/android-betterpickers
 https://developers.google.com/drive/v3/web/branding
 http://www.materialdoc.com/bottom-sheets/
 http://stackoverflow.com/questions/9763643/how-to-add-a-check-box-to-an-alert-dialog
 http://stackoverflow.com/questions/24659704/how-do-i-delete-files-programmatically-on-android
+
+Libraries:
+https://github.com/commonsguy/cwac-cam2 Camera
+https://github.com/mikepenz/MaterialDrawer Not used, Material Design Drawer
+https://github.com/bumptech/glide Handle image display
+https://github.com/google/gson Read and write JSON files
+https://github.com/code-troopers/android-betterpickers Date picker dialog
+https://github.com/davemorrissey/subsampling-scale-image-view Full screen image viewer with zoom
+https://github.com/johncarl81/parceler Pass objects through intents, etc. Create parcels

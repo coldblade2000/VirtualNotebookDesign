@@ -68,6 +68,7 @@ public class ChildBase {
 		this.childType=1;
 		this.uri=uri.toString();
 	}
+
 	public void setPath(String path) {
 		this.path = path;
 	}

@@ -2,8 +2,6 @@ package com.twotowerstudios.virtualnotebookdesign.PageActivityMain;
 
 import android.Manifest;
 import android.animation.ObjectAnimator;
-import android.app.Activity;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -17,8 +15,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.content.res.AppCompatResources;
 import android.support.v7.widget.RecyclerView;
@@ -29,6 +25,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.commonsware.cwac.cam2.CameraActivity;
+import com.commonsware.cwac.cam2.ZoomStyle;
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 import com.twotowerstudios.virtualnotebookdesign.Misc.SharedPrefs;
 import com.twotowerstudios.virtualnotebookdesign.Objects.ChildBase;
@@ -54,6 +52,7 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 	/*LinearLayout bottom_drawer;
 	BottomSheetBehavior bottomSheetBehavior;*/
 	FloatingActionButton fabPageMain1, fabTextChild, fabImageChild;
+	int CAMERAPIC =3, GALLERYPIC=2;
 	private boolean allowCamera;
 
 	@Override
@@ -226,7 +225,22 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 		if (tag.equals("camera")) {
 			locationpermission();
 			if (SharedPrefs.getBoolean(getApplicationContext(), "deleteNoticeShown")) {
-				if (allowCamera) {
+				File photo = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), newImageName + ".png");
+				Intent takePicture = new CameraActivity.IntentBuilder(PageActivityMain.this)
+						.debug()
+						.requestPermissions()
+						.zoomStyle(ZoomStyle.PINCH)
+						.to(photo)
+						.build()
+						.putExtra("path", getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/"+newImageName+".png");
+				startActivityForResult(takePicture, CAMERAPIC);
+				ChildBase newImage = new ChildBase(""+ title, newImageName, page.getParentUID(), page.getUID(),
+						Uri.fromFile(photo), getApplicationContext());
+				page.addToPage(newImage);
+				Helpers.addPageFromUID16(page.getParentUID(), page, getApplicationContext());
+				contents.add(newImage);
+				pageAdapter.notifyItemInserted(contents.size()-1);
+				/*if (allowCamera) {
 					Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 					if (takePicture.resolveActivity(getPackageManager()) != null) {
 						File nomedia = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), ".nomedia");
@@ -298,11 +312,12 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 										rvpagemain.invalidate();
 										SharedPrefs.setBoolean(getApplicationContext(), "deleteNoticeShown", true);
 									}
+
 								}
 							}
 						})
 						.show();
-			}
+			*/}
 
 
 		} else if (tag.equals("gallery")) {
@@ -319,13 +334,13 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 			intent.setAction(Intent.ACTION_GET_CONTENT);
 			intent.putExtra("title", title);
 			startActivityForResult(Intent.createChooser(intent,
-					"Select Picture"), 2);
+					"Select Picture"), GALLERYPIC);
 
 		}
 	}
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		final String filename = "i"+Helpers.generateUniqueId(16);
-		if (requestCode == 2 && resultCode == RESULT_OK && data != null){
+		if (requestCode == GALLERYPIC && resultCode == RESULT_OK && data != null){
 			File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), filename+".png");
 			Uri selectedImageUri = data.getData();
 			Bitmap bitmap = null;

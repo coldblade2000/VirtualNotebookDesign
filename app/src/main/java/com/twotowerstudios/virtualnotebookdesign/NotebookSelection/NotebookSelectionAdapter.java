@@ -89,7 +89,7 @@ public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelec
 		holder.card.setOnLongClickListener(new View.OnLongClickListener() {
 			@Override
 			public boolean onLongClick(View v) {
-				if (notebookList.get(holder.getAdapterPosition()).getNumberOfPages()<=0) {
+				if (notebookList.get(holder.getAdapterPosition()).getNumberOfPages()==0) {
 					//make this delete the pictures
 					new AlertDialog.Builder(mActivity)
 							.setTitle("Do you want to delete this notebook?")

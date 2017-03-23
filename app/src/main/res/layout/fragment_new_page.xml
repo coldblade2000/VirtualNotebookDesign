@@ -36,18 +36,18 @@
 			<android.support.design.widget.TextInputLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content">
+
 				<EditText
+					android:id="@+id/teNewpageName"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:inputType="textCapSentences"
-					android:id="@+id/teNewpageName"
-					android:hint="Page Name"
-					android:selectAllOnFocus="false"
 					android:layout_weight="1"
+					android:hint="Page Name"
+					android:inputType="textCapWords"
 					android:maxLines="2"
+					android:selectAllOnFocus="false"
 					android:textSize="28sp"
-					android:typeface="sans"
-					/>
+					android:typeface="sans"/>
 			</android.support.design.widget.TextInputLayout>
 		</LinearLayout>
 

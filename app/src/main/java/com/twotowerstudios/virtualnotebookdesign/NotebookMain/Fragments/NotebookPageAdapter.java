@@ -1,21 +1,32 @@
 package com.twotowerstudios.virtualnotebookdesign.NotebookMain.Fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.PorterDuff;
+import android.os.Environment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 import com.twotowerstudios.virtualnotebookdesign.NotebookMain.NotebookAdapterToAct;
+import com.twotowerstudios.virtualnotebookdesign.Objects.ChildBase;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
 import com.twotowerstudios.virtualnotebookdesign.R;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Created by Panther II on 02/12/2016.
@@ -28,6 +39,7 @@ public class NotebookPageAdapter extends RecyclerView.Adapter<NotebookPageAdapte
 	private ArrayList<Page> pageList = new ArrayList<>();
 	private NotebookAdapterToAct interf;
 	private int color;
+	private Page page;
 	private boolean onlyFavorites;
 
 	class ViewHolder extends RecyclerView.ViewHolder {
@@ -65,13 +77,89 @@ public class NotebookPageAdapter extends RecyclerView.Adapter<NotebookPageAdapte
 
 
 	@Override
-	public void onBindViewHolder(ViewHolder holder, int position) {
+	public void onBindViewHolder(final ViewHolder holder, int position) {
 		final int newpos = position;
-		Page page = pageList.get(position);
+		page = pageList.get(position);
 		holder.llpagelistitem.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				interf.clickListener(newpos, onlyFavorites);
+			}
+		});
+		holder.llpagelistitem.setOnLongClickListener(new View.OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+				if(page.getNumberOfItems()==0){
+					new AlertDialog.Builder(context)
+							.setTitle("Do you want to delete this page?")
+							.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									page.removeFromPage(holder.getAdapterPosition());
+									Helpers.addPageFromUID16(page.getParentUID(), page, context);
+									notifyItemRemoved(holder.getAdapterPosition());
+								}
+							})
+							.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+
+								}
+							}).show();
+				}else{
+					final EditText edittext = new EditText(context);
+					edittext.setRawInputType(InputType.TYPE_CLASS_NUMBER);
+					AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+					dialog.setTitle("Do you want to delete this page?");
+					final int randint= new Random().nextInt(8999)+1000;
+					if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+						dialog.setMessage(Html.fromHtml("You will have to type out the random number shown below to confirm." + "<br>" + "<b>" + randint + "</b>", Html.FROM_HTML_MODE_LEGACY));
+					}else {
+						dialog.setMessage(Html.fromHtml("You will have to type out the random number shown below to confirm." + "<br>" + "<b>" + randint + "</b>"));
+					}dialog.setView(edittext);
+					dialog.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							try {
+								if(Integer.parseInt(edittext.getText().toString())==randint){
+									for (ChildBase b: page.getContent()) {
+										if(b.getChildType()==1){
+											File fdelete = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)+b.getUri().getPath());
+											if (fdelete.exists()) {
+												if (fdelete.delete()) {
+													Log.d("NotebookSelectionAdptr","file Deleted :" + context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)+b.getUri().getPath());
+												} else {
+													Log.d("NotebookSelectionAdptr", "file not Deleted :" + context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)+b.getUri().getPath());
+												}
+											}
+
+										}
+									}
+									page.removeFromPage(holder.getAdapterPosition());
+									Helpers.addPageFromUID16(page.getParentUID(), page, context);
+									notifyItemRemoved(holder.getAdapterPosition());
+                                }else{
+                                    Toast.makeText(context, "Page not deleted, the number you input was wrong.", Toast.LENGTH_SHORT).show();
+                                }
+							} catch (NumberFormatException e) {
+								e.printStackTrace();
+								dialog.dismiss();
+							}
+
+
+						}
+					});
+
+					dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+
+						}
+					}).show();
+
+
+				}
+				return true;
 			}
 		});
 		holder.tvFavSub.setTextColor(color);

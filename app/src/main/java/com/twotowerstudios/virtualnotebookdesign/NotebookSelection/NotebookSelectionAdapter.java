@@ -9,12 +9,14 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 import com.twotowerstudios.virtualnotebookdesign.Objects.ChildBase;
@@ -119,25 +121,29 @@ public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelec
 					dialog.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
-							if(edittext.getText().toString().trim().equals(notebookSelection.getName().trim()))
-							for(Page a: notebookSelection.getPages()){
-								for (ChildBase b: a.getContent()) {
-									if(b.getChildType()==1){
-										File fdelete = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)+b.getUri().getPath());
-										if (fdelete.exists()) {
-											if (fdelete.delete()) {
-												System.out.println("file Deleted :" + context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)+b.getUri().getPath());
-											} else {
-												System.out.println("file not Deleted :" + context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)+b.getUri().getPath());
+							if(edittext.getText().toString().trim().equals(notebookSelection.getName().trim())){
+								for(Page a: notebookSelection.getPages()){
+									for (ChildBase b: a.getContent()) {
+										if(b.getChildType()==1){
+											File fdelete = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)+b.getUri().getPath());
+											if (fdelete.exists()) {
+												if (fdelete.delete()) {
+													Log.d("NotebookSelectionAdptr","file Deleted :" + context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)+b.getUri().getPath());
+												} else {
+													Log.d("NotebookSelectionAdptr", "file not Deleted :" + context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)+b.getUri().getPath());
+												}
 											}
-										}
 
+										}
 									}
 								}
+								notebookList.remove(holder.getAdapterPosition());
+								Helpers.writeListToFile(context, notebookList);
+								notifyItemRemoved(holder.getAdapterPosition());
+							}else{
+								Toast.makeText(context, "Notebook not deleted, the name you input was wrong.", Toast.LENGTH_SHORT).show();
 							}
-							notebookList.remove(holder.getAdapterPosition());
-							Helpers.writeListToFile(context, notebookList);
-							notifyItemRemoved(holder.getAdapterPosition());
+
 
 						}
 					});

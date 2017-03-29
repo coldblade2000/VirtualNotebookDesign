@@ -8,7 +8,9 @@
 
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 	<uses-permission android:name="android.permission.CAMERA"/>
-
+	<activity
+		android:name="com.commonsware.cwac.cam2.CameraActivity"
+		android:theme="@style/Theme.AppCompat.Light"/>
 	<application
 		android:allowBackup="true"
 		android:icon="@mipmap/ic_launcher"
@@ -28,6 +30,7 @@
 		<activity android:name=".MainMenu.MainActivity">
 
 		</activity>
+
 		<activity
 			android:name=".NotebookSelection.NotebookSelection"
 			android:label="@string/title_activity_notebook_selection"

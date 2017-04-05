@@ -9,10 +9,6 @@ import android.view.View;
 
 import com.twotowerstudios.virtualnotebookdesign.R;
 
-/**
- * Created by Panther II on 15/11/2016.
- */
-
 public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
 
 	@Override
@@ -29,18 +25,14 @@ public class ScrollAwareFABBehavior extends FloatingActionButton.Behavior {
 		super.onNestedScroll(coordinatorLayout, child, target, dxConsumed, dyConsumed, dxUnconsumed,
 				dyUnconsumed);
 
-		if (dyConsumed > 0 && child.getVisibility() == View.VISIBLE) {
+		if (dyConsumed > 0) {
 			child.hide();
 
-		} else if (dyConsumed < 0 && child.getVisibility() != View.VISIBLE) {
+		} else if (dyConsumed < 0) {
 			if (child.getId()== R.id.fabSelection){
 				if(NotebookSelection.isMainfabOpen()){
 					child.show();
-				}else{
-
 				}
-			}else{
-				child.show();
 			}
 
 		}

@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 import com.twotowerstudios.virtualnotebookdesign.NotebookMain.NotebookAdapterToAct;
 import com.twotowerstudios.virtualnotebookdesign.Objects.ChildBase;
+import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
 import com.twotowerstudios.virtualnotebookdesign.R;
 
@@ -41,6 +42,7 @@ public class NotebookPageAdapter extends RecyclerView.Adapter<NotebookPageAdapte
 	private int color;
 	private Page page;
 	private boolean onlyFavorites;
+	private String notebookUID;
 
 	class ViewHolder extends RecyclerView.ViewHolder {
 		TextView tvFavPage;
@@ -63,12 +65,13 @@ public class NotebookPageAdapter extends RecyclerView.Adapter<NotebookPageAdapte
 
 
 	public NotebookPageAdapter(){}
-	public NotebookPageAdapter(Context context, ArrayList<Page> list, NotebookAdapterToAct interf, int color,boolean onlyFavorites){
+	public NotebookPageAdapter(Context context, ArrayList<Page> list, NotebookAdapterToAct interf, int color,boolean onlyFavorites, String notebookUID){
 		this.onlyFavorites = onlyFavorites;
 		this.context = context;
 		this.interf=interf;
 		this.color=color;
 		pageList = list;
+		this.notebookUID = notebookUID;
 	}
 	@Override
 	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -135,8 +138,10 @@ public class NotebookPageAdapter extends RecyclerView.Adapter<NotebookPageAdapte
 
 										}
 									}
-									page.removeFromPage(holder.getAdapterPosition());
-									Helpers.addPageFromUID16(page.getParentUID(), page, context);
+									pageList.remove(holder.getAdapterPosition());
+									Notebook notebook = Helpers.getNotebookFromUID(notebookUID, context);
+									notebook.setPages(pageList);
+									Helpers.addToNotebookList(notebook, context);
 									notifyItemRemoved(holder.getAdapterPosition());
                                 }else{
                                     Toast.makeText(context, "Page not deleted, the number you input was wrong.", Toast.LENGTH_SHORT).show();

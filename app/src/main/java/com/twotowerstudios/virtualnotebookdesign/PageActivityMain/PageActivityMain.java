@@ -28,7 +28,6 @@ import android.view.View;
 import com.commonsware.cwac.cam2.CameraActivity;
 import com.commonsware.cwac.cam2.ZoomStyle;
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
-import com.twotowerstudios.virtualnotebookdesign.Misc.SharedPrefs;
 import com.twotowerstudios.virtualnotebookdesign.Objects.ChildBase;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
 import com.twotowerstudios.virtualnotebookdesign.R;
@@ -169,6 +168,12 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 	}
 
 	@Override
+	protected void onResume() {
+		super.onResume();
+		pageAdapter.notifyItemChanged(contents.size()-1);
+	}
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.pagemainmenu, menu);
 		return true;
@@ -224,7 +229,7 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 		final String newImageName = "i" + Helpers.generateUniqueId(16);
 		if (tag.equals("camera")) {
 			locationpermission();
-			if (SharedPrefs.getBoolean(getApplicationContext(), "deleteNoticeShown")) {
+			/*if (SharedPrefs.getBoolean(getApplicationContext(), "deleteNoticeShown")) {
 				File photo = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), newImageName + ".png");
 				Intent takePicture = new CameraActivity.IntentBuilder(PageActivityMain.this)
 						.debug()
@@ -232,92 +237,32 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 						.zoomStyle(ZoomStyle.PINCH)
 						.to(photo)
 						.build()
-						.putExtra("path", getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/"+newImageName+".png");
+						.putExtra("path", getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + newImageName + ".png");
 				startActivityForResult(takePicture, CAMERAPIC);
-				ChildBase newImage = new ChildBase(""+ title, newImageName, page.getParentUID(), page.getUID(),
+				ChildBase newImage = new ChildBase("" + title, newImageName, page.getParentUID(), page.getUID(),
 						Uri.fromFile(photo), getApplicationContext());
 				page.addToPage(newImage);
 				Helpers.addPageFromUID16(page.getParentUID(), page, getApplicationContext());
 				contents.add(newImage);
-				pageAdapter.notifyItemInserted(contents.size()-1);
-				/*if (allowCamera) {
-					Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-					if (takePicture.resolveActivity(getPackageManager()) != null) {
-						File nomedia = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), ".nomedia");
-						if (!nomedia.exists()) {
-							try {
-								nomedia.createNewFile();
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
-						}
-						File photo = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), newImageName + ".png");
-						Log.d("PageActivityMain", "does photo exist? "+photo.exists());
-						//Uri photoURI = Uri.fromFile(photo);
-						Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), "com.twotowerstudios.virtualnotebookdesign.fileprovider", photo);
-						takePicture.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-						takePicture.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-						try {
-							startActivityForResult(takePicture, 1);
-						} catch (SecurityException e) {
-							e.printStackTrace();
-							ActivityCompat.requestPermissions((Activity) getApplicationContext(),
-									new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-									MY_PERMISSIONS_REQUEST_CAMERA);
-
-						}
-						ChildBase newImage = new ChildBase("" + title, newImageName, page.getParentUID(), page.getUID(), photoURI, getApplicationContext());
-						page.addToPage(newImage);
-						Helpers.addPageFromUID16(page.getParentUID(), page, getApplicationContext());
-						rvpagemain.invalidate();
-						SharedPrefs.setBoolean(getApplicationContext(), "deleteNoticeShown", true);
-
-					}
-				}
-			} else {
-				new AlertDialog.Builder(this)
-						.setTitle("Notice")
-						.setMessage("Some phones will automatically copy every picture taken here to the gallery. Feel free to delete those copies from your gallery. The photos in this app won't be affected")
-						.setPositiveButton("I understand", new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, int which) {
-								if (allowCamera) {
-									Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-									if (takePicture.resolveActivity(getPackageManager()) != null) {
-										File nomedia = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), ".nomedia");
-										if (!nomedia.exists()) {
-											try {
-												nomedia.createNewFile();
-											} catch (IOException e) {
-												e.printStackTrace();
-											}
-										}
-										File photo = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), newImageName + ".png");
-										Log.d("PageActivityMain", "does photo exist? "+photo.exists());
-										//Uri photoURI = Uri.fromFile(photo);
-										Uri photoURI = FileProvider.getUriForFile(getApplicationContext(), "com.twotowerstudios.virtualnotebookdesign.fileprovider", photo);
-										takePicture.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-										takePicture.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-										try {
-											startActivityForResult(takePicture, 1);
-										} catch (SecurityException e) {
-											e.printStackTrace();
-											ActivityCompat.requestPermissions((Activity) getApplicationContext(),
-													new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-													MY_PERMISSIONS_REQUEST_CAMERA);
-
-										}
-										ChildBase newImage = new ChildBase("" + title, newImageName, page.getParentUID(), page.getUID(), photoURI, getApplicationContext());
-										page.addToPage(newImage);
-										Helpers.addPageFromUID16(page.getParentUID(), page, getApplicationContext());
-										rvpagemain.invalidate();
-										SharedPrefs.setBoolean(getApplicationContext(), "deleteNoticeShown", true);
-									}
-
-								}
-							}
-						})
-						.show();
-			*/}
+				pageAdapter.notifyItemInserted(contents.size() - 1);
+			}else{*/
+				File photo = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), newImageName + ".png");
+				Intent takePicture = new CameraActivity.IntentBuilder(PageActivityMain.this)
+						.debug()
+						.requestPermissions()
+						.zoomStyle(ZoomStyle.PINCH)
+						.to(photo)
+						.confirmationQuality(0.8f)
+						.build()
+						.putExtra("path", getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + newImageName + ".png");
+				startActivityForResult(takePicture, CAMERAPIC);
+				ChildBase newImage = new ChildBase("" + title, newImageName, page.getParentUID(), page.getUID(),
+						Uri.fromFile(photo), getApplicationContext());
+				page.addToPage(newImage);
+				Helpers.addPageFromUID16(page.getParentUID(), page, getApplicationContext());
+				//contents.add(newImage);
+				pageAdapter.notifyItemInserted(contents.size() - 1);
+			//}
 
 
 		} else if (tag.equals("gallery")) {

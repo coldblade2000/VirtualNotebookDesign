@@ -21,7 +21,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 import com.twotowerstudios.virtualnotebookdesign.NotebookMain.Fragments.NewPage.NewPageFragment;
@@ -136,7 +135,7 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 			notEmptyNotebook.setVisibility(View.VISIBLE);
 			viewPager = (ViewPager) findViewById(R.id.viewpager);
 
-			viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(),pageList,Helpers.getSingleColorAccent(this,notebook.getColor()),this));
+			viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(),pageList,Helpers.getSingleColorAccent(this,notebook.getColor()),this, notebookUID16));
 
 			tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
 			tabLayout.setupWithViewPager(viewPager);
@@ -200,7 +199,7 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 		}else{
 			pageList.clear();
 			pageList.addAll(Helpers.getNotebookFromUID(notebookUID16, getApplicationContext()).getPages());
-			viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), pageList, Helpers.getSingleColorAccent(this,notebook.getColor()), this));
+			viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), pageList, Helpers.getSingleColorAccent(this,notebook.getColor()), this, notebookUID16));
 			tabLayout.setupWithViewPager(viewPager);
 		}
 	}
@@ -225,7 +224,7 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 		emptyNotebook.setVisibility(View.GONE);
 		notEmptyNotebook.setVisibility(View.VISIBLE);
 		viewPager = (ViewPager) findViewById(R.id.viewpager);
-		viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(),pageList, notebook.getColor(), this);
+		viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(),pageList, notebook.getColor(), this, notebookUID16);
 		viewPager.setAdapter(viewPagerAdapter);
 
 		tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);

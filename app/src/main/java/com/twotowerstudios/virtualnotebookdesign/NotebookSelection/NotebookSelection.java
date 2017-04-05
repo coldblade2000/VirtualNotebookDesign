@@ -1,12 +1,18 @@
 package com.twotowerstudios.virtualnotebookdesign.NotebookSelection;
 
+import android.Manifest;
 import android.animation.ObjectAnimator;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -40,6 +46,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 	private FloatingActionButton fabSelection, fabAddBook;
 	static boolean isMainfabOpen;
 	private boolean isFirstTime;
+	final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 3;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +65,34 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 			File file = new File(getFilesDir(),"Notebooks.json");
 			Log.d("NotebookSelection", file.getPath());
 		}
+		if(!SharedPrefs.getBoolean(getApplicationContext(), "StorageLocDiagShown")){
+			SharedPrefs.setBoolean(getApplicationContext(), "StorageLocDiagShown", true);
+			new AlertDialog.Builder(this)
+					.setTitle("Do you want to use your SD card to store photos?")
+					.setMessage("No matter the location, these photos will be stored independently from the gallery. This choice might not be possible to reverse.")
+					.setPositiveButton("SD Card", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							if (ContextCompat.checkSelfPermission(getApplicationContext(),
+									Manifest.permission.WRITE_EXTERNAL_STORAGE)
+									!= PackageManager.PERMISSION_GRANTED) {
+								if (ActivityCompat.shouldShowRequestPermissionRationale(NotebookSelection.this,
+										Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+								} else {
+									ActivityCompat.requestPermissions(NotebookSelection.this,
+											new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+											MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+								}
+							}
+						}
+					})
+					.setNegativeButton("Internal Storage", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+
+						}
+					}).show();
+		}
 		//===============================================================================================================
 		notebookSelectionCardList = Helpers.getNotebookList(getApplicationContext());
 		fabSelection = (FloatingActionButton) findViewById(R.id.fabSelection);
@@ -67,6 +102,31 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 		rvNotebookSelection.setLayoutManager(rvNotebookSelectionManager);
 		rvNotebookSelectionAdapter = new NotebookSelectionAdapter(this, notebookSelectionCardList, this, this);
 		rvNotebookSelection.setAdapter(rvNotebookSelectionAdapter);
+		rvNotebookSelection.addOnScrollListener(new RecyclerView.OnScrollListener() {
+			/**
+			 * Callback method to be invoked when the RecyclerView has been scrolled. This will be
+			 * called after the scroll has completed.
+			 * <p>
+			 * This callback will also be called if visible item range changes after a layout
+			 * calculation. In that case, dx and dy will be 0.
+			 *
+			 * @param recyclerView The RecyclerView which scrolled.
+			 * @param dx           The amount of horizontal scroll.
+			 * @param dy           The amount of vertical scroll.
+			 */
+			@Override
+			public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+				if(dy>10){
+					fabSelection.hide();
+					fabAddBook.hide();
+				}else if(dy<10){
+					fabSelection.show();
+					if(isMainfabOpen()){
+						fabAddBook.show();
+					}
+				}
+			}
+		});
 		//===============================================================================================================
 		if (!notebookSelectionCardList.isEmpty()) {
 			//
@@ -144,7 +204,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -155,13 +215,9 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_delete) {
-            //showEditDialog();
-            getApplicationContext().deleteFile("Notebooks.json");
-            notebookSelectionCardList.clear();
-            rvNotebookSelectionAdapter.notifyDataSetChanged();
-            //Toast.makeText(this, "Sorry, this feature is disabled during the exhibition!", Toast.LENGTH_SHORT).show();
-            return true;
+        if (id == R.id.action_debug) {
+			SharedPrefs.setBoolean(getApplicationContext(), "StorageLocDiagShown", false);
+			return true;
         }
         return super.onOptionsItemSelected(item);
     }

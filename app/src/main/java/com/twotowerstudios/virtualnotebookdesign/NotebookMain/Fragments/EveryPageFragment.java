@@ -28,7 +28,7 @@ public class EveryPageFragment extends Fragment{
 	ArrayList<Page> pageList;
 	public RecyclerView rvEveryPage;
 	NotebookAdapterToAct interf;
-	String parentUID16;
+	String UID;
 	int color;
 
 	public EveryPageFragment() {
@@ -40,7 +40,7 @@ public class EveryPageFragment extends Fragment{
 		super.onCreate(savedInstanceState);
 		pageList = Parcels.unwrap(getArguments().getParcelable("list"));
 		color=getArguments().getInt("color");
-		parentUID16 = getArguments().getString("UID16");
+		UID = getArguments().getString("UID");
 	}
 
 	@Override
@@ -58,16 +58,17 @@ public class EveryPageFragment extends Fragment{
 		Collections.sort(pageList);
 		TextView tvFavoritesEmpty = (TextView) view.findViewById(R.id.tvFavoritesEmpty);
 		tvFavoritesEmpty.setVisibility(View.GONE);
-		rvEveryPage.setAdapter(new NotebookPageAdapter(getContext(), pageList, interf, color,false));
+		rvEveryPage.setAdapter(new NotebookPageAdapter(getContext(), pageList, interf, color,false, UID));
 	}
 
-	public static EveryPageFragment newInstance(int page, String title, ArrayList<Page> pageList, int color, NotebookAdapterToAct interf) {
+	public static EveryPageFragment newInstance(int page, String title, ArrayList<Page> pageList, int color, NotebookAdapterToAct interf, String UID) {
 		EveryPageFragment fragment = new EveryPageFragment();
 		fragment.interf=interf;
 		Bundle args = new Bundle();
 		args.putInt("page", page);
 		args.putInt("color", color);
 		args.putString("title", title);
+		args.putString("UID", UID);
 		args.putParcelable("list", Parcels.wrap(pageList));
 		fragment.setArguments(args);
 		return fragment;

@@ -32,18 +32,20 @@ public class FavoritesFragment extends Fragment{
 	public RecyclerView rvFavorite;
 	NotebookAdapterToAct interf;
 	int color;
+	private String UID;
 	TextView tvFavoritesEmpty;
 
     public FavoritesFragment() {
         // Required empty public constructor
     }
-    public static FavoritesFragment newInstance(int page, String title, ArrayList<Page> pageList, int color, NotebookAdapterToAct interf) {
+    public static FavoritesFragment newInstance(int page, String title, ArrayList<Page> pageList, int color, NotebookAdapterToAct interf, String UID) {
         FavoritesFragment fragment = new FavoritesFragment();
 		fragment.interf=interf;
         Bundle args = new Bundle();
         args.putInt("page", page);
 		args.putInt("color", color);
         args.putString("title", title);
+		args.putString("UID", UID);
 		args.putParcelable("list", Parcels.wrap(pageList));
         fragment.setArguments(args);
         return fragment;
@@ -53,6 +55,7 @@ public class FavoritesFragment extends Fragment{
         super.onCreate(savedInstanceState);
 		ArrayList<Page> fullList = Parcels.unwrap(getArguments().getParcelable("list"));
 		color=getArguments().getInt("color");
+		UID = getArguments().getString("UID");
 		for(Page p: fullList) {
 			if(p.isFavorite()){
 				favPageList.add(p);
@@ -87,7 +90,7 @@ public class FavoritesFragment extends Fragment{
 		rvFavorite = (RecyclerView) view.findViewById(R.id.rvFavorites);
 		LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
 		rvFavorite.setLayoutManager(linearLayoutManager);
-		rvFavorite.setAdapter(new NotebookPageAdapter(getContext(), favPageList, interf,color, true));
+		rvFavorite.setAdapter(new NotebookPageAdapter(getContext(), favPageList, interf,color, true, UID));
 		tvFavoritesEmpty = (TextView) view.findViewById(R.id.tvFavoritesEmpty);
 		if(!favPageList.isEmpty()){
 			tvFavoritesEmpty.setVisibility(View.GONE);

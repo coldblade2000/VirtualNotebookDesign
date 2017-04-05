@@ -78,7 +78,6 @@
 		android:layout_alignParentRight="true"
 		android:layout_alignParentEnd="true"
 		app:fabSize="normal"
-		app:layout_behavior="com.twotowerstudios.virtualnotebookdesign.NotebookSelection.ScrollAwareFABBehavior"
 		app:layout_anchor="@id/rvnotebookselection"
 		app:layout_anchorGravity="bottom|right"/>
 
@@ -97,6 +96,5 @@
 		app:fabSize="normal"
 		app:layout_anchor="@id/rvnotebookselection"
 		app:layout_anchorGravity="bottom|right"
-		app:layout_behavior="com.twotowerstudios.virtualnotebookdesign.NotebookSelection.ScrollAwareFABBehavior"
 		app:srcCompat="@drawable/ic_note_add_white_24px"/>
 </android.support.design.widget.CoordinatorLayout>

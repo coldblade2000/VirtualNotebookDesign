@@ -11,7 +11,10 @@ import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
 import com.twotowerstudios.virtualnotebookdesign.R;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
@@ -21,6 +24,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 public class Helpers {
 
@@ -291,5 +297,60 @@ public class Helpers {
 				Color.green(color) * 0.587 +
 				Color.blue(color) * 0.114;
 		return brightness < 160;
+	}
+	public static void zipFileArray(String[] filepaths, String filename){
+		int BUFFER = 2048;
+		try{
+			BufferedInputStream origin = null; // Initialize the input and output streams
+			FileOutputStream dest = new FileOutputStream(filename);
+			ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(
+					dest));
+			byte data[] = new byte[BUFFER]; //initializes a buffer for the output stream in order to not run out of memory and lowe the strain on the phone
+			for (int i = 0; i < filepaths.length; i++) { //iterating for every filename
+				Log.v("Compress", "Adding: " + filepaths[i]);
+				FileInputStream fi = new FileInputStream(filepaths[i]);//read the file from the current filepath
+				origin = new BufferedInputStream(fi, BUFFER);//makes the fileinoutstream have a buffer
+				ZipEntry entry = new ZipEntry(filepaths[i].substring(filepaths[i].lastIndexOf("/") + 1));
+				out.putNextEntry(entry);//pure fuckery
+				int count;
+				while ((count = origin.read(data, 0, BUFFER)) != -1) {
+					out.write(data, 0, count);
+				}
+				origin.close();
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+	}
+	public void unzip(String _zipFile, String _targetLocation) {
+
+		//create target location folder if not exist
+
+		//dirChecker(_targetLocatioan);
+
+		try {
+			FileInputStream fin = new FileInputStream(_zipFile);
+			ZipInputStream zin = new ZipInputStream(fin);
+			ZipEntry ze = null;
+			while ((ze = zin.getNextEntry()) != null) {
+
+				//create dir if required while unzipping
+				if (ze.isDirectory()) {
+					dirChecker(ze.getName());
+				} else {
+					FileOutputStream fout = new FileOutputStream(_targetLocation + ze.getName());
+					for (int c = zin.read(); c != -1; c = zin.read()) {
+						fout.write(c);
+					}
+
+					zin.closeEntry();
+					fout.close();
+				}
+
+			}
+			zin.close();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
 	}
 }

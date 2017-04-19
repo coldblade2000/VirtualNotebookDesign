@@ -77,8 +77,6 @@ public class NotebookPageAdapter extends RecyclerView.Adapter<NotebookPageAdapte
 	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.pagelistitem, parent, false));
 	}
-
-
 	@Override
 	public void onBindViewHolder(final ViewHolder holder, int position) {
 		final int newpos = position;
@@ -150,8 +148,6 @@ public class NotebookPageAdapter extends RecyclerView.Adapter<NotebookPageAdapte
 								e.printStackTrace();
 								dialog.dismiss();
 							}
-
-
 						}
 					});
 

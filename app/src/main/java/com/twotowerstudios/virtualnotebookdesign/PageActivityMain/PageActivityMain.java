@@ -76,7 +76,6 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 
 		notebookUID16 = getIntent().getStringExtra("notebookUID16");
 		setContentView(R.layout.activity_page_main);
-
 		allowCamera = ContextCompat.checkSelfPermission(this,
 				Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
 		tbpagemain = (Toolbar) findViewById(R.id.tbpagemain);
@@ -93,23 +92,19 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 		rvpagemain.setLayoutManager(lmpagemain);
 		pageAdapter = new PageActivityAdapter(getApplicationContext(), contents, this, this);
 		rvpagemain.setAdapter(pageAdapter);
-
 		fabPageMain1 = (FloatingActionButton) findViewById(R.id.fabPageMain1);
 		isMainfabOpen = false;
 		fabTextChild = ((FloatingActionButton) findViewById(R.id.fabTextChild));
 		fabImageChild = ((FloatingActionButton) findViewById(R.id.fabImageChild));
 		//fabDriveChild = ((FloatingActionButton) findViewById(R.id.fabDriveChild)); UNUSED FOR NOW
-
 		/* bottom_drawer = (LinearLayout) findViewById(R.id.bottom_drawer);
 		 bottomSheetBehavior = BottomSheetBehavior.from(bottom_drawer);
 		 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);*/
-
 		//===============================================================================================================
 		fabPageMain1.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				if (!isMainfabOpen) {
-
 					fabTextChild.show();
 					fabImageChild.show();
 					//fabDriveChild.show();
@@ -122,7 +117,6 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 					//openThirdSubfab.start();
 					ObjectAnimator rotateMainfab = ObjectAnimator.ofFloat(fabPageMain1, View.ROTATION, 0, 135);
 					rotateMainfab.start();
-
 				} else if (isMainfabOpen) {
 					isMainfabOpen = false;
 					ObjectAnimator rotateMainfab = ObjectAnimator.ofFloat(fabPageMain1, View.ROTATION, 135, 270);

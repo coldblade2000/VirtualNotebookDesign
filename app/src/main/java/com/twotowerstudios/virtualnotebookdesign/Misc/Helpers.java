@@ -14,6 +14,7 @@ import com.twotowerstudios.virtualnotebookdesign.R;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -327,7 +328,10 @@ public class Helpers {
 		//create target location folder if not exist
 
 		//dirChecker(_targetLocatioan);
-
+		File f = new File(_targetLocation);
+		if (!f.isDirectory()) {
+			f.mkdirs();
+		}
 		try {
 			FileInputStream fin = new FileInputStream(_zipFile);
 			ZipInputStream zin = new ZipInputStream(fin);
@@ -336,7 +340,10 @@ public class Helpers {
 
 				//create dir if required while unzipping
 				if (ze.isDirectory()) {
-					dirChecker(ze.getName());
+					File file = new File(ze.getName());
+					if (!file.isDirectory()) {
+						file.mkdirs();
+					}
 				} else {
 					FileOutputStream fout = new FileOutputStream(_targetLocation + ze.getName());
 					for (int c = zin.read(); c != -1; c = zin.read()) {
@@ -350,7 +357,7 @@ public class Helpers {
 			}
 			zin.close();
 		} catch (Exception e) {
-			System.out.println(e);
+			e.printStackTrace();
 		}
 	}
 }

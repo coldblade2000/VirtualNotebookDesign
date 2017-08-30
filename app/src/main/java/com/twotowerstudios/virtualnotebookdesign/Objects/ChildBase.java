@@ -8,6 +8,8 @@ import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 
 import org.parceler.Parcel;
 
+import java.util.ArrayList;
+
 @Parcel
 public class ChildBase {
 	//public final int TEXT=0,IMAGE=1,DRIVE=2;
@@ -15,10 +17,7 @@ public class ChildBase {
 	String UID16;
 	String pageUID;
 	String notebookUID;
-
 	String uri;
-
-
 
 	public ChildBase(){}
 	int childType;
@@ -126,5 +125,6 @@ public class ChildBase {
 		this.title = title;
 	}
 	public int getChildType() {return childType;}
+
 
 }

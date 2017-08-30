@@ -1,5 +1,6 @@
 package com.twotowerstudios.virtualnotebookdesign.NotebookMain;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -12,10 +13,12 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -24,6 +27,7 @@ import android.widget.TextView;
 
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 import com.twotowerstudios.virtualnotebookdesign.NotebookMain.Fragments.NewPage.NewPageFragment;
+import com.twotowerstudios.virtualnotebookdesign.Objects.ChildBase;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
 import com.twotowerstudios.virtualnotebookdesign.PageActivityMain.PageActivityMain;
@@ -74,7 +78,6 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 		intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 		startActivity(intent);
 	}
-
 
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,25 +173,40 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			// Respond to the action bar's Up/Home button
+			case R.id.exportnotebook:
+				AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext())
+						.setMessage("Are you sure you want to share/export this notebook and all its content?")
+						.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialogInterface, int i) {
+
+							}
+						})
+						.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialogInterface, int i) {
+								dialogInterface.dismiss();
+							}
+						});
+
+				for(Page a: pageList){
+					for(ChildBase b: a.getContent()){
+
+					}
+				}
+				break;
 			case android.R.id.home:
 				// Launch the correct Activity here
 				finish();
-				/*if (parent.equals("MainActivity")) {
-					Intent intent = new Intent(this, NotebookSelection.class);
-					intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-					startActivity(intent);
-					finish();
-					return true;
-				}else if(parent.equals("NotebookSelection")){
-					Intent intent = new Intent(this, MainActivity.class);
-					intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-					startActivity(intent);
-					finish();
-					return true;
-				}*/
 
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		getMenuInflater().inflate(R.menu.menu_main, menu);
+		return true;
 	}
 
 	@Override

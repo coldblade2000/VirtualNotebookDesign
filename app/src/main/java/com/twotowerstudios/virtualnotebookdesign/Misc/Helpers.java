@@ -312,7 +312,7 @@ public class Helpers {
 				FileInputStream fi = new FileInputStream(filepaths[i]);//read the file from the current filepath
 				origin = new BufferedInputStream(fi, BUFFER);//makes the fileinoutstream have a buffer
 				ZipEntry entry = new ZipEntry(filepaths[i].substring(filepaths[i].lastIndexOf("/") + 1));
-				out.putNextEntry(entry);//pure fuckery
+				out.putNextEntry(entry); //pure fuckery
 				int count;
 				while ((count = origin.read(data, 0, BUFFER)) != -1) {
 					out.write(data, 0, count);

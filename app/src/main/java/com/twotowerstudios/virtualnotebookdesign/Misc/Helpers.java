@@ -2,6 +2,7 @@ package com.twotowerstudios.virtualnotebookdesign.Misc;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Environment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
@@ -303,7 +304,7 @@ public class Helpers {
 		int BUFFER = 2048;
 		try{
 			BufferedInputStream origin = null; // Initialize the input and output streams
-			FileOutputStream dest = new FileOutputStream(filename);
+			FileOutputStream dest = new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+filename+".zip");
 			ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(
 					dest));
 			byte data[] = new byte[BUFFER]; //initializes a buffer for the output stream in order to not run out of memory and lowe the strain on the phone
@@ -319,6 +320,7 @@ public class Helpers {
 				}
 				origin.close();
 			}
+
 		}catch (Exception e){
 			e.printStackTrace();
 		}

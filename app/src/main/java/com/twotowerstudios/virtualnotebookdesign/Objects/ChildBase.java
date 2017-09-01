@@ -8,6 +8,7 @@ import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 
 import org.parceler.Parcel;
 
+import java.io.File;
 import java.util.ArrayList;
 
 @Parcel
@@ -45,7 +46,7 @@ public class ChildBase {
 		this.notebookUID =notebookUID;
 		this.childType=2;
 	}
-	public int getType(){return driveType;}
+	public int getDriveType(){return driveType;}
 	public void setDriveId(String driveId) {
 		this.driveId = driveId;
 	}
@@ -76,6 +77,9 @@ public class ChildBase {
 		this.notebookUID = notebookUID;
 	}
 
+	public File getFile(){
+		return new File(getPath());
+	}
 	public String getPath() {
 		return path;
 	}

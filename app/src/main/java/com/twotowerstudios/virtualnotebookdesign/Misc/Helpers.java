@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
@@ -300,19 +301,25 @@ public class Helpers {
 				Color.blue(color) * 0.114;
 		return brightness < 160;
 	}
-	public static void zipFileArray(String[] filepaths, String filename){
+	public static File zipFileArray(ArrayList<File> filepaths, String filename){
 		int BUFFER = 2048;
+		File f = null;
+		try {
+			f = File.createTempFile(filename,".zip");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		try{
 			BufferedInputStream origin = null; // Initialize the input and output streams
-			FileOutputStream dest = new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+filename+".zip");
+			FileOutputStream dest = new FileOutputStream(f);
 			ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(
 					dest));
 			byte data[] = new byte[BUFFER]; //initializes a buffer for the output stream in order to not run out of memory and lowe the strain on the phone
-			for (int i = 0; i < filepaths.length; i++) { //iterating for every filename
-				Log.v("Compress", "Adding: " + filepaths[i]);
-				FileInputStream fi = new FileInputStream(filepaths[i]);//read the file from the current filepath
-				origin = new BufferedInputStream(fi, BUFFER);//makes the fileinoutstream have a buffer
-				ZipEntry entry = new ZipEntry(filepaths[i].substring(filepaths[i].lastIndexOf("/") + 1));
+			for (int i = 0; i < filepaths.size(); i++) { //iterating for every filename
+				Log.v("Compress", "Adding: " + filepaths.get(i);
+				FileInputStream fi = new FileInputStream(filepaths.get(i));//read the file from the current filepath
+				origin = new BufferedInputStream(fi, BUFFER);//makes the fileinputstream have a buffer
+				ZipEntry entry = new ZipEntry(filepaths[i].substring(filepaths.get(i).lastIndexOf("/") + 1));
 				out.putNextEntry(entry); //pure fuckery
 				int count;
 				while ((count = origin.read(data, 0, BUFFER)) != -1) {
@@ -324,6 +331,10 @@ public class Helpers {
 		}catch (Exception e){
 			e.printStackTrace();
 		}
+		if (f != null) {
+			f.deleteOnExit();
+		}
+		return f;
 	}
 	public void unzip(String _zipFile, String _targetLocation) {
 

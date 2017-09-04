@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -175,12 +176,13 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 			// Respond to the action bar's Up/Home button
 			case R.id.exportnotebook:
 				AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext())
-						.setMessage("Are you sure you want to share/export this notebook and all its content?")
+						.setMessage("Are you sure you want to share/export this notebook and all its content? This might take a while")
 						.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialogInterface, int i) {
-
+								new AsyncExporting().execute()
 							}
+
 						})
 						.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 							@Override

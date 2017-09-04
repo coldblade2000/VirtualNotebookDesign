@@ -2,7 +2,9 @@ package com.twotowerstudios.virtualnotebookdesign.Misc;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.os.Environment;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
@@ -301,7 +303,7 @@ public class Helpers {
 				Color.blue(color) * 0.114;
 		return brightness < 160;
 	}
-	public static File zipFileArray(ArrayList<File> filepaths, String filename){
+	public static File zipFileArray(ArrayList<File> filepaths, String filename, @Nullable Bundle bundle){
 		int BUFFER = 2048;
 		File f = null;
 		try {
@@ -316,10 +318,10 @@ public class Helpers {
 					dest));
 			byte data[] = new byte[BUFFER]; //initializes a buffer for the output stream in order to not run out of memory and lowe the strain on the phone
 			for (int i = 0; i < filepaths.size(); i++) { //iterating for every filename
-				Log.v("Compress", "Adding: " + filepaths.get(i);
+				Log.v("Compress", "Adding: " + filepaths.get(i));
 				FileInputStream fi = new FileInputStream(filepaths.get(i));//read the file from the current filepath
 				origin = new BufferedInputStream(fi, BUFFER);//makes the fileinputstream have a buffer
-				ZipEntry entry = new ZipEntry(filepaths[i].substring(filepaths.get(i).lastIndexOf("/") + 1));
+				ZipEntry entry = new ZipEntry(filepaths.get(i).getName().substring(filepaths.get(i).getName().lastIndexOf("/") + 1));
 				out.putNextEntry(entry); //pure fuckery
 				int count;
 				while ((count = origin.read(data, 0, BUFFER)) != -1) {

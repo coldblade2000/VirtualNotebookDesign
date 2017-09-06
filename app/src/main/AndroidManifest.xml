@@ -25,9 +25,7 @@
 				android:resource="@xml/file_paths"/>
 		</provider>
 
-		<activity android:name=".MainMenu.MainActivity">
 
-		</activity>
 		<activity android:name="com.commonsware.cwac.cam2.CameraActivity"
 				  android:theme="@android:style/Theme.Holo.Light"/>
 		<activity

@@ -246,7 +246,7 @@ public class PageActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 	private void configureViewHolderDrive(ViewHolderDrive holder, int position) {
 		ChildBase child = list.get(position);
 		holder.tvChildDrive.setText("" + child.getTitle());
-		switch (child.getType()) {
+		switch (child.getDriveType()) {
 			case 0:
 				Glide.with(context)
 						.load(R.drawable.drivedocs)

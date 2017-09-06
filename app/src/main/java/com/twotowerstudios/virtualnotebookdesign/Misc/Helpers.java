@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
@@ -84,21 +85,33 @@ public class Helpers {
 
 		return cal.getTimeInMillis();
 	}
-	public static void writeStringToFile(String input, Context context, String name) {
-		FileOutputStream outputStream;
-		try {
-			outputStream = context.openFileOutput(name, Context.MODE_PRIVATE);
-			outputStream.write(input.getBytes());
-			outputStream.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	public static void writeStringToFile(String input, String name) {
+        try {
+            //outputStream = context.openFileOutput(name, Context.MODE_PRIVATE);
+            FileOutputStream outputStream = new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+name);
+            outputStream.write(input.getBytes());
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    static void writeStringToFile(String input, File file) {
+        try {
+            //outputStream = context.openFileOutput(name, Context.MODE_PRIVATE);
+            FileOutputStream outputStream = new FileOutputStream(file);
+            outputStream.write(input.getBytes());
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 	public static String getStringFromFile(String filename, Context context) {
+        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+filename);
 		BufferedReader input = null;
 		try {
-			input = new BufferedReader(new InputStreamReader(context.openFileInput(filename)));
+			//input = new BufferedReader(new InputStreamReader(context.openFileInput(filename)));
+			input = new BufferedReader(new FileReader(file));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -137,9 +150,9 @@ public class Helpers {
 		return notebookList;
 	}
 
-	public static void writeListToFile(Context context, ArrayList<Notebook> notebookList){
+	public static void writeListToFile(ArrayList<Notebook> notebookList){
 		String outputString = gson.toJson(notebookList);
-		writeStringToFile(outputString, context, "Notebooks.json");
+		writeStringToFile(outputString, "Notebooks.json");
 	}
 	public static void addToNotebookList(Notebook notebook, Context context){
 		ArrayList<Notebook> list = getNotebookList(context);
@@ -167,7 +180,7 @@ public class Helpers {
 		if (!bookalreadyexists) {
 			list.add(notebook);
 		}
-		writeListToFile(context,list);
+		writeListToFile(list);
 	}
 
 	public static ArrayList<Integer> getPossibleColors(Context context){
@@ -304,6 +317,7 @@ public class Helpers {
 		return brightness < 160;
 	}
 	public static File zipFileArray(ArrayList<File> filepaths, String filename, @Nullable Bundle bundle){
+
 		int BUFFER = 2048;
 		File f = null;
 		try {
@@ -314,9 +328,12 @@ public class Helpers {
 		try{
 			BufferedInputStream origin = null; // Initialize the input and output streams
 			FileOutputStream dest = new FileOutputStream(f);
-			ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(
-					dest));
+			ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(dest));
 			byte data[] = new byte[BUFFER]; //initializes a buffer for the output stream in order to not run out of memory and lowe the strain on the phone
+
+            writeStringToFile(bundle.getString("notebookJSON"), "TMPnotebookJSON.json");
+            File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+filename);
+            filepaths.add(file);
 			for (int i = 0; i < filepaths.size(); i++) { //iterating for every filename
 				Log.v("Compress", "Adding: " + filepaths.get(i));
 				FileInputStream fi = new FileInputStream(filepaths.get(i));//read the file from the current filepath
@@ -338,7 +355,7 @@ public class Helpers {
 		}
 		return f;
 	}
-	public void unzip(String _zipFile, String _targetLocation) {
+	public void unzip(File inputfile, String _targetLocation) {
 
 		//create target location folder if not exist
 
@@ -348,7 +365,7 @@ public class Helpers {
 			f.mkdirs();
 		}
 		try {
-			FileInputStream fin = new FileInputStream(_zipFile);
+			FileInputStream fin = new FileInputStream(inputfile);
 			ZipInputStream zin = new ZipInputStream(fin);
 			ZipEntry ze = null;
 			while ((ze = zin.getNextEntry()) != null) {

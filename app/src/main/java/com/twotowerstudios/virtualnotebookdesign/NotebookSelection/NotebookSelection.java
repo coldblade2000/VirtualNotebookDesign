@@ -218,6 +218,9 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
         if (id == R.id.action_debug) {
 			SharedPrefs.setBoolean(getApplicationContext(), "StorageLocDiagShown", false);
 			return true;
+        }else if(id== R.id.action_delete){
+            File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Notebooks.json");
+            file.delete();
         }
         return super.onOptionsItemSelected(item);
     }

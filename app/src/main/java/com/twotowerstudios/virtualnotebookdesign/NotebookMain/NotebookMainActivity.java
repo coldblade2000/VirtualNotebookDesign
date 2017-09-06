@@ -1,5 +1,6 @@
 package com.twotowerstudios.virtualnotebookdesign.NotebookMain;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -25,7 +26,9 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 import com.twotowerstudios.virtualnotebookdesign.NotebookMain.Fragments.NewPage.NewPageFragment;
 import com.twotowerstudios.virtualnotebookdesign.Objects.ChildBase;
@@ -36,6 +39,7 @@ import com.twotowerstudios.virtualnotebookdesign.R;
 
 import org.parceler.Parcels;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -175,21 +179,24 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 		switch (item.getItemId()) {
 			// Respond to the action bar's Up/Home button
 			case R.id.exportnotebook:
-				AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext())
+				Toast.makeText(this, "Clicked share", Toast.LENGTH_SHORT).show();
+				AlertDialog.Builder builder = new AlertDialog.Builder(NotebookMainActivity.this)
 						.setMessage("Are you sure you want to share/export this notebook and all its content? This might take a while")
 						.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialogInterface, int i) {
-								new AsyncExporting().execute()
+								new AsyncExporting().execute();
 							}
 
 						})
+
 						.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialogInterface, int i) {
 								dialogInterface.dismiss();
 							}
 						});
+				builder.show();
 
 				for(Page a: pageList){
 					for(ChildBase b: a.getContent()){
@@ -205,9 +212,63 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 		return super.onOptionsItemSelected(item);
 	}
 
-	@Override
+
+    //=========
+
+
+
+    class AsyncExporting extends AsyncTask<Notebook, Void, File> {
+        ProgressDialog pd;
+
+        @Override
+        protected void onPreExecute() {
+            pd = new ProgressDialog(NotebookMainActivity.this);
+            pd.setMessage("Creating files, please wait...");
+            pd.show();
+        }
+
+
+        @Override
+        protected File doInBackground(Notebook... notebook) {
+            ArrayList<File> fileList = new ArrayList<>();
+            for (Page b:notebook[0].getPages()) {
+                for (ChildBase a: b.getContent()) {
+                    if (a.getChildType()==1){
+                        fileList.add(a.getFile());
+                    }
+                }
+            }
+            Gson gson = new Gson();
+            Bundle bundle = new Bundle();
+            bundle.putString("notebookJson", gson.toJson(notebook[0]));
+
+            return Helpers.zipFileArray(fileList, "z"+Helpers.generateUniqueId(16),bundle);
+
+        }
+
+        @Override
+        protected void onProgressUpdate(Void... values) {
+            super.onProgressUpdate(values);
+        }
+
+        @Override
+        protected void onPostExecute(File file) {
+            if (pd != null)
+            {
+                pd.dismiss();
+            }
+            super.onPostExecute(file);
+        }
+    }
+
+    //=========
+
+
+
+
+    @Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.menu_main, menu);
+		getMenuInflater().inflate(R.menu.notebookmenu, menu);
 		return true;
 	}
 

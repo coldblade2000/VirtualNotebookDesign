@@ -185,7 +185,7 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 						.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialogInterface, int i) {
-								new AsyncExporting().execute();
+								new AsyncExporting().execute(notebook);
 							}
 
 						})
@@ -198,11 +198,7 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 						});
 				builder.show();
 
-				for(Page a: pageList){
-					for(ChildBase b: a.getContent()){
 
-					}
-				}
 				break;
 			case android.R.id.home:
 				// Launch the correct Activity here
@@ -212,9 +208,7 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 		return super.onOptionsItemSelected(item);
 	}
 
-
     //=========
-
 
 
     class AsyncExporting extends AsyncTask<Notebook, Void, File> {
@@ -240,7 +234,9 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
             }
             Gson gson = new Gson();
             Bundle bundle = new Bundle();
-            bundle.putString("notebookJson", gson.toJson(notebook[0]));
+			String jsonString = gson.toJson(notebook[0]);
+            bundle.putString("notebookJson", jsonString);
+			Log.v("NotebookMainActivity", jsonString);
 
             return Helpers.zipFileArray(fileList, "z"+Helpers.generateUniqueId(16),bundle);
 
@@ -262,9 +258,6 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
     }
 
     //=========
-
-
-
 
     @Override
 	public boolean onCreateOptionsMenu(Menu menu) {

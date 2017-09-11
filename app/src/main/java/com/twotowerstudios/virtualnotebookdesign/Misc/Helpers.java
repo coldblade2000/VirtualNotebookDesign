@@ -322,6 +322,7 @@ public class Helpers {
 		File f = null;
 		try {
 			f = File.createTempFile(filename,".zip");
+			Log.d("Helperd", "zipFileArray: "+ f.getAbsolutePath());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -331,8 +332,8 @@ public class Helpers {
 			ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(dest));
 			byte data[] = new byte[BUFFER]; //initializes a buffer for the output stream in order to not run out of memory and lowe the strain on the phone
 
-            writeStringToFile(bundle.getString("notebookJSON"), "TMPnotebookJSON.json");
-            File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+filename);
+            writeStringToFile(bundle.getString("notebookJson"), "TMPnotebookJSON.json");
+            File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+filename+".zip");
             filepaths.add(file);
 			for (int i = 0; i < filepaths.size(); i++) { //iterating for every filename
 				Log.v("Compress", "Adding: " + filepaths.get(i));

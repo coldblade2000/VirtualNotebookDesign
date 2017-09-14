@@ -37,7 +37,7 @@ import java.util.zip.ZipOutputStream;
 public class Helpers {
 
 	private static final String TAG = "Helpers";
-	static Gson gson = new Gson();
+	private static Gson gson = new Gson();
 	private static Random random = new Random();
 	private static final String POSSIBILITY = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_?";
 	public static long stringDataToMillis(String date) {
@@ -317,31 +317,32 @@ public class Helpers {
 				Color.blue(color) * 0.114;
 		return brightness < 160;
 	}
-	public static File zipFileArray(ArrayList<File> filepaths, String filename, @Nullable Bundle bundle){
+	public static File zipFileArray(ArrayList<File> filepaths, String filename, @Nullable Bundle bundle, Context context){
 
 		int BUFFER = 2048;
 		File f = null;
-		try {
-			f = File.createTempFile(filename,".zip");
-			Log.d("Helperd", "zipFileArray: "+ f.getAbsolutePath());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+
+		//f = File.createTempFile(filename,".zip");
+		f = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+filename+".zip");
+		Log.d("Helperd", "zipFileArray: "+ f.getAbsolutePath());
+
 		try{
 			BufferedInputStream origin = null; // Initialize the input and output streams
 			FileOutputStream dest = new FileOutputStream(f);
 			ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(dest));
 			byte data[] = new byte[BUFFER]; //initializes a buffer for the output stream in order to not run out of memory and lowe the strain on the phone
-
-			File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+"j"+generateUniqueId(16)+".json");
-			writeStringToFile(bundle.getString("notebookJson"), file);
-			Log.d(TAG, file.getAbsolutePath());
-			filepaths.add(file);
+			if(bundle!=null){
+				File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+"j"+generateUniqueId(16)+".json");
+				writeStringToFile(bundle.getString("notebookJson"), file);
+				Log.d(TAG, file.getAbsolutePath());
+				filepaths.add(file);
+			}
 			for (int i = 0; i < filepaths.size(); i++) { //iterating for every filename
 				Log.v("Compress", "Adding: " + filepaths.get(i));
 				FileInputStream fi = new FileInputStream(filepaths.get(i));//read the file from the current filepath
 				origin = new BufferedInputStream(fi, BUFFER);//makes the fileinputstream have a buffer
-				ZipEntry entry = new ZipEntry(filepaths.get(i).getName().substring(filepaths.get(i).getName().lastIndexOf("/") + 1));
+				ZipEntry entry = new ZipEntry(filepaths.get(i).getName()
+						.substring(filepaths.get(i).getName().lastIndexOf("/") + 1));
 				out.putNextEntry(entry); //pure fuckery
 				int count;
 				while ((count = origin.read(data, 0, BUFFER)) != -1) {
@@ -349,7 +350,8 @@ public class Helpers {
 				}
 				origin.close();
 			}
-
+			out.finish();
+			out.close();
 		}catch (Exception e){
 			e.printStackTrace();
 		}

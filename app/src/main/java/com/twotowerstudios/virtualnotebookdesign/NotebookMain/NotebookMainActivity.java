@@ -1,6 +1,7 @@
 package com.twotowerstudios.virtualnotebookdesign.NotebookMain;
 
 import android.app.ProgressDialog;
+import android.content.ContentProvider;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -14,6 +15,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -186,6 +188,7 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 							@Override
 							public void onClick(DialogInterface dialogInterface, int i) {
 								new AsyncExporting().execute(notebook);
+
 							}
 
 						})
@@ -197,8 +200,6 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 							}
 						});
 				builder.show();
-
-
 				break;
 			case android.R.id.home:
 				// Launch the correct Activity here
@@ -238,7 +239,7 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
             bundle.putString("notebookJson", jsonString);
 			Log.v("NotebookMainActivity", jsonString);
 
-            return Helpers.zipFileArray(fileList, "z"+Helpers.generateUniqueId(16),bundle);
+            return Helpers.zipFileArray(fileList, "z"+Helpers.generateUniqueId(16),bundle, getApplicationContext());
 
         }
 
@@ -253,8 +254,23 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
             {
                 pd.dismiss();
             }
+			Intent intent = new Intent(Intent.ACTION_SEND);
+			intent.setType("application/zip");
+			intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(getApplicationContext(), "com.twotowerstudios.virtualnotebookdesign.fileprovider", file));
+			intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+			startActivity(Intent.createChooser(intent, "Send file using: "));
             super.onPostExecute(file);
-        }
+
+			//http://androidxref.com/4.4.4_r1/xref/frameworks/base/media/java/android/media/MediaFile.java#174 MIME reference file
+
+
+/**final Intent shareIntent = new Intent(Intent.ACTION_SEND);
+ shareIntent.setType("image/jpg");
+ final File photoFile = new File(getFilesDir(), "foo.jpg");
+ shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(photoFile));
+ startActivity(Intent.createChooser(shareIntent, "Share image using"));*/
+
+		}
     }
 
     //=========

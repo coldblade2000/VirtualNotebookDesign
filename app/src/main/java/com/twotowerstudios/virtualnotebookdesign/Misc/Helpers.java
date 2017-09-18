@@ -2,6 +2,7 @@ package com.twotowerstudios.virtualnotebookdesign.Misc;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
@@ -23,6 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
@@ -323,7 +325,8 @@ public class Helpers {
 		File f = null;
 
 		//f = File.createTempFile(filename,".zip");
-		f = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+filename+".zip");
+		//f = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+filename+".zip");
+		f = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), filename+".zip");
 		Log.d("Helperd", "zipFileArray: "+ f.getAbsolutePath());
 
 		try{
@@ -372,6 +375,57 @@ public class Helpers {
 		try {
 			FileInputStream fin = new FileInputStream(inputfile);
 			ZipInputStream zin = new ZipInputStream(fin);
+			ZipEntry ze = null;
+			while ((ze = zin.getNextEntry()) != null) {
+
+				//create dir if required while unzipping
+				if (ze.isDirectory()) {
+					File file = new File(ze.getName());
+					if (!file.isDirectory()) {
+						file.mkdirs();
+					}
+				} else {
+					FileOutputStream fout = new FileOutputStream(_targetLocation + ze.getName());
+					for (int c = zin.read(); c != -1; c = zin.read()) {
+						fout.write(c);
+					}
+
+					zin.closeEntry();
+					fout.close();
+				}
+
+			}
+			zin.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public static void unzip(Uri uri,Context context, String _targetLocation) {
+
+		//create target location folder if not exist
+
+		//dirChecker(_targetLocatioan);
+		File f = new File(_targetLocation);
+		if (!f.isDirectory()) {
+			f.mkdirs();
+		}
+		/**private String readTextFromUri(Uri uri) throws IOException {
+		 InputStream inputStream = getContentResolver().openInputStream(uri);
+		 BufferedReader reader = new BufferedReader(new InputStreamReader(
+		 inputStream));
+		 StringBuilder stringBuilder = new StringBuilder();
+		 String line;
+		 while ((line = reader.readLine()) != null) {
+		 stringBuilder.append(line);
+		 }
+		 fileInputStream.close();
+		 parcelFileDescriptor.close();
+		 return stringBuilder.toString();
+		 }
+*/
+		 try {
+			 InputStream inputStream = context.getContentResolver().openInputStream(uri)-,
+			ZipInputStream zin = new ZipInputStream(inputStream);
 			ZipEntry ze = null;
 			while ((ze = zin.getNextEntry()) != null) {
 

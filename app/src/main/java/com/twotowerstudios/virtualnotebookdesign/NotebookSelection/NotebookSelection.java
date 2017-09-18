@@ -2,9 +2,11 @@ package com.twotowerstudios.virtualnotebookdesign.NotebookSelection;
 
 import android.Manifest;
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
@@ -38,7 +40,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class NotebookSelection extends AppCompatActivity implements NotebookSelectionAdapter.SelectionToNotebookInterface {
-    private AccountHeader accountHeader;
 	private RelativeLayout emptyList;
     private RecyclerView rvNotebookSelection;
     private RecyclerView.Adapter rvNotebookSelectionAdapter;
@@ -47,6 +48,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 	static boolean isMainfabOpen;
 	private boolean isFirstTime;
 	final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 3;
+    final int REQUEST_CODE = 5;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -215,15 +217,41 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_debug) {
-			SharedPrefs.setBoolean(getApplicationContext(), "StorageLocDiagShown", false);
-			return true;
+
+     	if(id == R.id.action_import) {
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("*/*");
+            startActivityForResult(intent, REQUEST_CODE);
+            return true;
         }else if(id== R.id.action_delete){
             File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Notebooks.json");
             file.delete();
         }
         return super.onOptionsItemSelected(item);
     }
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode,
+								 Intent resultData) {
+
+		// The ACTION_OPEN_DOCUMENT intent was sent with the request code
+		// READ_REQUEST_CODE. If the request code seen here doesn't match, it's the
+		// response to some other intent, and the code below shouldn't run at all.
+
+		if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+			// The document selected by the user won't be returned in the intent.
+			// Instead, a URI to that document will be contained in the return intent
+			// provided to this method as a parameter.
+			// Pull that URI using resultData.getData().
+			Uri uri = null;
+			if (resultData != null) {
+				uri = resultData.getData();
+				Helpers.unzip(uri, getApplicationContext(), );
+			}
+		}
+	}
+
 
 	public static boolean isMainfabOpen(){
 		return isMainfabOpen;

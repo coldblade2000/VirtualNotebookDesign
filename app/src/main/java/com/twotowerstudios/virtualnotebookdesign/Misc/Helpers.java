@@ -23,9 +23,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -424,7 +422,7 @@ public class Helpers {
 		 }
 */
 		 try {
-			 InputStream inputStream = context.getContentResolver().openInputStream(uri)-,
+			 InputStream inputStream = context.getContentResolver().openInputStream(uri);
 			ZipInputStream zin = new ZipInputStream(inputStream);
 			ZipEntry ze = null;
 			while ((ze = zin.getNextEntry()) != null) {
@@ -444,7 +442,6 @@ public class Helpers {
 					zin.closeEntry();
 					fout.close();
 				}
-
 			}
 			zin.close();
 		} catch (Exception e) {

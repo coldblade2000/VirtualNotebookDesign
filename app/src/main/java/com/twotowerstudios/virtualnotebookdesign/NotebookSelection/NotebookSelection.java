@@ -25,7 +25,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
 
-import com.mikepenz.materialdrawer.AccountHeader;
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 import com.twotowerstudios.virtualnotebookdesign.Misc.SharedPrefs;
 import com.twotowerstudios.virtualnotebookdesign.NewNotebookDialog.NewNotebookFragment;
@@ -118,10 +117,10 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 			 */
 			@Override
 			public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-				if(dy>10){
+				if(dy>5){
 					fabSelection.hide();
 					fabAddBook.hide();
-				}else if(dy<10){
+				}else if(dy<5){
 					fabSelection.show();
 					if(isMainfabOpen()){
 						fabAddBook.show();
@@ -148,7 +147,6 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 						isMainfabOpen = true;
 						ObjectAnimator openAddBookfab = ObjectAnimator.ofFloat(fabAddBook, View.TRANSLATION_Y, 200,0); openAddBookfab.start();
 						ObjectAnimator rotateMainfab = ObjectAnimator.ofFloat(fabSelection, View.ROTATION, 0, 135); rotateMainfab.start();
-
 					} else if(isMainfabOpen){
 						isMainfabOpen = false;
 						ObjectAnimator rotateMainfab = ObjectAnimator.ofFloat(fabSelection, View.ROTATION, 135, 270); rotateMainfab.start();
@@ -166,7 +164,6 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 				}
 			});
 			//============================================
-
 		} else {
 			fabSelection.setVisibility(View.GONE);
 			emptyList.setOnClickListener(new View.OnClickListener() {
@@ -195,12 +192,9 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
             ft.remove(prev);
         }
         ft.addToBackStack(null);
-
         // Create and show the dialog.
         NewNotebookFragment newFragment = NewNotebookFragment.newInstance();
-
         newFragment.show(ft, "dialog");
-
 
     }
     @Override
@@ -247,7 +241,10 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 			Uri uri = null;
 			if (resultData != null) {
 				uri = resultData.getData();
-				Helpers.unzip(uri, getApplicationContext(), );
+                String name = "u"+ Helpers.generateUniqueId(8);
+				Helpers.unzip(uri, getApplicationContext(), getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+name+"/");
+                File file = new File(getExternalFilesDirs(Environment.DIRECTORY_PICTURES), )
+
 			}
 		}
 	}

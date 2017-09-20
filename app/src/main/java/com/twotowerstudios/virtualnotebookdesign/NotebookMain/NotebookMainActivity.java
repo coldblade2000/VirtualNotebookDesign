@@ -264,12 +264,6 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 			//http://androidxref.com/4.4.4_r1/xref/frameworks/base/media/java/android/media/MediaFile.java#174 MIME reference file
 
 
-/**final Intent shareIntent = new Intent(Intent.ACTION_SEND);
- shareIntent.setType("image/jpg");
- final File photoFile = new File(getFilesDir(), "foo.jpg");
- shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(photoFile));
- startActivity(Intent.createChooser(shareIntent, "Share image using"));*/
-
 		}
     }
 

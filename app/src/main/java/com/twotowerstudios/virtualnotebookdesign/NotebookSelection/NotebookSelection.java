@@ -3,10 +3,12 @@ package com.twotowerstudios.virtualnotebookdesign.NotebookSelection;
 import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
@@ -14,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,11 +28,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.google.gson.Gson;
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 import com.twotowerstudios.virtualnotebookdesign.Misc.SharedPrefs;
 import com.twotowerstudios.virtualnotebookdesign.NewNotebookDialog.NewNotebookFragment;
 import com.twotowerstudios.virtualnotebookdesign.NotebookMain.NotebookMainActivity;
+import com.twotowerstudios.virtualnotebookdesign.Objects.ChildBase;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
+import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
 import com.twotowerstudios.virtualnotebookdesign.R;
 
 import org.parceler.Parcels;
@@ -62,7 +68,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 				e.printStackTrace();
 			}
 		}
-		if(Helpers.getStringFromFile("Notebooks.json", getApplicationContext()).equals("")){
+		if(Helpers.getStringFromName("Notebooks.json", getApplicationContext()).equals("")){
 			File file = new File(getFilesDir(),"Notebooks.json");
 			Log.d("NotebookSelection", file.getPath());
 		}
@@ -213,8 +219,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
         //noinspection SimplifiableIfStatement
 
      	if(id == R.id.action_import) {
-            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.setType("*/*");
             startActivityForResult(intent, REQUEST_CODE);
             return true;
@@ -241,14 +246,73 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 			Uri uri = null;
 			if (resultData != null) {
 				uri = resultData.getData();
-                String name = "u"+ Helpers.generateUniqueId(8);
-				Helpers.unzip(uri, getApplicationContext(), getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+name+"/");
-                File file = new File(getExternalFilesDirs(Environment.DIRECTORY_PICTURES), )
+				new AsyncImporting().execute(uri);
 
 			}
 		}
 	}
+	class AsyncImporting extends AsyncTask<Uri, Void, Notebook> {
+		ProgressDialog pd;
 
+		@Override
+		protected void onPreExecute() {
+			pd = new ProgressDialog(NotebookSelection.this);
+			pd.setMessage("Importing, please wait...");
+			pd.show();
+		}
+
+
+		@Override
+		protected Notebook doInBackground(Uri... uri) {
+			String name = "u"+ Helpers.generateUniqueId(8);
+			String TAG = "AsyncImporting";
+			File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+name+"/");
+			Log.d(TAG, "gotfile");
+			Helpers.unzip(uri[0], getApplicationContext(), file.getAbsolutePath());
+			File[] fileList = file.listFiles();
+			Log.d(TAG, "Unzipped");
+
+			ArrayList<File> images = new ArrayList<>();
+			Notebook notebook = null;
+			Gson gson = new Gson();
+			for(File a: fileList){
+				Log.d("notebookSelection", a.getName().substring(a.getName().lastIndexOf('.')));
+				if(a.getName().substring(a.getName().lastIndexOf('.')).equals(".json")){
+					String json = Helpers.getStringFromFile(a);
+					Log.d(TAG, "found JSON");
+					notebook = gson.fromJson(json, Notebook.class);
+				}else{
+					images.add(a);
+				}
+			}
+			if(notebook!= null){
+				for(Page a: notebook.getPages()){
+					for(ChildBase b: a.getContent()){
+						if(b.getChildType()==1){
+							for(File c: images) {
+								if(c.getName().equals(b.getImageUID() + ".png")){
+									b.setPath(c.getAbsolutePath());
+									Log.d(TAG, "Set Path: "+ c.getAbsolutePath());
+
+								}
+							}
+						}
+					}
+				}
+			}
+			Log.d("NotebookSelection", gson.toJson(notebook));
+			return notebook;
+		}
+		@Override
+		protected void onProgressUpdate(Void... values) {
+			super.onProgressUpdate(values);
+		}
+
+		@Override
+		protected void onPostExecute(Notebook notebook) {
+
+		}
+	}
 
 	public static boolean isMainfabOpen(){
 		return isMainfabOpen;

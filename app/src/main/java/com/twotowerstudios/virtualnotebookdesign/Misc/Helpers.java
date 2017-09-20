@@ -107,8 +107,28 @@ public class Helpers {
         }
     }
 
-	public static String getStringFromFile(String filename, Context context) {
+	public static String getStringFromName(String filename, Context context) {
         File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+filename);
+		BufferedReader input = null;
+		try {
+			//input = new BufferedReader(new InputStreamReader(context.openFileInput(filename)));
+			input = new BufferedReader(new FileReader(file));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		String line;
+		StringBuilder buffer = new StringBuilder();
+		try {
+			while ((line = input.readLine()) != null) {
+				buffer.append(line + "\n");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return buffer.toString();
+	}
+
+	public static String getStringFromFile(File file) {
 		BufferedReader input = null;
 		try {
 			//input = new BufferedReader(new InputStreamReader(context.openFileInput(filename)));
@@ -131,7 +151,7 @@ public class Helpers {
 	public static ArrayList<Notebook> getNotebookList(Context context){
 		ArrayList<Notebook> notebookList;
 		Log.d("Helpers", "context = "+context.getPackageCodePath());
-		String fileString = getStringFromFile("Notebooks.json", context);
+		String fileString = getStringFromName("Notebooks.json", context);
 		int reps = (fileString.length()/4000)+1;
 		for (int i = 0; i < reps; i++) {
 			if((i+1)*4000>fileString.length()) {
@@ -324,7 +344,7 @@ public class Helpers {
 
 		//f = File.createTempFile(filename,".zip");
 		//f = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+filename+".zip");
-		f = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), filename+".zip");
+		f = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), filename+".nb");
 		Log.d("Helperd", "zipFileArray: "+ f.getAbsolutePath());
 
 		try{

@@ -99,7 +99,7 @@ public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelec
 								public void onClick(DialogInterface dialog, int which) {
 
 									notebookList.remove(holder.getAdapterPosition());
-									Helpers.writeListToFile(notebookList);
+									Helpers.writeListToFile(notebookList, context);
 									notifyItemRemoved(holder.getAdapterPosition());
 								}
 							})
@@ -138,7 +138,7 @@ public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelec
 									}
 								}
 								notebookList.remove(holder.getAdapterPosition());
-								Helpers.writeListToFile(notebookList);
+								Helpers.writeListToFile(notebookList, context);
 								notifyItemRemoved(holder.getAdapterPosition());
 							}else{
 								Toast.makeText(context, "Notebook not deleted, the name you input was wrong.", Toast.LENGTH_SHORT).show();

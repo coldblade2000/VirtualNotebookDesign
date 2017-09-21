@@ -86,10 +86,10 @@ public class Helpers {
 
 		return cal.getTimeInMillis();
 	}
-	public static void writeStringToFile(String input, String name) {
+	public static void writeStringToFile(String input, String name, Context context) {
         try {
             //outputStream = context.openFileOutput(name, Context.MODE_PRIVATE);
-            FileOutputStream outputStream = new FileOutputStream(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+name);
+            FileOutputStream outputStream = new FileOutputStream(context.getFilesDir().getAbsolutePath()+"/"+name);
             outputStream.write(input.getBytes());
             outputStream.close();
         } catch (Exception e) {
@@ -108,7 +108,7 @@ public class Helpers {
     }
 
 	public static String getStringFromName(String filename, Context context) {
-        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+filename);
+        File file = new File(context.getFilesDir().getAbsolutePath()+"/"+filename);
 		BufferedReader input = null;
 		try {
 			//input = new BufferedReader(new InputStreamReader(context.openFileInput(filename)));
@@ -171,9 +171,9 @@ public class Helpers {
 		return notebookList;
 	}
 
-	public static void writeListToFile(ArrayList<Notebook> notebookList){
+	public static void writeListToFile(ArrayList<Notebook> notebookList, Context context){
 		String outputString = gson.toJson(notebookList);
-		writeStringToFile(outputString, "Notebooks.json");
+		writeStringToFile(outputString, "Notebooks.json", context);
 	}
 	public static void addToNotebookList(Notebook notebook, Context context){
 		ArrayList<Notebook> list = getNotebookList(context);
@@ -201,7 +201,7 @@ public class Helpers {
 		if (!bookalreadyexists) {
 			list.add(notebook);
 		}
-		writeListToFile(list);
+		writeListToFile(list, context);
 	}
 
 	public static ArrayList<Integer> getPossibleColors(Context context){
@@ -353,7 +353,8 @@ public class Helpers {
 			ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(dest));
 			byte data[] = new byte[BUFFER]; //initializes a buffer for the output stream in order to not run out of memory and lowe the strain on the phone
 			if(bundle!=null){
-				File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+"j"+generateUniqueId(16)+".json");
+				File file = new File(context.getFilesDir().getAbsolutePath()+"/"+"j"+generateUniqueId(16)+".json");
+				file.deleteOnExit();
 				writeStringToFile(bundle.getString("notebookJson"), file);
 				Log.d(TAG, file.getAbsolutePath());
 				filepaths.add(file);
@@ -430,10 +431,11 @@ public class Helpers {
 		 try {
 			 InputStream inputStream = context.getContentResolver().openInputStream(uri);
 			ZipInputStream zin = new ZipInputStream(inputStream);
-			ZipEntry ze = null;
+			ZipEntry ze;
 
 			while ((ze = zin.getNextEntry()) != null) {
-Log.d(TAG, "Starting zip entry");
+			Log.d(TAG, "Starting zip entry: "+ ze.getName());
+
 				//create dir if required while unzipping
 				if (ze.isDirectory()) {
 					File file = new File(ze.getName());
@@ -441,7 +443,7 @@ Log.d(TAG, "Starting zip entry");
 						file.mkdirs();
 					}
 				} else {
-					FileOutputStream fout = new FileOutputStream(_targetLocation + ze.getName());
+					FileOutputStream fout = new FileOutputStream(_targetLocation +"/" + ze.getName());
 					for (int c = zin.read(); c != -1; c = zin.read()) {
 						fout.write(c);
 					}

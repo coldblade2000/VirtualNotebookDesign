@@ -307,7 +307,10 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 
 		@Override
 		protected void onPostExecute(Notebook notebook) {
-
+			if (pd != null)
+			{
+				pd.dismiss();
+			}
 		}
 	}
 

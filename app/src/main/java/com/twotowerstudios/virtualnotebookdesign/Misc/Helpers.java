@@ -427,26 +427,13 @@ public class Helpers {
 		if (!f.isDirectory()) {
 			f.mkdirs();
 		}
-		/**private String readTextFromUri(Uri uri) throws IOException {
-		 InputStream inputStream = getContentResolver().openInputStream(uri);
-		 BufferedReader reader = new BufferedReader(new InputStreamReader(
-		 inputStream));
-		 StringBuilder stringBuilder = new StringBuilder();
-		 String line;
-		 while ((line = reader.readLine()) != null) {
-		 stringBuilder.append(line);
-		 }
-		 fileInputStream.close();
-		 parcelFileDescriptor.close();
-		 return stringBuilder.toString();
-		 }
-*/
 		 try {
 			 InputStream inputStream = context.getContentResolver().openInputStream(uri);
 			ZipInputStream zin = new ZipInputStream(inputStream);
 			ZipEntry ze = null;
-			while ((ze = zin.getNextEntry()) != null) {
 
+			while ((ze = zin.getNextEntry()) != null) {
+Log.d(TAG, "Starting zip entry");
 				//create dir if required while unzipping
 				if (ze.isDirectory()) {
 					File file = new File(ze.getName());

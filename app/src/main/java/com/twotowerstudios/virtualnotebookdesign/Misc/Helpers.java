@@ -150,7 +150,6 @@ public class Helpers {
 
 	public static ArrayList<Notebook> getNotebookList(Context context){
 		ArrayList<Notebook> notebookList;
-		Log.d("Helpers", "context = "+context.getPackageCodePath());
 		String fileString = getStringFromName("Notebooks.json", context);
 		int reps = (fileString.length()/4000)+1;
 		for (int i = 0; i < reps; i++) {
@@ -267,6 +266,8 @@ public class Helpers {
 		 * t prefix = ChildText
 		 * d prefix = ChildDriveDoc
 		 * c prefix = ChildImage
+		 * j prefix = JSON
+		 * z prefix = Compressed Notebook
 		 */
 		String result="";
 		for(int i=0;i<length;i++){
@@ -345,8 +346,8 @@ public class Helpers {
 		//f = File.createTempFile(filename,".zip");
 		//f = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+filename+".zip");
 		f = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), filename+".nb");
-		Log.d("Helperd", "zipFileArray: "+ f.getAbsolutePath());
-
+		f.deleteOnExit();
+		Log.d("Helpers", "zipFileArray: "+ f.getAbsolutePath());
 		try{
 			BufferedInputStream origin = null; // Initialize the input and output streams
 			FileOutputStream dest = new FileOutputStream(f);
@@ -357,7 +358,7 @@ public class Helpers {
 				file.deleteOnExit();
 				writeStringToFile(bundle.getString("notebookJson"), file);
 				Log.d(TAG, file.getAbsolutePath());
-				filepaths.add(file);
+				filepaths.add(0,file);
 			}
 			for (int i = 0; i < filepaths.size(); i++) { //iterating for every filename
 				Log.v("Compress", "Adding: " + filepaths.get(i));
@@ -370,16 +371,17 @@ public class Helpers {
 				while ((count = origin.read(data, 0, BUFFER)) != -1) {
 					out.write(data, 0, count);
 				}
+				out.closeEntry();
+				fi.close();
 				origin.close();
 			}
 			out.finish();
 			out.close();
+			dest.close();
 		}catch (Exception e){
 			e.printStackTrace();
 		}
-		if (f != null) {
-			f.deleteOnExit();
-		}
+		f.deleteOnExit();
 		return f;
 	}
 	public void unzip(File inputfile, String _targetLocation) {
@@ -404,6 +406,7 @@ public class Helpers {
 						file.mkdirs();
 					}
 				} else {
+
 					FileOutputStream fout = new FileOutputStream(_targetLocation + ze.getName());
 					for (int c = zin.read(); c != -1; c = zin.read()) {
 						fout.write(c);
@@ -429,6 +432,7 @@ public class Helpers {
 			f.mkdirs();
 		}
 		 try {
+
 			 InputStream inputStream = context.getContentResolver().openInputStream(uri);
 			ZipInputStream zin = new ZipInputStream(inputStream);
 			ZipEntry ze;
@@ -443,11 +447,15 @@ public class Helpers {
 						file.mkdirs();
 					}
 				} else {
+					BufferedInputStream bufferedInputStream = new BufferedInputStream(zin);
 					FileOutputStream fout = new FileOutputStream(_targetLocation +"/" + ze.getName());
-					for (int c = zin.read(); c != -1; c = zin.read()) {
-						fout.write(c);
+					BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fout);
+					byte[] arr = new byte[1024*1024];
+					int available;
+					while((available = bufferedInputStream.read(arr)) > 0) {
+						bufferedOutputStream.write(arr, 0, available);
 					}
-
+					bufferedOutputStream.close();
 					zin.closeEntry();
 					fout.close();
 				}

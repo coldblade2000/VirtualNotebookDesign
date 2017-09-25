@@ -213,7 +213,6 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        //noinspection SimplifiableIfStatement
 
      	if(id == R.id.action_import) {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
@@ -223,7 +222,18 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
         }else if(id== R.id.action_delete){
             File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Notebooks.json");
             file.delete();
-        }
+        }else if(id==R.id.action_dumpjson){
+			String fileString = Helpers.getStringFromName("Notebooks.json", getApplicationContext());
+			int reps = (fileString.length()/4000)+1;
+			for (int i = 0; i < reps; i++) {
+				if((i+1)*4000>fileString.length()) {
+					Log.v("Helpers", "getNotebookList: \n" + fileString.substring(i * 4000, fileString.length()));
+				}else{
+					Log.v("Helpers", "getNotebookList: \n" + fileString.substring(i * 4000, (i + 1) * 4000));
+
+				}
+			}
+		}
         return super.onOptionsItemSelected(item);
     }
 
@@ -264,10 +274,9 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 			String name = "u"+ Helpers.generateUniqueId(8);
 			String TAG = "AsyncImporting";
 			File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+name+"/");
-			Log.d(TAG, "gotfile");
 			Helpers.unzip(uri[0], getApplicationContext(), file.getAbsolutePath());
 			File[] fileList = file.listFiles();
-			Log.d(TAG, "Unzipped");
+			Log.d(TAG, "Unzipped in "+ file.getAbsolutePath());
 
 			ArrayList<File> images = new ArrayList<>();
 			Notebook notebook = null;
@@ -276,7 +285,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 				Log.d("notebookSelection", a.getName().substring(a.getName().lastIndexOf('.')));
 				if(a.getName().substring(a.getName().lastIndexOf('.')).equals(".json")){
 					String json = Helpers.getStringFromFile(a);
-					Log.d(TAG, "found JSON");
+					Log.d(TAG, "found JSON: "+ a.getAbsolutePath());
 					notebook = gson.fromJson(json, Notebook.class);
 				}else{
 					images.add(a);
@@ -290,7 +299,6 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 								if(c.getName().equals(b.getImageUID() + ".png")){
 									b.setPath(c.getAbsolutePath());
 									Log.d(TAG, "Set Path: "+ c.getAbsolutePath());
-
 								}
 							}
 						}
@@ -298,6 +306,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 				}
 			}
 			Log.d("NotebookSelection", gson.toJson(notebook));
+			file.delete();
 			return notebook;
 		}
 		@Override
@@ -311,6 +320,8 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 			{
 				pd.dismiss();
 			}
+			Helpers.addToNotebookList(notebook, getApplicationContext());
+			refreshData(notebook);
 		}
 	}
 

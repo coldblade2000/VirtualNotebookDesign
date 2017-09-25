@@ -16,4 +16,8 @@
         android:icon="@android:drawable/ic_popup_sync"
         android:title="Delete notebooks"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_dumpjson"
+        android:title="Dump JSON to log"
+        app:showAsAction="never"/>
 </menu>

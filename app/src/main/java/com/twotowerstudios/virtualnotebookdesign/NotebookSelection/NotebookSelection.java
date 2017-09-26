@@ -292,6 +292,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 				}
 			}
 			if(notebook!= null){
+                file.renameTo(new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+notebook.getUID16()+"/"));
 				for(Page a: notebook.getPages()){
 					for(ChildBase b: a.getContent()){
 						if(b.getChildType()==1){
@@ -306,7 +307,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 				}
 			}
 			Log.d("NotebookSelection", gson.toJson(notebook));
-			file.delete();
+			//file.delete();
 			return notebook;
 		}
 		@Override

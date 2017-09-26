@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.twotowerstudios.virtualnotebookdesign.Objects.ChildBase;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
 import com.twotowerstudios.virtualnotebookdesign.R;
@@ -463,6 +464,28 @@ public class Helpers {
 			zin.close();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	public void changeFileStructure(Context context) {
+		ArrayList<Notebook> notebooklist = getNotebookList(context);
+		for(Notebook a : notebooklist) {
+			File newFolderDoc = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + a.getUID16()+"/");
+			if (!newFolderDoc.isDirectory()){
+				newFolderDoc.mkdir();
+			}
+			File newFolderPIC = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + a.getUID16()+"/");
+			if (!newFolderPIC.isDirectory()){
+				newFolderPIC.mkdir();
+			}
+			ArrayList<File> fileList = new ArrayList<>();
+			for (Page b:a.getPages()) {
+				for (ChildBase c: b.getContent()) {
+					if (c.getChildType()==1){
+						fileList.add(c.getFile());
+					}
+				}
+			}
+
 		}
 	}
 }

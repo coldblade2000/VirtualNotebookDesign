@@ -240,7 +240,7 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 				contents.add(newImage);
 				pageAdapter.notifyItemInserted(contents.size() - 1);
 			}else{*/
-				File photo = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), newImageName + ".png");
+				File photo = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+ notebookUID16+ "/"+ newImageName + ".png");
 				Intent takePicture = new CameraActivity.IntentBuilder(PageActivityMain.this)
 						.debug()
 						.requestPermissions()
@@ -260,7 +260,7 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 
 
 		} else if (tag.equals("gallery")) {
-			File nomedia = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), ".nomedia");
+			File nomedia = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+ notebookUID16+ "/" + ".nomedia");
 			if (!nomedia.exists()) {
 				try {
 					nomedia.createNewFile();
@@ -280,7 +280,7 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		final String filename = "i"+Helpers.generateUniqueId(16);
 		if (requestCode == GALLERYPIC && resultCode == RESULT_OK && data != null){
-			File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), filename+".png");
+			File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+ notebookUID16+ "/"+ filename+".png");
 			Uri selectedImageUri = data.getData();
 			Bitmap bitmap = null;
 			try {

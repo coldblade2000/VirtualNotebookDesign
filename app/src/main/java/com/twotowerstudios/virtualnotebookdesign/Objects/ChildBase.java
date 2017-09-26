@@ -59,7 +59,7 @@ public class ChildBase {
 	public  ChildBase(String name, String ImageUID, String notebookUID, String pageUID, Uri uri, Context context){
 		this.title =name;
 		this.ImageUID=ImageUID;
-		path=context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/"+ImageUID+".png";
+		path=context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+ notebookUID+ "/"+ImageUID+".png";
 		char[] charar = ImageUID.toCharArray();
 		charar[0]='c';
 		UID16 = charar.toString();

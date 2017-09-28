@@ -128,12 +128,11 @@ public class NotebookPageAdapter extends RecyclerView.Adapter<NotebookPageAdapte
 											File fdelete = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)+b.getUri().getPath());
 											if (fdelete.exists()) {
 												if (fdelete.delete()) {
-													Log.d("NotebookSelectionAdptr","file Deleted :" + context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)+b.getUri().getPath());
+													Log.d("NotebookSelectionAdptr","file Deleted :" + context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/"+notebookUID+"/"+b.getUri().getPath());
 												} else {
-													Log.d("NotebookSelectionAdptr", "file not Deleted :" + context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)+b.getUri().getPath());
+													Log.d("NotebookSelectionAdptr", "file not Deleted :" + context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/"+notebookUID+"/"+b.getUri().getPath());
 												}
 											}
-
 										}
 									}
 									pageList.remove(holder.getAdapterPosition());
@@ -150,15 +149,12 @@ public class NotebookPageAdapter extends RecyclerView.Adapter<NotebookPageAdapte
 							}
 						}
 					});
-
 					dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 
 						}
 					}).show();
-
-
 				}
 				return true;
 			}
@@ -183,9 +179,7 @@ public class NotebookPageAdapter extends RecyclerView.Adapter<NotebookPageAdapte
 		}else{
 			holder.ivFavStar.setVisibility(View.INVISIBLE);
 		}
-
 	}
-
 	@Override
 	public int getItemCount() {
 		return pageList.size();

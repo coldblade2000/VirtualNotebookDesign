@@ -31,6 +31,9 @@ public class SharedPrefs {
 	public static int getInt(Context context, String s) {
 		return PreferenceManager.getDefaultSharedPreferences(context).getInt(s, -1);
 	}
+	public static String getString(Context context, String s) {
+		return PreferenceManager.getDefaultSharedPreferences(context).getString(s, "1");
+	}
 
 	public static boolean getBoolean(Context context, String s) {
 		return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(s, false);

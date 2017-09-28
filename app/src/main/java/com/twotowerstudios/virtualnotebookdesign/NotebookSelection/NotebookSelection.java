@@ -230,21 +230,17 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 					Log.v("Helpers", "getNotebookList: \n" + fileString.substring(i * 4000, fileString.length()));
 				}else{
 					Log.v("Helpers", "getNotebookList: \n" + fileString.substring(i * 4000, (i + 1) * 4000));
-
 				}
 			}
 		}
         return super.onOptionsItemSelected(item);
     }
-
 	@Override
 	public void onActivityResult(int requestCode, int resultCode,
 								 Intent resultData) {
-
 		// The ACTION_OPEN_DOCUMENT intent was sent with the request code
 		// READ_REQUEST_CODE. If the request code seen here doesn't match, it's the
 		// response to some other intent, and the code below shouldn't run at all.
-
 		if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
 			// The document selected by the user won't be returned in the intent.
 			// Instead, a URI to that document will be contained in the return intent

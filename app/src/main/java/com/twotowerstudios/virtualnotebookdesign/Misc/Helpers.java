@@ -150,25 +150,40 @@ public class Helpers {
 	}
 
 	public static ArrayList<Notebook> getNotebookList(Context context){
-		ArrayList<Notebook> notebookList;
-		String fileString = getStringFromName("Notebooks.json", context);
-		int reps = (fileString.length()/4000)+1;
-		for (int i = 0; i < reps; i++) {
-			if((i+1)*4000>fileString.length()) {
-				Log.v("Helpers", "getNotebookList: \n" + fileString.substring(i * 4000, fileString.length()));
-			}else{
-				Log.v("Helpers", "getNotebookList: \n" + fileString.substring(i * 4000, (i + 1) * 4000));
+		if (SharedPrefs.getInt(context, "filestructure")== -1) {
+			ArrayList<Notebook> notebookList;
+			String fileString = getStringFromName("Notebooks.json", context);
+			int reps = (fileString.length()/4000)+1;
+			for (int i = 0; i < reps; i++) {
+                if((i+1)*4000>fileString.length()) {
+                    Log.v("Helpers", "getNotebookList: \n" + fileString.substring(i * 4000, fileString.length()));
+                }else{
+                    Log.v("Helpers", "getNotebookList: \n" + fileString.substring(i * 4000, (i + 1) * 4000));
 
+                }
+            }
+			if (!fileString.equalsIgnoreCase("")) {
+                Type type = new TypeToken<ArrayList<Notebook>>(){}.getType();
+                notebookList = gson.fromJson(fileString,type);
+            } else {
+                Log.d("getNotebookList", "notebooks.json is empty, returning empty arraylist");
+                notebookList = new ArrayList<>();
+            }
+			return notebookList;
+		} else {
+			File folder = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath());
+			File[] filelist = folder.listFiles();
+			for(File f: filelist){
+				if(f.getName().substring(0,1).equals("n")||f.isDirectory()){
+					for( File f2: f.listFiles()){
+						if(f2.getName().substring(f.getName().length()-5).equals(".json")){
+							Gson gson = new Gson();
+							gson.fromJson(f2.toString(), Notebook.class);
+						}
+					}
+				}
 			}
 		}
-		if (!fileString.equalsIgnoreCase("")) {
-			Type type = new TypeToken<ArrayList<Notebook>>(){}.getType();
-			notebookList = gson.fromJson(fileString,type);
-		} else {
-			Log.d("getNotebookList", "notebooks.json is empty, returning empty arraylist");
-			notebookList = new ArrayList<>();
-		}
-		return notebookList;
 	}
 
 	public static void writeListToFile(ArrayList<Notebook> notebookList, Context context){
@@ -481,11 +496,19 @@ public class Helpers {
 			for (Page b:a.getPages()) {
 				for (ChildBase c: b.getContent()) {
 					if (c.getChildType()==1){
-						fileList.add(c.getFile());
+						File image = c.getFile();
+						File dest = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + a.getUID16()+"/"+image.getName());
+						Log.d("changeFileStructure", "Moving "+ image.getAbsolutePath()+ "to "+ dest.getAbsolutePath());
+						if(image.renameTo(dest)){
+							c.setPath(dest.getAbsolutePath());
+						}
 					}
 				}
 			}
-
+			String notebookjson = gson.toJson(a);
+			File notebookjsonfolder = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/"+a.getUID16()+ "/");
+			writeStringToFile(notebookjson, notebookjsonfolder);
 		}
+		SharedPrefs.setInt(context, "filestructure", 2);
 	}
 }

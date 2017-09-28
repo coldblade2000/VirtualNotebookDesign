@@ -223,23 +223,6 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 		final String newImageName = "i" + Helpers.generateUniqueId(16);
 		if (tag.equals("camera")) {
 			locationpermission();
-			/*if (SharedPrefs.getBoolean(getApplicationContext(), "deleteNoticeShown")) {
-				File photo = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), newImageName + ".png");
-				Intent takePicture = new CameraActivity.IntentBuilder(PageActivityMain.this)
-						.debug()
-						.requestPermissions()
-						.zoomStyle(ZoomStyle.PINCH)
-						.to(photo)
-						.build()
-						.putExtra("path", getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + newImageName + ".png");
-				startActivityForResult(takePicture, CAMERAPIC);
-				ChildBase newImage = new ChildBase("" + title, newImageName, page.getParentUID(), page.getUID(),
-						Uri.fromFile(photo), getApplicationContext());
-				page.addToPage(newImage);
-				Helpers.addPageFromUID16(page.getParentUID(), page, getApplicationContext());
-				contents.add(newImage);
-				pageAdapter.notifyItemInserted(contents.size() - 1);
-			}else{*/
 				File photo = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+ notebookUID16+ "/"+ newImageName + ".png");
 				Intent takePicture = new CameraActivity.IntentBuilder(PageActivityMain.this)
 						.debug()
@@ -248,7 +231,7 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 						.to(photo)
 						.confirmationQuality(0.8f)
 						.build()
-						.putExtra("path", getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + newImageName + ".png");
+						.putExtra("path", getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + notebookUID16+"/"+ newImageName + ".png");
 				startActivityForResult(takePicture, CAMERAPIC);
 				ChildBase newImage = new ChildBase("" + title, newImageName, page.getParentUID(), page.getUID(),
 						Uri.fromFile(photo), getApplicationContext());
@@ -256,9 +239,6 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 				Helpers.addPageFromUID16(page.getParentUID(), page, getApplicationContext());
 				//contents.add(newImage);
 				pageAdapter.notifyItemInserted(contents.size() - 1);
-			//}
-
-
 		} else if (tag.equals("gallery")) {
 			File nomedia = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+ notebookUID16+ "/" + ".nomedia");
 			if (!nomedia.exists()) {

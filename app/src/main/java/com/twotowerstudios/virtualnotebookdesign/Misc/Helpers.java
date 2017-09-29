@@ -151,6 +151,7 @@ public class Helpers {
 
 	public static ArrayList<Notebook> getNotebookList(Context context){
 		if (SharedPrefs.getInt(context, "filestructure")== -1) {
+			Log.d("getnotebooklist", "Using Legacy getnoteboolist");
 			ArrayList<Notebook> notebookList;
 			String fileString = getStringFromName("Notebooks.json", context);
 			int reps = (fileString.length()/4000)+1;
@@ -171,24 +172,29 @@ public class Helpers {
             }
 			return notebookList;
 		} else {
+			Log.d("getnotebooklist", "Using new getnoteboolist");
+
 			File folder = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath());
 			File[] filelist = folder.listFiles();
+			ArrayList<Notebook> notebookList = new ArrayList<>();
 			for(File f: filelist){
-				if(f.getName().substring(0,1).equals("n")||f.isDirectory()){
-					for( File f2: f.listFiles()){
-						if(f2.getName().substring(f.getName().length()-5).equals(".json")){
-							Gson gson = new Gson();
-							gson.fromJson(f2.toString(), Notebook.class);
-						}
-					}
+				if(f.getName().substring(0,1).equals("n")||!f.isDirectory()){
+					Notebook notebook = gson.fromJson(getStringFromFile(f), Notebook.class);
+					notebookList.add(notebook);
 				}
 			}
+			return notebookList;
 		}
 	}
 
 	public static void writeListToFile(ArrayList<Notebook> notebookList, Context context){
 		String outputString = gson.toJson(notebookList);
 		writeStringToFile(outputString, "Notebooks.json", context);
+	}
+	public static void writeNotebookToFile(Notebook notebook, Context context){
+		File file = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+notebook.getUID16()+".json");
+		writeStringToFile(gson.toJson(notebook), file);
+		Log.d("writelisttofile", "Wrote notebook '"+ notebook.getName()+"' in location: " +file.getAbsolutePath());
 	}
 	public static void addToNotebookList(Notebook notebook, Context context){
 		ArrayList<Notebook> list = getNotebookList(context);
@@ -370,7 +376,7 @@ public class Helpers {
 			ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(dest));
 			byte data[] = new byte[BUFFER]; //initializes a buffer for the output stream in order to not run out of memory and lowe the strain on the phone
 			if(bundle!=null){
-				File file = new File(context.getFilesDir().getAbsolutePath()+"/"+"j"+generateUniqueId(16)+".json");
+				File file = new File(context.getFilesDir().getAbsolutePath()+"/"+"j"+bundle.getString("UID16","ERROR").substring(1)+".json");
 				file.deleteOnExit();
 				writeStringToFile(bundle.getString("notebookJson"), file);
 				Log.d(TAG, file.getAbsolutePath());
@@ -506,7 +512,7 @@ public class Helpers {
 				}
 			}
 			String notebookjson = gson.toJson(a);
-			File notebookjsonfolder = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/"+a.getUID16()+ "/");
+			File notebookjsonfolder = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath(), a.getUID16()+".json");
 			writeStringToFile(notebookjson, notebookjsonfolder);
 		}
 		SharedPrefs.setInt(context, "filestructure", 2);

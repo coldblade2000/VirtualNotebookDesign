@@ -237,6 +237,7 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
             Bundle bundle = new Bundle();
 			String jsonString = gson.toJson(notebook[0]);
             bundle.putString("notebookJson", jsonString);
+			bundle.putString("UID16", notebook[0].getUID16());
 			Log.v("NotebookMainActivity", jsonString);
 
             return Helpers.zipFileArray(fileList, "z"+Helpers.generateUniqueId(16),bundle, getApplicationContext());

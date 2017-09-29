@@ -66,7 +66,7 @@ public class NewNotebookFragment extends DialogFragment implements NewNotebookAd
 				Log.d("Dialog", "onMenuItemClick: ");
 				String nameLow=etNewName.getText().toString().toLowerCase();
 				String nameReal=etNewName.getText().toString();
-				if(nameLow.equalsIgnoreCase("")){
+				if(nameLow.trim().equalsIgnoreCase("")){
 					Toast.makeText(getContext(),"Name can't be empty", Toast.LENGTH_SHORT).show();
 					return false;
 				}else{
@@ -85,7 +85,9 @@ public class NewNotebookFragment extends DialogFragment implements NewNotebookAd
 					if (!notebookExists){
 						Toast.makeText(getContext(),"Created notebook called: \""+nameReal+"\"", Toast.LENGTH_SHORT).show();
 						Log.d("NewNotebookFrag","Created notebook called:"+nameReal);
-						((NotebookSelection)getActivity()).refreshData(new Notebook(nameReal,colors.get(activeColorIndex), Helpers.getSingleColorAccent(getContext(), activeColor)));
+						//((NotebookSelection)getActivity()).refreshData(new Notebook(nameReal,colors.get(activeColorIndex), Helpers.getSingleColorAccent(getContext(), activeColor)));
+						Helpers.writeNotebookToFile(new Notebook(nameReal,colors.get(activeColorIndex), Helpers.getSingleColorAccent(getContext(), activeColor)), getContext());
+						((NotebookSelection)getActivity()).rvNotebookSelectionAdapter.notifyDataSetChanged();
 						dismiss();
 						//refresh.refreshData();
 					}

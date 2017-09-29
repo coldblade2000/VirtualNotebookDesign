@@ -46,7 +46,7 @@ import java.util.ArrayList;
 public class NotebookSelection extends AppCompatActivity implements NotebookSelectionAdapter.SelectionToNotebookInterface {
 	private RelativeLayout emptyList;
     private RecyclerView rvNotebookSelection;
-    private RecyclerView.Adapter rvNotebookSelectionAdapter;
+    public RecyclerView.Adapter rvNotebookSelectionAdapter;
     private ArrayList<Notebook> notebookSelectionCardList;
 	private FloatingActionButton fabSelection, fabAddBook;
 	static boolean isMainfabOpen;
@@ -100,6 +100,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 					}).show();
 		}
 		//===============================================================================================================
+        SharedPrefs.setInt(this, "filestructure", 1);
 		notebookSelectionCardList = Helpers.getNotebookList(getApplicationContext());
 		fabSelection = (FloatingActionButton) findViewById(R.id.fabSelection);
 		emptyList = (RelativeLayout) findViewById(R.id.emptyFile);

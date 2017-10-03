@@ -376,7 +376,7 @@ public class Helpers {
 			ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(dest));
 			byte data[] = new byte[BUFFER]; //initializes a buffer for the output stream in order to not run out of memory and lowe the strain on the phone
 			if(bundle!=null){
-				File file = new File(context.getFilesDir().getAbsolutePath()+"/"+"j"+bundle.getString("UID16","ERROR").substring(1)+".json");
+				File file = new File(context.getFilesDir().getAbsolutePath()+"/"+"ncd"+bundle.getString("UID16","ERROR").substring(1)+".json");
 				file.deleteOnExit();
 				writeStringToFile(bundle.getString("notebookJson"), file);
 				Log.d(TAG, file.getAbsolutePath());

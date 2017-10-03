@@ -42,6 +42,7 @@ import org.parceler.Parcels;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class NotebookSelection extends AppCompatActivity implements NotebookSelectionAdapter.SelectionToNotebookInterface {
 	private RelativeLayout emptyList;
@@ -264,8 +265,6 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 			pd.setMessage("Importing, please wait...");
 			pd.show();
 		}
-
-
 		@Override
 		protected Notebook doInBackground(Uri... uri) {
 			String name = "u"+ Helpers.generateUniqueId(8);
@@ -282,6 +281,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 				Log.d("notebookSelection", a.getName().substring(a.getName().lastIndexOf('.')));
 				if(a.getName().substring(a.getName().lastIndexOf('.')).equals(".json")){
 					String json = Helpers.getStringFromFile(a);
+					a.renameTo(new File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsoluteFile()+"/"+a.getName()));
 					Log.d(TAG, "found JSON: "+ a.getAbsolutePath());
 					notebook = gson.fromJson(json, Notebook.class);
 				}else{
@@ -289,7 +289,12 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 				}
 			}
 			if(notebook!= null){
-                file.renameTo(new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+notebook.getUID16()+"/"));
+
+                if(file.renameTo(new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+notebook.getUID16()+"/"))){
+					Log.d("AsyncImporting", "Renamed folder to "+file.getAbsolutePath());
+				} else{
+					Log.w("AsyncImporting", "Couldn't rename folder "+ file.getName());
+				}
 				for(Page a: notebook.getPages()){
 					for(ChildBase b: a.getContent()){
 						if(b.getChildType()==1){

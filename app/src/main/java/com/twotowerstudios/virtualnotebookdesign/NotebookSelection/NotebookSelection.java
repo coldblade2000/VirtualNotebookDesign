@@ -289,7 +289,6 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 				}
 			}
 			if(notebook!= null){
-
                 if(file.renameTo(new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+notebook.getUID16()+"/"))){
 					Log.d("AsyncImporting", "Renamed folder to "+file.getAbsolutePath());
 				} else{
@@ -316,7 +315,6 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 		protected void onProgressUpdate(Void... values) {
 			super.onProgressUpdate(values);
 		}
-
 		@Override
 		protected void onPostExecute(Notebook notebook) {
 			if (pd != null)

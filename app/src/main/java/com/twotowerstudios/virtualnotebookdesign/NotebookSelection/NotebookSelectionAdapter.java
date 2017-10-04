@@ -99,8 +99,9 @@ public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelec
 								public void onClick(DialogInterface dialog, int which) {
 
 									notebookList.remove(holder.getAdapterPosition());
-									Helpers.writeListToFile(notebookList, context);
-									notifyItemRemoved(holder.getAdapterPosition());
+									Helpers.deleteNotebookByUID(notebookSelection.getUID16(), context);
+									//Helpers.writeListToFile(notebookList, context);
+									//notifyItemRemoved(holder.getAdapterPosition());
 								}
 							})
 							.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

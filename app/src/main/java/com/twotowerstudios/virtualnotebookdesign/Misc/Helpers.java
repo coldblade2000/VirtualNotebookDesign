@@ -97,7 +97,7 @@ public class Helpers {
             e.printStackTrace();
         }
     }
-    static void writeStringToFile(String input, File file) {
+    private static void writeStringToFile(String input, File file) {
         try {
             //outputStream = context.openFileOutput(name, Context.MODE_PRIVATE);
             FileOutputStream outputStream = new FileOutputStream(file);
@@ -224,7 +224,6 @@ public class Helpers {
 		}
 		writeListToFile(list, context);
 	}
-
 	public static ArrayList<Integer> getPossibleColors(Context context){
 		ArrayList<Integer> colors = new ArrayList<>();
 		colors.add(ContextCompat.getColor(context,R.color.md_red_500));
@@ -248,7 +247,6 @@ public class Helpers {
 
 		return colors;
 	}
-
 	private static ArrayList<Integer> getColorAccents(Context context){
 		ArrayList<Integer> colors = new ArrayList<>();
 		colors.add(ContextCompat.getColor(context,R.color.md_light_blue_A200));
@@ -272,16 +270,14 @@ public class Helpers {
 
 		return colors;
 	}
-
 	public static int getSingleColorAccent(Context context, int color){
 		ArrayList<Integer> colors = getPossibleColors(context);
 		String TAG = "getSingleColorAccent";
 		Log.d(TAG, "colors.size()== "+colors.size());
 		return getColorAccents(context).get(colors.indexOf(color));
 	}
-
 	public static String generateUniqueId(int length){
-		/** BTW to ease confusion:
+		/* BTW to ease confusion:
 		 * n prefix = Notebook
 		 * p prefix = Page
 		 * i prefix = Image file
@@ -297,17 +293,30 @@ public class Helpers {
 		}
 		return result;
 	}
-
 	public static Notebook getNotebookFromUID(String UID16, Context context){
-		ArrayList<Notebook> list=Helpers.getNotebookList(context);
-		for(Notebook a: list){
-			if(a.getUID16().equals(UID16)){
-				return a;
+		Log.d(TAG, "getNotebookFromUID: UID = "+UID16);
+		if(SharedPrefs.getInt(context, "filestructure") ==1){
+			File directory = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath());
+			for (File a:directory.listFiles()) {
+				Log.d(TAG, "getNotebookFromUID: "+ a.getName());
+				Log.d(TAG, "getNotebookFromUID: "+ a.getName().substring(0,16));
+				if(a.getName().substring(0,16).equals(UID16)){
+					Log.d(TAG, "getNotebookFromUID: found notebook match");
+					return gson.fromJson(getStringFromFile(a), Notebook.class);
+				}
+			}
+			Log.d(TAG, "getNotebookFromUID: didn't find the notebook");
+
+		}else{
+			ArrayList<Notebook> list = Helpers.getNotebookList(context);
+			for (Notebook a : list) {
+				if (a.getUID16().equals(UID16)) {
+					return a;
+				}
 			}
 		}
 		return null;
 	}
-
 	public static Page getPageFromUID(String UID16,String parentUID ,Context context){
 		ArrayList<Page> list= getNotebookFromUID(parentUID,context).getPages();
 		for(Page a:list){
@@ -361,10 +370,8 @@ public class Helpers {
 		return brightness < 160;
 	}
 	public static File zipFileArray(ArrayList<File> filepaths, String filename, @Nullable Bundle bundle, Context context){
-
 		int BUFFER = 2048;
 		File f = null;
-
 		//f = File.createTempFile(filename,".zip");
 		//f = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+filename+".zip");
 		f = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), filename+".nb");
@@ -445,16 +452,13 @@ public class Helpers {
 		}
 	}
 	public static void unzip(Uri uri,Context context, String _targetLocation) {
-
 		//create target location folder if not exist
-
 		//dirChecker(_targetLocatioan);
 		File f = new File(_targetLocation);
 		if (!f.isDirectory()) {
 			f.mkdirs();
 		}
 		 try {
-
 			 InputStream inputStream = context.getContentResolver().openInputStream(uri);
 			ZipInputStream zin = new ZipInputStream(inputStream);
 			ZipEntry ze;
@@ -516,5 +520,21 @@ public class Helpers {
 			writeStringToFile(notebookjson, notebookjsonfolder);
 		}
 		SharedPrefs.setInt(context, "filestructure", 2);
+	}
+
+	public static void deleteNotebookByUID(String UID16, Context context) {
+		Notebook notebook = getNotebookFromUID(UID16, context);
+		for (Page a : notebook.getPages()) {
+			for (ChildBase b : a.getContent()) {
+				if (b.getChildType() == 1) {
+					String path = b.getFile().getAbsolutePath();
+					if( b.getFile().delete()){
+						Log.d(TAG, "deleteNotebookByUID: deleted file: "+path);
+					}else{
+						Log.e(TAG, "deleteNotebookByUID: couldn't delete file: "+path);
+					}
+				}
+			}
+		}
 	}
 }

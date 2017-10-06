@@ -284,6 +284,8 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 					a.renameTo(new File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsoluteFile()+"/"+a.getName()));
 					Log.d(TAG, "found JSON: "+ a.getAbsolutePath());
 					notebook = gson.fromJson(json, Notebook.class);
+					a.renameTo(new File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsoluteFile()+"/"+notebook.getUID16()+".json"));
+
 				}else{
 					images.add(a);
 				}
@@ -338,6 +340,10 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 		rvNotebookSelection.getLayoutManager().scrollToPosition(notebookSelectionCardList.size());
 		emptyList.setVisibility(View.GONE);
 		rvNotebookSelection.setVisibility(View.VISIBLE);
+	}
+	public void addNotebookToAdapter(Notebook notebook){
+		notebookSelectionCardList.add(notebook);
+		rvNotebookSelectionAdapter.notifyItemInserted(notebookSelectionCardList.size()-1);
 	}
 
 	@Override

@@ -103,6 +103,7 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 		}
 		pageList = notebook.getPages();
 		notebookUID16=notebook.getUID16();
+		Log.d("NotebookMainActivity" , new Gson().toJson(notebook));
 		emptyNotebook = (RelativeLayout) findViewById(R.id.emptyNotebook);
 		notEmptyNotebook = (LinearLayout) findViewById(R.id.notEmptyNotebook);
 		fabnotebookmain = (FloatingActionButton) findViewById(R.id.fabnotebookmain);
@@ -299,7 +300,7 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 		}
 		notebook.setLastModified(Helpers.getCurrentTimeInMillis());
 		notebook.setPages(pageList);
-		Helpers.addToNotebookList(notebook, getApplicationContext());
+		Helpers.writeNotebookToFile(notebook, getApplicationContext());
 		tvSub.setText("Last Modified: "+ DateUtils.getRelativeTimeSpanString(notebook.getLastModified(), Helpers.getCurrentTimeInMillis(), DateUtils.SECOND_IN_MILLIS));
 		getSupportActionBar().setSubtitle("Last modified: " + DateUtils.getRelativeTimeSpanString(notebook.getLastModified(), Helpers.getCurrentTimeInMillis(), DateUtils.SECOND_IN_MILLIS));
 

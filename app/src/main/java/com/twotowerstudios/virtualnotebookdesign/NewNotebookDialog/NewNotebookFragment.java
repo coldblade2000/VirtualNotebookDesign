@@ -85,9 +85,11 @@ public class NewNotebookFragment extends DialogFragment implements NewNotebookAd
 					if (!notebookExists){
 						Toast.makeText(getContext(),"Created notebook called: \""+nameReal+"\"", Toast.LENGTH_SHORT).show();
 						Log.d("NewNotebookFrag","Created notebook called:"+nameReal);
+						Notebook notebook = new Notebook(nameReal,colors.get(activeColorIndex), Helpers.getSingleColorAccent(getContext(), activeColor));
 						//((NotebookSelection)getActivity()).refreshData(new Notebook(nameReal,colors.get(activeColorIndex), Helpers.getSingleColorAccent(getContext(), activeColor)));
-						Helpers.writeNotebookToFile(new Notebook(nameReal,colors.get(activeColorIndex), Helpers.getSingleColorAccent(getContext(), activeColor)), getContext());
-						((NotebookSelection)getActivity()).rvNotebookSelectionAdapter.notifyDataSetChanged();
+						Helpers.writeNotebookToFile(notebook, getContext());
+
+						((NotebookSelection)getActivity()).addNotebookToAdapter(notebook);
 						dismiss();
 						//refresh.refreshData();
 					}

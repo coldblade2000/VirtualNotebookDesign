@@ -10,11 +10,11 @@ import java.util.ArrayList;
 
 @Parcel
 public class Notebook {
-	String name;
-	int color,accentColor;
-	long lastModified;
-	String UID16;
-	ArrayList<Page> pages;
+	private String name;
+	private int color,accentColor;
+	private long lastModified;
+	private String UID16;
+	private ArrayList<Page> pages;
 
 	public Notebook(String name, int color,
 					int debugNumOfPages, long lastModified, Context context){

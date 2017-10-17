@@ -179,7 +179,9 @@ public class Helpers {
 			ArrayList<Notebook> notebookList = new ArrayList<>();
 			for(File f: filelist){
 				if(f.getName().substring(0,1).equals("n")||!f.isDirectory()){
-					Notebook notebook = gson.fromJson(getStringFromFile(f), Notebook.class);
+					String json = getStringFromFile(f);
+					Log.v("JSON helper", json);
+					Notebook notebook = gson.fromJson(json, Notebook.class);
 					notebookList.add(notebook);
 				}
 			}
@@ -535,6 +537,12 @@ public class Helpers {
 					}
 				}
 			}
+		}
+		File json = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath(), "j"+UID16+".json");
+		if(json.delete()){
+			Log.d(TAG, "deleteNotebookByUID: deleted file: "+json.getAbsolutePath());
+		}else{
+			Log.e(TAG, "deleteNotebookByUID: couldn't delete file: "+json.getAbsolutePath());
 		}
 	}
 	/*public static void updateNotebook(Notebook notebook, Context context){

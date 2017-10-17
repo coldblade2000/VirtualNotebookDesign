@@ -281,9 +281,9 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 				Log.d("notebookSelection", a.getName().substring(a.getName().lastIndexOf('.')));
 				if(a.getName().substring(a.getName().lastIndexOf('.')).equals(".json")){
 					String json = Helpers.getStringFromFile(a);
-					a.renameTo(new File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsoluteFile()+"/"+a.getName()));
 					Log.d(TAG, "found JSON: "+ a.getAbsolutePath());
 					notebook = gson.fromJson(json, Notebook.class);
+					String notebookName = "j"+notebook.getUID16().substring(1);
 					a.renameTo(new File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsoluteFile()+"/"+notebook.getUID16()+".json"));
 
 				}else{

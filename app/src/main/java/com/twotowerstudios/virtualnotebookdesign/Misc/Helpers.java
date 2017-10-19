@@ -194,7 +194,7 @@ public class Helpers {
 		writeStringToFile(outputString, "Notebooks.json", context);
 	}
 	public static void writeNotebookToFile(Notebook notebook, Context context){
-		File file = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath()+"/"+notebook.getUID16()+".json");
+		File file = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath()+"/j"+notebook.getUID16().substring(1)+".json");
 		writeStringToFile(gson.toJson(notebook), file);
 		Log.d("writelisttofile", "Wrote notebook '"+ notebook.getName()+"' in location: " +file.getAbsolutePath());
 	}
@@ -302,7 +302,7 @@ public class Helpers {
 			for (File a:directory.listFiles()) {
 				Log.d(TAG, "getNotebookFromUID: "+ a.getName());
 				Log.d(TAG, "getNotebookFromUID: "+ a.getName().substring(0,16));
-				if(a.getName().substring(0,17).equals(UID16)){
+				if(a.getName().substring(1,17).equals(UID16.substring(1))){
 					Log.d(TAG, "getNotebookFromUID: found notebook match");
 					return gson.fromJson(getStringFromFile(a), Notebook.class);
 				}
@@ -538,7 +538,7 @@ public class Helpers {
 				}
 			}
 		}
-		File json = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath(), "j"+UID16+".json");
+		File json = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath(), "j"+UID16.substring(1)+".json");
 		if(json.delete()){
 			Log.d(TAG, "deleteNotebookByUID: deleted file: "+json.getAbsolutePath());
 		}else{

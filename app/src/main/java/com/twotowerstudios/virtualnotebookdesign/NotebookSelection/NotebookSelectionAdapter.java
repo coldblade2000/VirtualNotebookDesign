@@ -123,7 +123,11 @@ public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelec
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							if(edittext.getText().toString().trim().equals(notebookSelection.getName().trim())){
-								for(Page a: notebookSelection.getPages()){
+
+								Helpers.deleteNotebookByUID(notebookSelection.getUID16(), context);
+								notebookList.remove(holder.getAdapterPosition());
+								notifyItemRemoved(holder.getAdapterPosition());
+								/*for(Page a: notebookSelection.getPages()){
 									for (ChildBase b: a.getContent()) {
 										if(b.getChildType()==1){
 											File fdelete = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)+b.getUri().getPath());
@@ -140,7 +144,7 @@ public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelec
 								}
 								notebookList.remove(holder.getAdapterPosition());
 								Helpers.writeListToFile(notebookList, context);
-								notifyItemRemoved(holder.getAdapterPosition());
+								notifyItemRemoved(holder.getAdapterPosition());*/
 							}else{
 								Toast.makeText(context, "Notebook not deleted, the name you input was wrong.", Toast.LENGTH_SHORT).show();
 							}

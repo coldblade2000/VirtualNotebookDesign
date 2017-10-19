@@ -222,8 +222,15 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
             startActivityForResult(intent, REQUEST_CODE);
             return true;
         }else if(id== R.id.action_delete){
-            File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Notebooks.json");
-            file.delete();
+            File file = new File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath());
+			for(File a: file.listFiles()){
+				if(a.getName().substring(a.getName().length()-4).equals("json")){
+					Gson gson = new Gson();
+					Notebook notebook = gson.fromJson(Helpers.getStringFromFile(a), Notebook.class);
+					Log.d("NotebookSelection", "Renamed from "+a.getAbsolutePath()+ "to "+ getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsoluteFile()+"/j"+notebook.getUID16().substring(1)+ ".json");
+					a.renameTo(new File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsoluteFile()+"/j"+notebook.getUID16().substring(1)+ ".json"));
+				}
+			}
         }else if(id==R.id.action_dumpjson){
 			String fileString = Helpers.getStringFromName("Notebooks.json", getApplicationContext());
 			int reps = (fileString.length()/4000)+1;
@@ -284,7 +291,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 					Log.d(TAG, "found JSON: "+ a.getAbsolutePath());
 					notebook = gson.fromJson(json, Notebook.class);
 					String notebookName = "j"+notebook.getUID16().substring(1);
-					a.renameTo(new File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsoluteFile()+"/"+notebook.getUID16()+".json"));
+					a.renameTo(new File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsoluteFile()+"/j"+notebook.getUID16().substring(1)+".json"));
 
 				}else{
 					images.add(a);
@@ -308,6 +315,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 						}
 					}
 				}
+				Helpers.writeNotebookToFile(notebook, getApplicationContext());
 			}
 			Log.d("NotebookSelection", gson.toJson(notebook));
 			//file.delete();

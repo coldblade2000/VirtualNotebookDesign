@@ -291,17 +291,21 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 					Log.d(TAG, "found JSON: "+ a.getAbsolutePath());
 					notebook = gson.fromJson(json, Notebook.class);
 					String notebookName = "j"+notebook.getUID16().substring(1);
-					a.renameTo(new File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsoluteFile()+"/j"+notebook.getUID16().substring(1)+".json"));
-
-				}else{
-					images.add(a);
+					a.renameTo(new File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsoluteFile()+"/"+notebookName+".json"));
+					Log.d(TAG, "doInBackground: "+notebookName);
 				}
 			}
 			if(notebook!= null){
-                if(file.renameTo(new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+notebook.getUID16()+"/"))){
+				File newfolder = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+notebook.getUID16()+"/");
+                if(file.renameTo(newfolder)){
 					Log.d("AsyncImporting", "Renamed folder to "+file.getAbsolutePath());
 				} else{
 					Log.w("AsyncImporting", "Couldn't rename folder "+ file.getName());
+				}
+				for(File d : newfolder.listFiles()){
+					if(d.getName().substring(d.getName().length()-4).equalsIgnoreCase("json")){
+						images.add(d);
+					}
 				}
 				for(Page a: notebook.getPages()){
 					for(ChildBase b: a.getContent()){
@@ -310,6 +314,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 								if(c.getName().equals(b.getImageUID() + ".png")){
 									b.setPath(c.getAbsolutePath());
 									Log.d(TAG, "Set Path: "+ c.getAbsolutePath());
+									b.setUri(Uri.fromFile(new File(c.getAbsolutePath())));
 								}
 							}
 						}

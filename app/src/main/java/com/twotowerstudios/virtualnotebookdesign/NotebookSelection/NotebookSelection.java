@@ -303,7 +303,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 					Log.w("AsyncImporting", "Couldn't rename folder "+ file.getName());
 				}
 				for(File d : newfolder.listFiles()){
-					if(d.getName().substring(d.getName().length()-4).equalsIgnoreCase("json")){
+					if(!d.getName().substring(d.getName().length()-4).equalsIgnoreCase("json")){
 						images.add(d);
 					}
 				}

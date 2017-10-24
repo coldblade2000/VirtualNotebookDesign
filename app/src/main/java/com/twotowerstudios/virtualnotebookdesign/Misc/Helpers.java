@@ -178,7 +178,7 @@ public class Helpers {
 			File[] filelist = folder.listFiles();
 			ArrayList<Notebook> notebookList = new ArrayList<>();
 			for(File f: filelist){
-				if(f.getName().substring(0,1).equals("n")||!f.isDirectory()){
+				if(f.getName().substring(0,1).equals("j")&&!f.isDirectory()){
 					String json = getStringFromFile(f);
 					Log.v("JSON helper", json);
 					Notebook notebook = gson.fromJson(json, Notebook.class);
@@ -526,7 +526,7 @@ public class Helpers {
 
 	public static void deleteNotebookByUID(String UID16, Context context) {
 		Notebook notebook = getNotebookFromUID(UID16, context);
-		for (Page a : notebook.getPages()) {
+		/**for (Page a : notebook.getPages()) {
 			for (ChildBase b : a.getContent()) {
 				if (b.getChildType() == 1) {
 					String path = b.getFile().getAbsolutePath();
@@ -537,12 +537,21 @@ public class Helpers {
 					}
 				}
 			}
+		}*/
+		File folder = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath(), "n"+UID16.substring(1));
+		for(File a: folder.listFiles()){
+			a.delete();
 		}
 		File json = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath(), "j"+UID16.substring(1)+".json");
 		if(json.delete()){
 			Log.d(TAG, "deleteNotebookByUID: deleted file: "+json.getAbsolutePath());
 		}else{
 			Log.e(TAG, "deleteNotebookByUID: couldn't delete file: "+json.getAbsolutePath());
+		}
+		if(folder.delete()){
+			Log.d(TAG, "deleteNotebookByUID: deleted file: "+folder.getAbsolutePath());
+		}else{
+			Log.e(TAG, "deleteNotebookByUID: couldn't delete file: "+folder.getAbsolutePath());
 		}
 	}
 	/*public static void updateNotebook(Notebook notebook, Context context){

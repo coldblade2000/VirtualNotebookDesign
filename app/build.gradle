@@ -43,6 +43,7 @@ dependencies {
     compile 'org.parceler:parceler-api:1.1.6'
     compile 'com.davemorrissey.labs:subsampling-scale-image-view:3.6.0'
     compile 'com.commonsware.cwac:cam2:0.7.4'
+    compile 'id.zelory:compressor:2.1.0'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'org.parceler:parceler:1.1.6'
 }

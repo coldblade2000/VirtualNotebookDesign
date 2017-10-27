@@ -11,11 +11,10 @@
 	<TextView
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:text="Add picture from..."
 		android:paddingBottom="16dp"
+		android:text="Add picture from..."
 		android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-		android:textSize="18sp"
-		android:textColor="?android:attr/textColorPrimaryNoDisable"/>
+		android:textSize="30sp" />
 	<View
 		android:layout_width="match_parent"
 		android:layout_height="1px"
@@ -24,18 +23,45 @@
 	<android.support.design.widget.TextInputLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content">
+
 		<EditText
+			android:id="@+id/etImageTitle"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:paddingTop="4dp"
-			android:paddingBottom="4dp"
-			android:id="@+id/etImageTitle"
-			android:inputType="textCapSentences"
-			android:hint="Title..."
-			android:selectAllOnFocus="false"
 			android:layout_weight="1"
-			android:maxLines="2"/>
+			android:hint="Title..."
+			android:inputType="textCapSentences"
+			android:maxLines="2"
+			android:paddingBottom="12dp"
+			android:paddingLeft="8dp"
+			android:paddingTop="4dp"
+			android:selectAllOnFocus="false" />
 	</android.support.design.widget.TextInputLayout>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:padding="8dp">
+
+		<Switch
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:checked="true"
+			android:id="@+id/compressionswitch"
+
+			android:thumbTint="@color/md_light_blue_500"
+			android:trackTint="@color/md_light_blue_500" />
+
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:gravity="right"
+			android:text="Apply Compression"
+			android:textAllCaps="false"
+			android:textColor="@android:color/black"
+			android:textSize="18sp" />
+	</LinearLayout>
+
 	<View
 		android:layout_width="match_parent"
 		android:layout_height="1px"

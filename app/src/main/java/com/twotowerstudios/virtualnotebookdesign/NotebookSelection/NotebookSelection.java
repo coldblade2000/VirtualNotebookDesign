@@ -205,8 +205,14 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+		/*if (SharedPrefs.getBoolean(getApplicationContext(), "debug")) {
+		if (true) {
+			menu.getItem(R.id.loghierarchy).setEnabled(true);
+			menu.getItem(R.id.action_dumpjson).setEnabled(true);
+		}*/
+		getMenuInflater().inflate(R.menu.menu_main, menu);
+
+		return true;
     }
 
     @Override
@@ -239,6 +245,27 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 					Log.v("Helpers", "getNotebookList: \n" + fileString.substring(i * 4000, fileString.length()));
 				}else{
 					Log.v("Helpers", "getNotebookList: \n" + fileString.substring(i * 4000, (i + 1) * 4000));
+				}
+			}
+		}else if(id==R.id.loghierarchy){
+			String TAG = "HierarchyLog";
+			for(Notebook a: notebookSelectionCardList){
+				Log.d(TAG, a.getName());
+				Log.d(TAG, "*	UID16 = "+a.getUID16());
+				Log.d(TAG, "*	Path = "+a.getPath());
+				Log.d(TAG, "*	Number of Pages = "+a.getNumberOfPages());
+				for(Page b: a.getPages()){
+					Log.d(TAG, "	"+b.getName());
+					Log.d(TAG, "	"+"*	UID16 = "+b.getUID());
+					Log.d(TAG, "	"+"*	PageNumber "+b.getPageNumber());
+					for(ChildBase c:b.getContent()){
+						Log.d(TAG, "		"+"Title =" +c.getTitle());
+						Log.d(TAG, "		"+"Child type = "+c.getChildType());
+						Log.d(TAG, "		"+"Path = "+c.getPath());
+						Log.d(TAG, "		"+"Image UID = "+c.getImageUID());
+						Log.d(TAG, "		"+"UID16 = "+c.getUID16());
+
+					}
 				}
 			}
 		}

@@ -15,6 +15,7 @@ public class Notebook {
 	private long lastModified;
 	private String UID16;
 	private ArrayList<Page> pages;
+	private String path;
 
 	public Notebook(String name, int color,
 					int debugNumOfPages, long lastModified, Context context){
@@ -31,6 +32,7 @@ public class Notebook {
 		this.lastModified=Helpers.getCurrentTimeInMillis();
 		this.accentColor=accentColor;
 		this.pages = new ArrayList<>();
+		this.path = "";
 		this.UID16 = "n"+Helpers.generateUniqueId(16);
 	}
 	public Notebook(){}
@@ -56,6 +58,13 @@ public class Notebook {
 		this.lastModified = lastModified;
 	}
 
+	public void setPath(String path) {
+		this.path = path;
+	}
+
+	public String getPath() {
+		return path;
+	}
 
 	public int getNumberOfPages(){return pages.size();}
 

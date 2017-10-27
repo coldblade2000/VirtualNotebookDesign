@@ -10,15 +10,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 
 import com.twotowerstudios.virtualnotebookdesign.R;
 
 public class ModalBottomSheet extends BottomSheetDialogFragment {
 	LinearLayout bottomGalleryButton, bottomCameraButton;
 	OnModalBottomSheetListener mListener;
+	Switch compressionSwitch;
 	EditText etImageTitle;
 	public interface OnModalBottomSheetListener{
-		void returnDecision(String tag, String title);
+		void returnDecision(String tag, String title, boolean compression);
 	}
 	public ModalBottomSheet() {
 		// Required empty public constructor
@@ -54,19 +56,20 @@ public class ModalBottomSheet extends BottomSheetDialogFragment {
 	public void onViewCreated(View v, @Nullable Bundle savedInstanceState) {
 		bottomCameraButton = (LinearLayout) v.findViewById(R.id.bottomCameraButton);
 		bottomGalleryButton = (LinearLayout) v.findViewById(R.id.bottomGalleryButton);
+		compressionSwitch = (Switch) v.findViewById(R.id.compressionswitch);
 		etImageTitle=(EditText)v.findViewById(R.id.etImageTitle);
 
 		bottomCameraButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				mListener.returnDecision("camera",etImageTitle.getText().toString());
+				mListener.returnDecision("camera",etImageTitle.getText().toString(), compressionSwitch.isChecked());
 				dismiss();
 			}
 		});
 		bottomGalleryButton.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				mListener.returnDecision("gallery",etImageTitle.getText().toString());
+				mListener.returnDecision("gallery",etImageTitle.getText().toString(), compressionSwitch.isChecked());
 				dismiss();
 			}
 		});

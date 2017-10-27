@@ -39,6 +39,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import id.zelory.compressor.Compressor;
+
 public class PageActivityMain extends AppCompatActivity implements PageActivityAdapter.PageAdapterToAct, NewPageChildFragment.OnFragmentInteractionListener, ModalBottomSheet.OnModalBottomSheetListener {
 
 	Toolbar tbpagemain;
@@ -219,7 +221,7 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 	}
 
 	@Override
-	public void returnDecision(String tag, final String title) {
+	public void returnDecision(String tag, final String title, boolean compression) {
 		final String newImageName = "i" + Helpers.generateUniqueId(16);
 		if (tag.equals("camera")) {
 			locationpermission();
@@ -231,7 +233,8 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 						.to(photo)
 						.confirmationQuality(0.8f)
 						.build()
-						.putExtra("path", getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + notebookUID16+"/"+ newImageName + ".png");
+						.putExtra("path", getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + notebookUID16+"/"+ newImageName + ".png")
+						.putExtra("compression", compression);
 				startActivityForResult(takePicture, CAMERAPIC);
 				ChildBase newImage = new ChildBase("" + title, newImageName, page.getParentUID(), page.getUID(),
 						Uri.fromFile(photo), getApplicationContext());
@@ -258,10 +261,11 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 		}
 	}
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		final String filename = "i"+Helpers.generateUniqueId(16);
-		if (requestCode == GALLERYPIC && resultCode == RESULT_OK && data != null){
-			File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+ notebookUID16+ "/"+ filename+".png");
+		final String filename = "i" + Helpers.generateUniqueId(16);
+		if (requestCode == GALLERYPIC && resultCode == RESULT_OK && data != null) {
 			Uri selectedImageUri = data.getData();
+			File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + notebookUID16 + "/"
+					+ filename + selectedImageUri.toString().substring(selectedImageUri.toString().lastIndexOf(".")));
 			Bitmap bitmap = null;
 			try {
 				bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
@@ -272,17 +276,39 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 			FileOutputStream outStream = null;
 			try {
 				outStream = new FileOutputStream(file);
-				bitmap.compress(Bitmap.CompressFormat.PNG, 97, outStream);
 				outStream.flush();
 				outStream.close();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			if (data.getBooleanExtra("compression", false)) {
+
+				try {
+					if (bitmap.getWidth() > bitmap.getHeight()) {
+						file = new Compressor(this)
+								.setMaxWidth(1920)
+								.setMaxHeight(1080)
+								.setQuality(75)
+								.setCompressFormat(Bitmap.CompressFormat.WEBP)
+								.compressToFile(file);
+					} else {
+						file = new Compressor(this)
+								.setMaxWidth(1080)
+								.setMaxHeight(1920)
+								.setQuality(75)
+								.setCompressFormat(Bitmap.CompressFormat.WEBP)
+								.compressToFile(file);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 			ChildBase newImage = new ChildBase("", filename, page.getParentUID(), page.getUID(), Uri.fromFile(file), getApplicationContext());
 			contents.add(newImage);
 			page.setContent(contents);
 			Helpers.addPageFromUID16(page.getParentUID(), page, getApplicationContext());
-			pageAdapter.notifyItemInserted(contents.size()-1);
+			pageAdapter.notifyItemInserted(contents.size() - 1);
+
 		}
 	}
 

@@ -28,6 +28,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.google.gson.Gson;
+import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 import com.twotowerstudios.virtualnotebookdesign.Misc.SharedPrefs;
 import com.twotowerstudios.virtualnotebookdesign.NewNotebookDialog.NewNotebookFragment;
@@ -182,6 +183,10 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 		getSupportActionBar().setTitle("Notebooks");
+		new DrawerBuilder()
+				.withActivity(this)
+
+				.build();
 
 
     }

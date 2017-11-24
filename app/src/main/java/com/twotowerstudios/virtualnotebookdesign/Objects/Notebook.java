@@ -17,20 +17,11 @@ public class Notebook {
 	private ArrayList<Page> pages;
 	private String path;
 
-	public Notebook(String name, int color,
-					int debugNumOfPages, long lastModified, Context context){
-		this.name = name;
-		this.lastModified = lastModified;
-		this.color = color;
-		this.accentColor=Helpers.getSingleColorAccent(context,color);
-		this.pages = new ArrayList<>();
-		this.UID16 = "n"+Helpers.generateUniqueId(16);
-	}
-	public Notebook(String name, int color, int accentColor){
+	public Notebook(String name, int color, Context context){
 		this.name=name;
 		this.color=color;
 		this.lastModified=Helpers.getCurrentTimeInMillis();
-		this.accentColor=accentColor;
+		this.accentColor=Helpers.getSingleColorAccent(context, color);
 		this.pages = new ArrayList<>();
 		this.path = "";
 		this.UID16 = "n"+Helpers.generateUniqueId(16);

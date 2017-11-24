@@ -12,6 +12,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.twotowerstudios.virtualnotebookdesign.Objects.ChildBase;
+import com.twotowerstudios.virtualnotebookdesign.Objects.Collection;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
 import com.twotowerstudios.virtualnotebookdesign.R;
@@ -29,6 +30,7 @@ import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Random;
 import java.util.zip.ZipEntry;
@@ -554,6 +556,21 @@ public class Helpers {
 			Log.e(TAG, "deleteNotebookByUID: couldn't delete file: "+folder.getAbsolutePath());
 		}
 	}
+	public static ArrayList<Collection> getCollections(Context context){
+        File file = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath());
+        for (File a: file.listFiles()){
+            if ((a.getName().equals("Collections.json"))){
+                return gson.fromJson(getStringFromFile(a), new TypeToken<ArrayList<Collection>>(){}.getType());
+            }
+        }
+        return null;
+    }
+    public static void writeCollectionsToFile(ArrayList<Collection> collections, Context context){
+        File file = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath(), "Collections.json");
+        writeStringToFile(gson.toJson(collections), file);
+        Log.d("writelisttofile", "Wrote collections in location: " +file.getAbsolutePath());
+
+    }
 	/*public static void updateNotebook(Notebook notebook, Context context){
 		File file = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath(), notebook.getUID16()+".json");
 		writeNotebookToFile();

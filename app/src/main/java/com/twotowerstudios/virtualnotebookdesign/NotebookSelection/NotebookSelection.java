@@ -29,11 +29,15 @@ import android.widget.RelativeLayout;
 
 import com.google.gson.Gson;
 import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 import com.twotowerstudios.virtualnotebookdesign.Misc.SharedPrefs;
 import com.twotowerstudios.virtualnotebookdesign.NewNotebookDialog.NewNotebookFragment;
 import com.twotowerstudios.virtualnotebookdesign.NotebookMain.NotebookMainActivity;
 import com.twotowerstudios.virtualnotebookdesign.Objects.ChildBase;
+import com.twotowerstudios.virtualnotebookdesign.Objects.Collection;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
 import com.twotowerstudios.virtualnotebookdesign.R;
@@ -100,6 +104,17 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 
 						}
 					}).show();
+		}
+		if(Helpers.getCollections(getApplicationContext())==null){
+			ArrayList<String> UIDs = new ArrayList<>();
+			for (Notebook a: Helpers.getNotebookList(getApplicationContext())){
+				UIDs.add(a.getUID16());
+			}
+			final Collection defaultCollection = new Collection("Default Collection",UIDs,ContextCompat.getColor(getApplicationContext(), R.color.primary));
+			ArrayList<Collection> defaultCollectionList = new ArrayList<Collection>();
+			defaultCollectionList.add(defaultCollection);
+			Helpers.writeCollectionsToFile(defaultCollectionList, getApplicationContext());
+			//TODO Check the default Collection initializer
 		}
 		//===============================================================================================================
         SharedPrefs.setInt(this, "filestructure", 1);
@@ -185,12 +200,18 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 		getSupportActionBar().setTitle("Notebooks");
 		new DrawerBuilder()
 				.withActivity(this)
-
+.addDrawerItems()
 				.build();
 
 
     }
-
+// TODO Finish this
+    private IDrawerItem[] populateDrawer(){
+		IDrawerItem[] drawerArray = new IDrawerItem[notebookSelectionCardList.size()];
+		for (Notebook a:notebookSelectionCardList) {
+			new PrimaryDrawerItem().withName(a.getName()).with
+		}
+	}
     private void showDialog() {
 
         // DialogFragment.show() will take care of adding the fragment

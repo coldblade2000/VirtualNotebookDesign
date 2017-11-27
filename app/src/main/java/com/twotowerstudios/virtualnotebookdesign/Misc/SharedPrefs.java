@@ -32,7 +32,7 @@ public class SharedPrefs {
 		return PreferenceManager.getDefaultSharedPreferences(context).getInt(s, -1);
 	}
 	public static String getString(Context context, String s) {
-		return PreferenceManager.getDefaultSharedPreferences(context).getString(s, "1");
+		return PreferenceManager.getDefaultSharedPreferences(context).getString(s, "-1");
 	}
 
 	public static boolean getBoolean(Context context, String s) {

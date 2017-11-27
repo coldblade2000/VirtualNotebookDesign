@@ -569,10 +569,12 @@ public class Helpers {
         File file = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath(), "Collections.json");
         writeStringToFile(gson.toJson(collections), file);
         Log.d("writelisttofile", "Wrote collections in location: " +file.getAbsolutePath());
-
     }
-	/*public static void updateNotebook(Notebook notebook, Context context){
-		File file = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath(), notebook.getUID16()+".json");
-		writeNotebookToFile();
-	}*/
+    public static ArrayList<Notebook> getNotebooksFromCollection(Collection collection, Context context){
+        ArrayList<Notebook> notebooks = new ArrayList<>();
+        for(String a: collection.getContentUIDs()){
+            notebooks.add(getNotebookFromUID(a,context));
+        }
+        return notebooks;
+    }
 }

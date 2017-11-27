@@ -55,6 +55,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
     public RecyclerView.Adapter rvNotebookSelectionAdapter;
     private ArrayList<Notebook> notebookSelectionCardList;
 	private FloatingActionButton fabSelection, fabAddBook;
+    private ArrayList<Collection> collections;
 	static boolean isMainfabOpen;
 	private boolean isFirstTime;
 	final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 3;
@@ -111,14 +112,27 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 				UIDs.add(a.getUID16());
 			}
 			final Collection defaultCollection = new Collection("Default Collection",UIDs,ContextCompat.getColor(getApplicationContext(), R.color.primary));
-			ArrayList<Collection> defaultCollectionList = new ArrayList<Collection>();
+			ArrayList<Collection> defaultCollectionList = new ArrayList<>();
 			defaultCollectionList.add(defaultCollection);
 			Helpers.writeCollectionsToFile(defaultCollectionList, getApplicationContext());
 			//TODO Check the default Collection initializer
 		}
 		//===============================================================================================================
+
         SharedPrefs.setInt(this, "filestructure", 1);
-		notebookSelectionCardList = Helpers.getNotebookList(getApplicationContext());
+        collections = new ArrayList<>();
+        collections = Helpers.getCollections(getApplicationContext());
+        assert collections != null;
+        for (Collection a: collections){
+            if(SharedPrefs.getString(this, "lastUID8").equals(a.getUID8())){
+                notebookSelectionCardList = Helpers.getNotebooksFromCollection(a, getApplicationContext());
+            }
+        }
+        if (notebookSelectionCardList == null || notebookSelectionCardList.size() == 0){
+            // TODO finish loading from collection
+        }
+		//notebookSelectionCardList = Helpers.getNotebookList(getApplicationContext());
+
 		fabSelection = (FloatingActionButton) findViewById(R.id.fabSelection);
 		emptyList = (RelativeLayout) findViewById(R.id.emptyFile);
 		rvNotebookSelection = (RecyclerView) findViewById(R.id.rvnotebookselection);

@@ -7,6 +7,8 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -46,6 +48,7 @@ import org.parceler.Parcels;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.CollationElementIterator;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -56,6 +59,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
     private ArrayList<Notebook> notebookSelectionCardList;
 	private FloatingActionButton fabSelection, fabAddBook;
     private ArrayList<Collection> collections;
+	private int currentCollectionIndex;
 	static boolean isMainfabOpen;
 	private boolean isFirstTime;
 	final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 3;
@@ -64,6 +68,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notebook_selection);
+		notebookSelectionCardList = new ArrayList<>();
 		isFirstTime=true;
 		SharedPrefs.setBoolean(getApplicationContext(), "debug", false);
 		File nomedia = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), ".nomedia");
@@ -120,16 +125,18 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 		//===============================================================================================================
 
         SharedPrefs.setInt(this, "filestructure", 1);
-        collections = new ArrayList<>();
         collections = Helpers.getCollections(getApplicationContext());
         assert collections != null;
         for (Collection a: collections){
             if(SharedPrefs.getString(this, "lastUID8").equals(a.getUID8())){
                 notebookSelectionCardList = Helpers.getNotebooksFromCollection(a, getApplicationContext());
+				currentCollectionIndex = collections.indexOf(a);
+				break;
             }
         }
         if (notebookSelectionCardList == null || notebookSelectionCardList.size() == 0){
-            // TODO finish loading from collection
+            Helpers.getNotebooksFromCollection(collections.get(0), getApplicationContext());
+			currentCollectionIndex = 0;
         }
 		//notebookSelectionCardList = Helpers.getNotebookList(getApplicationContext());
 
@@ -212,19 +219,24 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 		getSupportActionBar().setTitle("Notebooks");
+
+		ArrayList<IDrawerItem> drawerItems = populateDrawer();
 		new DrawerBuilder()
 				.withActivity(this)
-.addDrawerItems()
+				.addDrawerItems(drawerItems.toArray(new IDrawerItem[drawerItems.size()]))
+				.withSelectedItemByPosition(currentCollectionIndex)
 				.build();
 
 
     }
-// TODO Finish this
-    private IDrawerItem[] populateDrawer(){
-		IDrawerItem[] drawerArray = new IDrawerItem[notebookSelectionCardList.size()];
-		for (Notebook a:notebookSelectionCardList) {
-			new PrimaryDrawerItem().withName(a.getName()).with
+    private ArrayList<IDrawerItem> populateDrawer(){
+		ArrayList<IDrawerItem> drawerArray = new ArrayList<>();
+		for (Collection a:collections) {
+			Drawable icon = getResources().getDrawable(R.drawable.ic_folder_black_24dp);
+			//icon.setColorFilter(ContextCompat.getColor(getApplicationContext(), a.getColor()), PorterDuff.Mode.MULTIPLY);
+			drawerArray.add(new PrimaryDrawerItem().withName(a.getName()).withIcon(icon));
 		}
+		return drawerArray;
 	}
     private void showDialog() {
 

@@ -228,6 +228,35 @@ public class Helpers {
 		}
 		writeListToFile(list, context);
 	}
+    public static void addToNotebookList(Notebook notebook, Context context, String collectionUID){
+        ArrayList<Notebook> list = getNotebooksFromCollection(getCollectionFromUID(collectionUID, context), context);
+        boolean bookalreadyexists=false;
+        try {
+            for(Notebook a: list){
+                if(a.getUID16().equals(notebook.getUID16())){
+                    bookalreadyexists=true;
+                    //Toast.makeText(context, "Can't add notebook, already exists", Toast.LENGTH_SHORT).show();
+                    list.set(list.indexOf(a), notebook);
+                    break;
+                }
+            }
+            for(int i=0; i<list.size(); i++){
+                if(list.get(i).getName().equalsIgnoreCase(notebook.getName().toLowerCase())){
+                    bookalreadyexists=true;
+                    //Toast.makeText(context, "Can't add notebook, already exists", Toast.LENGTH_SHORT).show();
+                    list.set(i,notebook);
+                    break;
+                }
+            }
+        } catch (NullPointerException e) {
+            Log.d("NewNotebookFrag","Notebooklist of "+collectionUID+" was empty, adding notebook");
+        }
+        if (!bookalreadyexists) {
+            list.add(notebook);
+        }
+        //TODO dont write to notebook list
+        writeListToFile(list, context);
+    }
 	public static ArrayList<Integer> getPossibleColors(Context context){
 		ArrayList<Integer> colors = new ArrayList<>();
 		colors.add(ContextCompat.getColor(context,R.color.md_red_500));
@@ -576,5 +605,13 @@ public class Helpers {
             notebooks.add(getNotebookFromUID(a,context));
         }
         return notebooks;
+    }
+    public static Collection getCollectionFromUID(String UID8, Context context){
+        for(Collection a: getCollections(context)){
+            if (a.getUID8().substring(1).equals(UID8)){
+                return a;
+            }
+        }
+        return null;
     }
 }

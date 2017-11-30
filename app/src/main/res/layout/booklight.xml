@@ -16,12 +16,12 @@
 		android:textAlignment="center"/>
 
 	<ImageView
-		android:src="@drawable/ic_book_black_36px"
-		android:tint="@color/colorPrimary"
-		android:layout_width="60dp"
-		android:elevation="4dp"
-		android:layout_height="60dp"
 		android:id="@+id/ivBookLight"
+		android:layout_width="60dp"
+		android:layout_height="60dp"
 		android:layout_alignParentTop="true"
-		android:layout_centerHorizontal="true"/>
+		android:layout_centerHorizontal="true"
+		android:elevation="4dp"
+		android:src="@drawable/ic_book_black_36px"
+		android:tint="@color/colorPrimary" />
 </RelativeLayout>

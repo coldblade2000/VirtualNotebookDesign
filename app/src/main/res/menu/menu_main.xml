@@ -27,4 +27,11 @@
         android:title="Log notebook hierarchy"
         app:showAsAction="never"
         />
+    <item
+        android:id="@+id/debugaddcollection"
+        android:enabled="true"
+        android:title="Add all notebooks to Collection"
+        app:showAsAction="never"
+        />
+
 </menu>

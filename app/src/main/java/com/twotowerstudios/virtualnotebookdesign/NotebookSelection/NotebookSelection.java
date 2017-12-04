@@ -301,24 +301,35 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 			}
 		}else if(id==R.id.loghierarchy){
 			String TAG = "HierarchyLog";
-			for(Notebook a: notebookSelectionCardList){
-				Log.d(TAG, a.getName());
-				Log.d(TAG, "*	UID16 = "+a.getUID16());
-				Log.d(TAG, "*	Path = "+a.getPath());
-				Log.d(TAG, "*	Number of Pages = "+a.getNumberOfPages());
-				for(Page b: a.getPages()){
-					Log.d(TAG, "	"+b.getName());
-					Log.d(TAG, "	"+"*	UID16 = "+b.getUID());
-					Log.d(TAG, "	"+"*	PageNumber "+b.getPageNumber());
-					for(ChildBase c:b.getContent()){
-						Log.d(TAG, "		"+"Title =" +c.getTitle());
-						Log.d(TAG, "		"+"Child type = "+c.getChildType());
-						Log.d(TAG, "		"+"Path = "+c.getPath());
-						Log.d(TAG, "		"+"Image UID = "+c.getImageUID());
-						Log.d(TAG, "		"+"UID16 = "+c.getUID16());
+			for(Collection a: collections){
+				Log.d(TAG, "Name: "+a.getName());
+				Log.d(TAG, "UID 8: "+a.getUID8());
+				Log.d(TAG, "Color: "+a.getColor());
+				for(Notebook ab : Helpers.getNotebooksFromCollection(a, getApplicationContext())){
+					Log.d(TAG, ab.getName());
+					Log.d(TAG, "*	UID16 = "+ab.getUID16());
+					Log.d(TAG, "*	Path = "+ab.getPath());
+					Log.d(TAG, "*	Number of Pages = "+ab.getNumberOfPages());
+					for(Page b: ab.getPages()){
+						Log.d(TAG, "	"+b.getName());
+						Log.d(TAG, "	"+"*	UID16 = "+b.getUID());
+						Log.d(TAG, "	"+"*	PageNumber "+b.getPageNumber());
+						for(ChildBase c:b.getContent()){
+							Log.d(TAG, "		"+"Title =" +c.getTitle());
+							Log.d(TAG, "		"+"Child type = "+c.getChildType());
+							Log.d(TAG, "		"+"Path = "+c.getPath());
+							Log.d(TAG, "		"+"Image UID = "+c.getImageUID());
+							Log.d(TAG, "		"+"UID16 = "+c.getUID16());
 
+						}
 					}
 				}
+			}
+		}else if (id==R.id.debugaddcollection){
+			for (Notebook a: Helpers.getNotebookList(getApplicationContext())){
+				collections.get(0).addUID(a.getUID16());
+				Helpers.writeCollectionsToFile(collections, getApplicationContext());
+
 			}
 		}
         return super.onOptionsItemSelected(item);

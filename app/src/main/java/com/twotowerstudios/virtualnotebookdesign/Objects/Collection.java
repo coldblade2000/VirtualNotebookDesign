@@ -47,4 +47,17 @@ public class Collection {
     public String getUID8() {
         return UID8;
     }
+    public void addUID(String UID16){
+        boolean found = false;
+        for (String a: contentUIDs){
+            if(a.equals(UID16)){
+                contentUIDs.set(contentUIDs.indexOf(a),UID16);
+                found = true;
+                break;
+            }
+        }
+        if(!found) {
+            contentUIDs.add(UID16);
+        }
+    }
 }

@@ -333,7 +333,7 @@ public class Helpers {
 			for (File a:directory.listFiles()) {
 				Log.d(TAG, "getNotebookFromUID: "+ a.getName());
 				Log.d(TAG, "getNotebookFromUID: "+ a.getName().substring(0,16));
-				if(a.getName().substring(1,17).equals(UID16.substring(1))){
+				if(a.getName().length() >= 17 && a.getName().substring(1,17).equals(UID16.substring(1))){
 					Log.d(TAG, "getNotebookFromUID: found notebook match");
 					return gson.fromJson(getStringFromFile(a), Notebook.class);
 				}
@@ -601,8 +601,12 @@ public class Helpers {
     }
     public static ArrayList<Notebook> getNotebooksFromCollection(Collection collection, Context context){
         ArrayList<Notebook> notebooks = new ArrayList<>();
-        for(String a: collection.getContentUIDs()){
-            notebooks.add(getNotebookFromUID(a,context));
+		Notebook book;
+		for(String a: collection.getContentUIDs()){
+			Log.d(TAG, "getNotebooksFromCollection: ContentUID = "+a);
+			book = getNotebookFromUID(a,context);
+            notebooks.add(book);
+            Log.d(TAG, "Name: "+book.getName());
         }
         return notebooks;
     }

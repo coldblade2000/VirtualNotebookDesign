@@ -135,7 +135,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
             }
         }
         if (notebookSelectionCardList == null || notebookSelectionCardList.size() == 0){
-            Helpers.getNotebooksFromCollection(collections.get(0), getApplicationContext());
+            notebookSelectionCardList = Helpers.getNotebooksFromCollection(collections.get(0), getApplicationContext());
 			currentCollectionIndex = 0;
         }
 		//notebookSelectionCardList = Helpers.getNotebookList(getApplicationContext());

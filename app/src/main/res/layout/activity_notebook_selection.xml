@@ -82,7 +82,23 @@
 		app:layout_anchorGravity="bottom|right"/>
 
 	<android.support.design.widget.FloatingActionButton
-		android:id="@+id/fabAddBlock"
+	android:id="@+id/fabAddBlock"
+	android:layout_width="56dp"
+	android:layout_height="56dp"
+	android:layout_marginBottom="@dimen/fab_margin_bottom_2nd"
+	android:layout_marginEnd="@dimen/fab_margin_right"
+	android:layout_marginRight="@dimen/fab_margin_right"
+	android:elevation="8dp"
+	android:tint="@android:color/white"
+	android:translationY="60dp"
+	android:visibility="gone"
+	app:backgroundTint="@color/colorPrimary"
+	app:fabSize="normal"
+	app:layout_anchor="@id/rvnotebookselection"
+	app:layout_anchorGravity="bottom|right"
+	app:srcCompat="@drawable/ic_note_add_white_24px"/>
+	<android.support.design.widget.FloatingActionButton
+		android:id="@+id/fabAddCollect"
 		android:layout_width="56dp"
 		android:layout_height="56dp"
 		android:layout_marginBottom="@dimen/fab_margin_bottom_2nd"
@@ -91,10 +107,10 @@
 		android:elevation="8dp"
 		android:tint="@android:color/white"
 		android:translationY="60dp"
-		android:visibility="gone"
+		android:visibility="visible"
 		app:backgroundTint="@color/colorPrimary"
 		app:fabSize="normal"
 		app:layout_anchor="@id/rvnotebookselection"
 		app:layout_anchorGravity="bottom|right"
-		app:srcCompat="@drawable/ic_note_add_white_24px"/>
+		app:srcCompat="@drawable/ic_folder_black_24dp"/>
 </android.support.design.widget.CoordinatorLayout>

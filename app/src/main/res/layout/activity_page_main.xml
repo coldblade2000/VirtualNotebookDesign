@@ -26,51 +26,54 @@
 			android:layout_alignParentRight="true"
 			android:layout_alignParentBottom="true"
 			android:layout_alignParentEnd="true"/>
+
 		<android.support.design.widget.FloatingActionButton
 			android:id="@+id/fabTextChild"
 			android:layout_width="56dp"
 			android:layout_height="56dp"
-			app:fabSize="mini"
-			android:layout_marginLeft="8dp"
-			app:srcCompat="@drawable/ic_format_size_black_24dp"
-			android:tint="@android:color/white"
-			app:backgroundTint="@color/colorPrimary"
-			android:layout_marginBottom="20dp"
 			android:layout_above="@+id/fabPageMain1"
 			android:layout_alignLeft="@+id/fabPageMain1"
 			android:layout_alignStart="@+id/fabPageMain1"
+			android:layout_marginBottom="20dp"
+			android:layout_marginLeft="8dp"
+			android:tint="@android:color/white"
 			android:translationY="60dp"
-			android:visibility="gone" />
+			android:visibility="gone"
+			app:backgroundTint="@color/colorPrimary"
+			app:fabSize="mini"
+			app:srcCompat="@drawable/ic_format_size_black_24dp" />
+
 		<android.support.design.widget.FloatingActionButton
 			android:id="@+id/fabImageChild"
 			android:layout_width="56dp"
 			android:layout_height="56dp"
-			app:fabSize="mini"
-			android:layout_marginLeft="8dp"
-			app:srcCompat="@drawable/ic_image_white_24px"
-			android:tint="@android:color/white"
-			app:backgroundTint="@color/colorPrimary"
-			android:layout_marginBottom="20dp"
 			android:layout_above="@+id/fabTextChild"
 			android:layout_alignLeft="@+id/fabPageMain1"
 			android:layout_alignStart="@+id/fabPageMain1"
+			android:layout_marginBottom="20dp"
+			android:layout_marginLeft="8dp"
+			android:tint="@android:color/white"
 			android:translationY="60dp"
-			android:visibility="gone" />
+			android:visibility="gone"
+			app:backgroundTint="@color/colorPrimary"
+			app:fabSize="mini"
+			app:srcCompat="@drawable/ic_image_white_24px" />
+
 		<android.support.design.widget.FloatingActionButton
 			android:id="@+id/fabDriveChild"
 			android:layout_width="56dp"
 			android:layout_height="56dp"
-			app:fabSize="mini"
-			android:layout_marginLeft="8dp"
-			app:srcCompat="@drawable/monochrome128"
-			android:tint="@android:color/white"
-			app:backgroundTint="@color/colorPrimary"
-			android:layout_marginBottom="20dp"
 			android:layout_above="@+id/fabImageChild"
 			android:layout_alignLeft="@+id/fabPageMain1"
 			android:layout_alignStart="@+id/fabPageMain1"
+			android:layout_marginBottom="20dp"
+			android:layout_marginLeft="8dp"
+			android:tint="@android:color/white"
 			android:translationY="60dp"
-			android:visibility="gone" />
+			android:visibility="gone"
+			app:backgroundTint="@color/colorPrimary"
+			app:fabSize="mini"
+			app:srcCompat="@drawable/monochrome128" />
 		<LinearLayout
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"

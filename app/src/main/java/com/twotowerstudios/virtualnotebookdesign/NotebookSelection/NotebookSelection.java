@@ -57,7 +57,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
     private RecyclerView rvNotebookSelection;
     public RecyclerView.Adapter rvNotebookSelectionAdapter;
     private ArrayList<Notebook> notebookSelectionCardList;
-	private FloatingActionButton fabSelection, fabAddBook;
+	private FloatingActionButton fabSelection, fabAddBook, fabAddCollect;
     private ArrayList<Collection> collections;
 	private int currentCollectionIndex;
 	static boolean isMainfabOpen;
@@ -181,18 +181,23 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 			isMainfabOpen = false;
 
 			fabAddBook = (FloatingActionButton) findViewById(R.id.fabAddBlock);
+			fabAddCollect = (FloatingActionButton) findViewById(R.id.fabAddCollect);
 			fabSelection.setOnClickListener(new View.OnClickListener(){
 				@Override
 				public void onClick(View view) {
 					if (!isMainfabOpen) {
 						fabAddBook.show();
+						fabAddCollect.show();
 						isMainfabOpen = true;
 						ObjectAnimator openAddBookfab = ObjectAnimator.ofFloat(fabAddBook, View.TRANSLATION_Y, 200,0); openAddBookfab.start();
+						ObjectAnimator openAddCollectFab = ObjectAnimator.ofFloat(fabAddCollect, View.TRANSLATION_Y, 400,0); openAddCollectFab.start();
 						ObjectAnimator rotateMainfab = ObjectAnimator.ofFloat(fabSelection, View.ROTATION, 0, 135); rotateMainfab.start();
 					} else if(isMainfabOpen){
 						isMainfabOpen = false;
 						ObjectAnimator rotateMainfab = ObjectAnimator.ofFloat(fabSelection, View.ROTATION, 135, 270); rotateMainfab.start();
 						ObjectAnimator closeFirstSubfab = ObjectAnimator.ofFloat(fabAddBook, View.TRANSLATION_Y, 0,200); closeFirstSubfab.start();
+						ObjectAnimator closeAddCollectFab = ObjectAnimator.ofFloat(fabAddCollect, View.TRANSLATION_Y, 0,400); closeAddCollectFab.start();
+						fabAddCollect.hide();
 						fabAddBook.hide();
 					}
 				}

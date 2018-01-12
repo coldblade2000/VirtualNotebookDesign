@@ -1,12 +1,14 @@
 package com.twotowerstudios.virtualnotebookdesign.NewCollectionDialog;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -21,6 +23,8 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
+import com.twotowerstudios.virtualnotebookdesign.NewNotebookDialog.ColorPickAdapter;
+import com.twotowerstudios.virtualnotebookdesign.NotebookSelection.NotebookSelection;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Collection;
 import com.twotowerstudios.virtualnotebookdesign.R;
 
@@ -37,7 +41,7 @@ import java.util.Random;
  * Use the {@link NewCollectionFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class NewCollectionFragment extends DialogFragment {
+public class NewCollectionFragment extends DialogFragment implements ColorPickAdapter.FromAdapterInterface{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -120,13 +124,19 @@ public class NewCollectionFragment extends DialogFragment {
     @Override
     public void onViewCreated(View v, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(v, savedInstanceState);
+        rvNewCollection = (RecyclerView) v.findViewById(R.id.rvNewCollection);
+        final GridLayoutManager rvNotebookManager = new GridLayoutManager(getContext(),6);
+        rvNewCollection.setLayoutManager(rvNotebookManager);
+        ColorPickAdapter adapter= new ColorPickAdapter(getContext(), Helpers.getPossibleColors(getContext()), activeColorIndex, this);
+        rvNewCollection.setVisibility(View.GONE);
         colors = Helpers.getPossibleColors(getContext());
         activeColorIndex =new Random().nextInt(colors.size());
         activeColor = colors.get(activeColorIndex);
         swColors = (Switch) v.findViewById(R.id.switch1);
 
-        etNewCollection = (EditText) v.findViewById(R.id.etNewName);
-        toolbar = (Toolbar) v.findViewById(R.id.newnotebooktoolbar);
+        etNewCollection = (EditText) v.findViewById(R.id.etNewCollection);
+        toolbar = (Toolbar) v.findViewById(R.id.newcollectiontoolbar);
+        toolbar.inflateMenu(R.menu.newnotebook);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -153,7 +163,8 @@ public class NewCollectionFragment extends DialogFragment {
                         Log.d("NewNotebookFrag","Created notebook called:"+nameReal);
                         Collection collection = new Collection(nameReal,new ArrayList<String>(), colors.get(activeColorIndex));
                         //((NotebookSelection)getActivity()).refreshData(new Notebook(nameReal,colors.get(activeColorIndex), Helpers.getSingleColorAccent(getContext(), activeColor)));
-                        ((NotebookSelection)getActivity()).addNotebookToAdapter(notebook);
+                        collection.setColor(colors.get(activeColorIndex));
+                        successfulSubmit(collection);
                         dismiss(); //TODO finish making the collection
                         //refresh.refreshData();
                     }
@@ -179,6 +190,21 @@ public class NewCollectionFragment extends DialogFragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void clickListener(int color) {
+        changeColor(color);
+    }
+    public void changeColor(int position){
+        if(Helpers.isColorDark(colors.get(position))){
+            toolbar.setTitleTextColor(getResources().getColor(R.color.md_dark_primary_text));
+        }else{
+            toolbar.setTitleTextColor(getResources().getColor(R.color.md_light_primary_text));
+        }
+        toolbar.setBackgroundColor(colors.get(position));
+        this.activeColorIndex =position;
+        this.activeColor= colors.get(activeColorIndex);
     }
 
     /**

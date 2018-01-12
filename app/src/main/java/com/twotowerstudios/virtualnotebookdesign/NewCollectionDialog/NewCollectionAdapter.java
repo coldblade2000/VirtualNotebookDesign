@@ -1,4 +1,4 @@
-package com.twotowerstudios.virtualnotebookdesign.NewNotebookDialog;
+package com.twotowerstudios.virtualnotebookdesign.NewCollectionDialog;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -18,12 +18,12 @@ import java.util.ArrayList;
  * Created by Panther II on 10/11/2016.
  */
 
-public class NewNotebookAdapter extends RecyclerView.Adapter<NewNotebookAdapter.ViewHolder>{
+public class NewCollectionAdapter extends RecyclerView.Adapter<NewCollectionAdapter.ViewHolder>{
 	Context context;
 	ArrayList<Integer> colors = new ArrayList<>();
 	int activeColor;
 	FromAdapterInterface clickListener;
-	public NewNotebookAdapter(){
+	public NewCollectionAdapter(){
 
 	}
 
@@ -39,7 +39,7 @@ public class NewNotebookAdapter extends RecyclerView.Adapter<NewNotebookAdapter.
 			toolbar = (Toolbar) itemView.findViewById(R.id.newnotebooktoolbar);
 		}
 	}
-	public NewNotebookAdapter(Context context, ArrayList<Integer> colors, int activeColor, FromAdapterInterface clickListener){
+	public NewCollectionAdapter(Context context, ArrayList<Integer> colors, int activeColor, FromAdapterInterface clickListener){
 		this.context=context;
 		this.colors=colors;
 		this.activeColor=activeColor;

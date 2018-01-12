@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 
-public class NewNotebookFragment extends DialogFragment implements NewNotebookAdapter.FromAdapterInterface {
+public class NewNotebookFragment extends DialogFragment implements ColorPickAdapter.FromAdapterInterface {
 
 	RecyclerView rvNewNotebook;
 	int activeColorIndex, activeColor;
@@ -90,7 +90,7 @@ public class NewNotebookFragment extends DialogFragment implements NewNotebookAd
 						notebook.setPath(getContext().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath()+"/j"+notebook.getUID16().substring(1)+".json");
 						//((NotebookSelection)getActivity()).refreshData(new Notebook(nameReal,colors.get(activeColorIndex), Helpers.getSingleColorAccent(getContext(), activeColor)));
 						Helpers.writeNotebookToFile(notebook, getContext());
-						((NotebookSelection)getActivity()).addNotebookToAdapter(notebook);
+						((NotebookSelection)getActivity()).addNotebookToNBSelection(notebook);
 						dismiss();
 						//refresh.refreshData();
 					}
@@ -110,7 +110,7 @@ public class NewNotebookFragment extends DialogFragment implements NewNotebookAd
 		rvNewNotebook = (RecyclerView) v.findViewById(R.id.rvNewNotebook);
 		final GridLayoutManager rvNotebookManager = new GridLayoutManager(getContext(),6);
 		rvNewNotebook.setLayoutManager(rvNotebookManager);
-		NewNotebookAdapter adapter= new NewNotebookAdapter(getContext(), Helpers.getPossibleColors(getContext()), activeColorIndex, this);
+		ColorPickAdapter adapter= new ColorPickAdapter(getContext(), Helpers.getPossibleColors(getContext()), activeColorIndex, this);
 		rvNewNotebook.setVisibility(View.GONE);
 		toolbar.setBackgroundColor(activeColor);
 		rvNewNotebook.setAdapter(adapter);
@@ -137,7 +137,6 @@ public class NewNotebookFragment extends DialogFragment implements NewNotebookAd
 		getDialog().getWindow().setLayout((int)(width*0.9),(int)(height*0.8));*/
 		DisplayMetrics displaymetrics = new DisplayMetrics();
 		getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-		int height = displaymetrics.heightPixels;
 		int width = displaymetrics.widthPixels;
 		WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
 		lp.copyFrom(getDialog().getWindow().getAttributes());
@@ -150,16 +149,16 @@ public class NewNotebookFragment extends DialogFragment implements NewNotebookAd
 			NewNotebookFragment f = new NewNotebookFragment();
 			return f;
 	}
-	public void changeColor(int position){
-		if(Helpers.isColorDark(colors.get(position))){
-			toolbar.setTitleTextColor(getResources().getColor(R.color.md_dark_primary_text));
-		}else{
-			toolbar.setTitleTextColor(getResources().getColor(R.color.md_light_primary_text));
-		}
-		toolbar.setBackgroundColor(colors.get(position));
-		this.activeColorIndex =position;
-		this.activeColor= colors.get(activeColorIndex);
-	}
+			public void changeColor(int position){
+				if(Helpers.isColorDark(colors.get(position))){
+					toolbar.setTitleTextColor(getResources().getColor(R.color.md_dark_primary_text));
+				}else{
+					toolbar.setTitleTextColor(getResources().getColor(R.color.md_light_primary_text));
+				}
+				toolbar.setBackgroundColor(colors.get(position));
+				this.activeColorIndex =position;
+				this.activeColor= colors.get(activeColorIndex);
+			}
 
 	@Override
 	public void onDismiss(DialogInterface dialog) {

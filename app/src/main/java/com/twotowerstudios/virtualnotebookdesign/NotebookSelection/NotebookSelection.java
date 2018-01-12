@@ -30,12 +30,14 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.google.gson.Gson;
+import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 import com.twotowerstudios.virtualnotebookdesign.Misc.SharedPrefs;
+import com.twotowerstudios.virtualnotebookdesign.NewCollectionDialog.NewCollectionFragment;
 import com.twotowerstudios.virtualnotebookdesign.NewNotebookDialog.NewNotebookFragment;
 import com.twotowerstudios.virtualnotebookdesign.NotebookMain.NotebookMainActivity;
 import com.twotowerstudios.virtualnotebookdesign.Objects.ChildBase;
@@ -52,7 +54,7 @@ import java.text.CollationElementIterator;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class NotebookSelection extends AppCompatActivity implements NotebookSelectionAdapter.SelectionToNotebookInterface {
+public class NotebookSelection extends AppCompatActivity implements NotebookSelectionAdapter.SelectionToNotebookInterface, NewCollectionFragment.OnFragmentInteractionListener {
 	private RelativeLayout emptyList;
     private RecyclerView rvNotebookSelection;
     public RecyclerView.Adapter rvNotebookSelectionAdapter;
@@ -64,6 +66,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 	private boolean isFirstTime;
 	final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 3;
     final int REQUEST_CODE = 5;
+    private Drawer drawer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -175,48 +178,14 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 		//===============================================================================================================
 		if (!notebookSelectionCardList.isEmpty()) {
 			//
-			emptyList.setVisibility(View.GONE);
-			rvNotebookSelection.setVisibility(View.VISIBLE);
-			//================================================
-			isMainfabOpen = false;
-
-			fabAddBook = (FloatingActionButton) findViewById(R.id.fabAddBlock);
-			fabAddCollect = (FloatingActionButton) findViewById(R.id.fabAddCollect);
-			fabSelection.setOnClickListener(new View.OnClickListener(){
-				@Override
-				public void onClick(View view) {
-					if (!isMainfabOpen) {
-						fabAddBook.show();
-						fabAddCollect.show();
-						isMainfabOpen = true;
-						ObjectAnimator openAddBookfab = ObjectAnimator.ofFloat(fabAddBook, View.TRANSLATION_Y, 200,0); openAddBookfab.start();
-						ObjectAnimator openAddCollectFab = ObjectAnimator.ofFloat(fabAddCollect, View.TRANSLATION_Y, 400,0); openAddCollectFab.start();
-						ObjectAnimator rotateMainfab = ObjectAnimator.ofFloat(fabSelection, View.ROTATION, 0, 135); rotateMainfab.start();
-					} else if(isMainfabOpen){
-						isMainfabOpen = false;
-						ObjectAnimator rotateMainfab = ObjectAnimator.ofFloat(fabSelection, View.ROTATION, 135, 270); rotateMainfab.start();
-						ObjectAnimator closeFirstSubfab = ObjectAnimator.ofFloat(fabAddBook, View.TRANSLATION_Y, 0,200); closeFirstSubfab.start();
-						ObjectAnimator closeAddCollectFab = ObjectAnimator.ofFloat(fabAddCollect, View.TRANSLATION_Y, 0,400); closeAddCollectFab.start();
-						fabAddCollect.hide();
-						fabAddBook.hide();
-					}
-				}
-
-
-			});
-			fabAddBook.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View view) {
-					showDialog();
-				}
-			});
+			listNotEmpty();
 			//============================================
 		} else {
 			fabSelection.setVisibility(View.GONE);
 			emptyList.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					showDialog();
+					showDialog("NewNotebookFragment");
 				}
 			});
 		}
@@ -226,24 +195,67 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 		getSupportActionBar().setTitle("Notebooks");
 
 		ArrayList<IDrawerItem> drawerItems = populateDrawer();
-		new DrawerBuilder()
+		drawer = new DrawerBuilder()
 				.withActivity(this)
 				.addDrawerItems(drawerItems.toArray(new IDrawerItem[drawerItems.size()]))
 				.withSelectedItemByPosition(currentCollectionIndex)
 				.build();
-
-
     }
-    private ArrayList<IDrawerItem> populateDrawer(){
+
+	private void listNotEmpty() {
+		emptyList.setVisibility(View.GONE);
+		rvNotebookSelection.setVisibility(View.VISIBLE);
+		//================================================
+		isMainfabOpen = false;
+
+		fabAddBook = (FloatingActionButton) findViewById(R.id.fabAddBlock);
+		fabAddCollect = (FloatingActionButton) findViewById(R.id.fabAddCollect);
+		fabSelection.setOnClickListener(new View.OnClickListener(){
+			@Override
+			public void onClick(View view) {
+				if (!isMainfabOpen) {
+					fabAddBook.show();
+					fabAddCollect.show();
+					isMainfabOpen = true;
+					ObjectAnimator openAddBookfab = ObjectAnimator.ofFloat(fabAddBook, View.TRANSLATION_Y, 200,0); openAddBookfab.start();
+					ObjectAnimator openAddCollectFab = ObjectAnimator.ofFloat(fabAddCollect, View.TRANSLATION_Y, 400,0); openAddCollectFab.start();
+					ObjectAnimator rotateMainfab = ObjectAnimator.ofFloat(fabSelection, View.ROTATION, 0, 135); rotateMainfab.start();
+				} else if(isMainfabOpen){
+					isMainfabOpen = false;
+					ObjectAnimator rotateMainfab = ObjectAnimator.ofFloat(fabSelection, View.ROTATION, 135, 270); rotateMainfab.start();
+					ObjectAnimator closeFirstSubfab = ObjectAnimator.ofFloat(fabAddBook, View.TRANSLATION_Y, 0,200); closeFirstSubfab.start();
+					ObjectAnimator closeAddCollectFab = ObjectAnimator.ofFloat(fabAddCollect, View.TRANSLATION_Y, 0,400); closeAddCollectFab.start();
+					fabAddCollect.hide();
+					fabAddBook.hide();
+				}
+			}
+
+
+		});
+		fabAddBook.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				showDialog("NewNotebookFragment");
+			}
+		});
+		fabAddCollect.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				showDialog("NewCollectionFragment");
+			}
+		});
+	}
+
+	private ArrayList<IDrawerItem> populateDrawer(){
 		ArrayList<IDrawerItem> drawerArray = new ArrayList<>();
 		for (Collection a:collections) {
-			Drawable icon = getResources().getDrawable(R.drawable.ic_folder_black_24dp);
+			final Drawable icon = getResources().getDrawable(R.drawable.ic_folder_black_24dp);
 			//icon.setColorFilter(ContextCompat.getColor(getApplicationContext(), a.getColor()), PorterDuff.Mode.MULTIPLY);
 			drawerArray.add(new PrimaryDrawerItem().withName(a.getName()).withIcon(icon));
 		}
 		return drawerArray;
 	}
-    private void showDialog() {
+    private void showDialog(String type) {
 
         // DialogFragment.show() will take care of adding the fragment
         // in a transaction.  We also want to remove any currently showing
@@ -255,10 +267,14 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
         }
         ft.addToBackStack(null);
         // Create and show the dialog.
-        NewNotebookFragment newFragment = NewNotebookFragment.newInstance();
-        newFragment.show(ft, "dialog");
-
-    }
+		if (type.equals("NewNotebookFragment")) {
+			NewNotebookFragment newFragment = NewNotebookFragment.newInstance();
+			newFragment.show(ft, "dialog");
+		}else if(type.equals("NewCollectionFragment")) {
+			NewCollectionFragment newFragment = NewCollectionFragment.newInstance(collections);
+			newFragment.show(ft, "dialog");
+		}
+	}
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -358,6 +374,14 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 			}
 		}
 	}
+
+	@Override
+	public void onFragmentInteraction(Collection collection) {
+		collections.add(collection);
+		final Drawable icon = getResources().getDrawable(R.drawable.ic_folder_black_24dp);
+		drawer.addItem(new PrimaryDrawerItem().withName(collection.getName()).withIcon(icon));
+	}
+
 	class AsyncImporting extends AsyncTask<Uri, Void, Notebook> {
 		ProgressDialog pd;
 
@@ -449,11 +473,17 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 		emptyList.setVisibility(View.GONE);
 		rvNotebookSelection.setVisibility(View.VISIBLE);
 	}
-	public void addNotebookToAdapter(Notebook notebook){
+	public void addNotebookToNBSelection(Notebook notebook){
 		notebookSelectionCardList.add(notebook);
 		rvNotebookSelectionAdapter.notifyItemInserted(notebookSelectionCardList.size()-1);
+		collections.get(currentCollectionIndex).addUID(notebook.getUID16());
+		Helpers.writeCollectionsToFile(collections, getApplicationContext());
+		listNotEmpty();
 	}
 
+	public void addCollection(Collection collection){
+
+	}
 	@Override
 	public void openNotebookActivity(int position) {
 		Intent intent = new Intent(this, NotebookMainActivity.class);

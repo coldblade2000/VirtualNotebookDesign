@@ -150,13 +150,13 @@ public class NewCollectionFragment extends DialogFragment implements ColorPickAd
                     try {
                         for(int i=0;i<collections.size();i++){
                             if (nameLow.equalsIgnoreCase(collections.get(i).getName())){
-                                Toast.makeText(getContext(),"Notebook already exists", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getContext(),"Collection already exists", Toast.LENGTH_SHORT).show();
                                 collectionExists=true;
                                 break;
                             }
                         }
                     } catch (NullPointerException e) {
-                        Log.d("NewNotebookFrag","Notebooklist was empty, adding notebook");
+                        Log.d("NewCollectFrag","Collection list was empty, adding collection: "+etNewCollection);
                     }
                     if (!collectionExists){
                         Toast.makeText(getContext(),"Created notebook called: \""+nameReal+"\"", Toast.LENGTH_SHORT).show();

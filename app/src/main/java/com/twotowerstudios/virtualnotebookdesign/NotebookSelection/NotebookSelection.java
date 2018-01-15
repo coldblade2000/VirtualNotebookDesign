@@ -376,10 +376,11 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 	}
 
 	@Override
-	public void onFragmentInteraction(Collection collection) {
+	public void onFragmentInteraction(Collection collection) { //Where a colllection is added to the notebookSelection activity
 		collections.add(collection);
 		final Drawable icon = getResources().getDrawable(R.drawable.ic_folder_black_24dp);
 		drawer.addItem(new PrimaryDrawerItem().withName(collection.getName()).withIcon(icon));
+		Helpers.writeCollectionsToFile(collections, getApplicationContext());
 	}
 
 	class AsyncImporting extends AsyncTask<Uri, Void, Notebook> {
@@ -481,9 +482,6 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 		listNotEmpty();
 	}
 
-	public void addCollection(Collection collection){
-
-	}
 	@Override
 	public void openNotebookActivity(int position) {
 		Intent intent = new Intent(this, NotebookMainActivity.class);

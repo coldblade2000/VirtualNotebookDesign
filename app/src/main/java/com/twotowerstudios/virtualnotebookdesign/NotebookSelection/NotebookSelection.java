@@ -199,6 +199,19 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 				.withActivity(this)
 				.addDrawerItems(drawerItems.toArray(new IDrawerItem[drawerItems.size()]))
 				.withSelectedItemByPosition(currentCollectionIndex)
+				.withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+					@Override
+					public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+						Collection clickedCollect = collections.get(position);
+						ArrayList<Notebook> collectionArrayList = new ArrayList<>();
+						for(String a: clickedCollect.getContentUIDs()){
+							collectionArrayList.add(Helpers.getNotebookFromUID(a, getApplicationContext()));
+						}
+						rvNotebookSelectionAdapter = new NotebookSelectionAdapter(getApplicationContext(),collectionArrayList , NotebookSelection.this, NotebookSelection.this);
+						rvNotebookSelection.setAdapter(rvNotebookSelectionAdapter);
+						return true;
+					}
+				})
 				.build();
     }
 
@@ -482,6 +495,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 		listNotEmpty();
 	}
 
+
 	@Override
 	public void openNotebookActivity(int position) {
 		Intent intent = new Intent(this, NotebookMainActivity.class);
@@ -492,14 +506,18 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 
     @Override
     protected void onResume() {
-		if(isFirstTime){
-			isFirstTime=false;
-		}else{
+		if (isFirstTime) {
+			isFirstTime = false;
+		} else {
 			notebookSelectionCardList.clear();
 			notebookSelectionCardList.addAll(Helpers.getNotebookList(getApplicationContext()));
 			rvNotebookSelectionAdapter.notifyDataSetChanged();
 		}
-        super.onResume();
+		super.onResume();
+	}
 
-    }
+    public void addCollectionToAdapters(Collection collection){
+    	collections.add(collection);
+
+	}
 }

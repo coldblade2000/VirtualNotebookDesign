@@ -137,6 +137,7 @@ public class NewCollectionFragment extends DialogFragment implements ColorPickAd
         etNewCollection = (EditText) v.findViewById(R.id.etNewCollection);
         toolbar = (Toolbar) v.findViewById(R.id.newcollectiontoolbar);
         toolbar.inflateMenu(R.menu.newnotebook);
+        toolbar.setTitle("Create new collection");
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -165,7 +166,7 @@ public class NewCollectionFragment extends DialogFragment implements ColorPickAd
                         //((NotebookSelection)getActivity()).refreshData(new Notebook(nameReal,colors.get(activeColorIndex), Helpers.getSingleColorAccent(getContext(), activeColor)));
                         collection.setColor(colors.get(activeColorIndex));
                         successfulSubmit(collection);
-                        dismiss(); //TODO finish making the collection
+                        dismiss();
                         //refresh.refreshData();
                     }
 

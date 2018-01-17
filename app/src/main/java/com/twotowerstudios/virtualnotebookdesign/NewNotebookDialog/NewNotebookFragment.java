@@ -52,12 +52,10 @@ public class NewNotebookFragment extends DialogFragment implements ColorPickAdap
 
 	@Override
 	public void onViewCreated(View v, Bundle savedInstanceState){
-
 		colors= Helpers.getPossibleColors(getContext());
 		activeColorIndex =new Random().nextInt(colors.size());
 		activeColor = colors.get(activeColorIndex);
 		swColors = (Switch) v.findViewById(R.id.switch1);
-
 		etNewName = (EditText) v.findViewById(R.id.etNewName);
 		notebookList = Helpers.getNotebookList(getContext());
 		toolbar = (Toolbar) v.findViewById(R.id.newnotebooktoolbar);
@@ -94,7 +92,6 @@ public class NewNotebookFragment extends DialogFragment implements ColorPickAdap
 						dismiss();
 						//refresh.refreshData();
 					}
-
 				}
 				return false;
 			}

@@ -70,7 +70,6 @@ public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelec
 		return new ViewHolder(v);
 	}
 
-
 	@Override
 	public void onBindViewHolder(final ViewHolder holder, int position){
 		final Notebook notebookSelection = notebookList.get(position);

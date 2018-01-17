@@ -199,20 +199,25 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 				.withActivity(this)
 				.addDrawerItems(drawerItems.toArray(new IDrawerItem[drawerItems.size()]))
 				.withSelectedItemByPosition(currentCollectionIndex)
+				.withToolbar(toolbar)
 				.withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
 					@Override
 					public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+						currentCollectionIndex = position;
 						Collection clickedCollect = collections.get(position);
 						ArrayList<Notebook> collectionArrayList = new ArrayList<>();
 						for(String a: clickedCollect.getContentUIDs()){
 							collectionArrayList.add(Helpers.getNotebookFromUID(a, getApplicationContext()));
 						}
-						rvNotebookSelectionAdapter = new NotebookSelectionAdapter(getApplicationContext(),collectionArrayList , NotebookSelection.this, NotebookSelection.this);
+						notebookSelectionCardList.clear();
+						notebookSelectionCardList.addAll(collectionArrayList);
+						rvNotebookSelectionAdapter = new NotebookSelectionAdapter(getApplicationContext(),notebookSelectionCardList , NotebookSelection.this, NotebookSelection.this);
 						rvNotebookSelection.setAdapter(rvNotebookSelectionAdapter);
 						return true;
 					}
 				})
 				.build();
+
     }
 
 	private void listNotEmpty() {
@@ -339,6 +344,10 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 				Log.d(TAG, "Name: "+a.getName());
 				Log.d(TAG, "UID 8: "+a.getUID8());
 				Log.d(TAG, "Color: "+a.getColor());
+				Log.d(TAG, "UIDs: ");
+				for(String s: a.getContentUIDs()) {
+					Log.d(TAG, s+", ");
+				}
 				for(Notebook ab : Helpers.getNotebooksFromCollection(a, getApplicationContext())){
 					Log.d(TAG, ab.getName());
 					Log.d(TAG, "*	UID16 = "+ab.getUID16());

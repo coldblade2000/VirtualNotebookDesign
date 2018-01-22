@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/md_cyan_500"
-        app:title="Transfer notebook to...">
+        app:title="Transfer notebook">
 
     </android.support.v7.widget.Toolbar>
 

@@ -60,4 +60,8 @@ public class Collection {
             contentUIDs.add(UID16);
         }
     }
+    @Override
+    public String toString(){
+        return name;
+    }
 }

@@ -12,8 +12,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.twotowerstudios.virtualnotebookdesign.Objects.Collection;
+import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
 import com.twotowerstudios.virtualnotebookdesign.R;
 
 import org.parceler.Parcel;
@@ -22,24 +24,27 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TransferNotebookDialog extends Fragment implements AdapterView.OnItemClickListener{
+public class TransferNotebookDialog extends Fragment implements AdapterView.OnItemSelectedListener
+{
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
      ArrayList<Collection> collections;
+     Notebook notebook;
 
     private OnFragmentInteractionListener mListener;
     public TransferNotebookDialog() {
     }
 
     Spinner transferSpinner;
+    Collection selectedCollection;
     Button button, button2;
     Toolbar transfortoolbar;
     List<String> uids;
 
-    // TODO: Rename and change types and number of parameters
-    public static TransferNotebookDialog newInstance(ArrayList<Collection> list) {
+    public static TransferNotebookDialog newInstance(ArrayList<Collection> list, Notebook notebook) {
         TransferNotebookDialog fragment = new TransferNotebookDialog();
         Bundle args = new Bundle();
         args.putParcelable("list", Parcels.wrap(list));
+        args.putParcelable("book", Parcels.wrap(notebook));
         fragment.setArguments(args);
         return fragment;
     }
@@ -50,6 +55,7 @@ public class TransferNotebookDialog extends Fragment implements AdapterView.OnIt
         if (getArguments() != null) {
             //mParam1 = getArguments().getString(ARG_PARAM1);
             collections = getArguments().getParcelable("list");
+            notebook = getArguments().getParcelable("book");
             uids = new ArrayList<String>();
             for (int i = 0; i < collections.size(); i++) {
                 uids.add(collections.get(i).getUID8());
@@ -66,21 +72,37 @@ public class TransferNotebookDialog extends Fragment implements AdapterView.OnIt
 
     @Override
     public void onViewCreated(View v, @Nullable Bundle savedInstanceState) {
+        selectedCollection = collections.get(collections.size()-1);
         transferSpinner = (Spinner) v.findViewById(R.id.transferSpinner);
         button = (Button) v.findViewById(R.id.button);
         button2 = (Button) v.findViewById(R.id.button2);
         transfortoolbar = (Toolbar) v.findViewById(R.id.transfertoolbar);
 
-        transferSpinner.setOnItemClickListener(this);
-        ArrayAdapter<Collection> adapter = new ArrayAdapter<Collection>(getContext(), android.R.layout.simple_spinner_item, collections);
+        transferSpinner.setOnItemSelectedListener(this);
+        ArrayAdapter<Collection> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, collections);
         transferSpinner.setAdapter(adapter);
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Collection collection = ((Collection) transferSpinner.getSelectedItem());
+                if (mListener != null) {
+                    breakout:
+                    for(Collection a: collections){
+                        for(String b: a.getContentUIDs()){
+                            if(notebook.getUID16().equals(b)){
+                                ArrayList<String> newContentUIDsFromOldCollection= a.getContentUIDs();
+                                newContentUIDsFromOldCollection.remove(notebook.getUID16());
+                                //TODO Finish the notebook transfer logic
+                                a.setContentUIDs());
+                                break breakout;
+                            }
+                        }
+                    }
+                    //mListener.onFragmentInteraction();
+                }
+            }
+        });
         super.onViewCreated(v, savedInstanceState);
-    }
-
-    public void onSubmit(String UID16) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(UID16);
-        }
     }
 
     @Override
@@ -101,7 +123,14 @@ public class TransferNotebookDialog extends Fragment implements AdapterView.OnIt
     }
 
     @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        Collection item = (Collection) adapterView.getItemAtPosition(i);
+        selectedCollection = item;
+        Toast.makeText(getContext(), "Selected "+ item.getName(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
 
     }
 

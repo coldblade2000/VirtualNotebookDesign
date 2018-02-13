@@ -618,4 +618,19 @@ public class Helpers {
         }
         return null;
     }
+    public static void writeOneCollectionToFile(Collection collection, Context context){
+    	ArrayList<Collection> collections = getCollections(context);
+		boolean hasBeenUpdated = false;
+		for (int i = 0; i < collections.size(); i++) {
+			if(collections.get(i).getUID8().equals(collection.getUID8())){
+				collections.set(i, collection);
+				hasBeenUpdated = true;
+				break;
+			}
+		}
+		if (!hasBeenUpdated){
+			collections.add(collection);
+		}
+
+	}
 }

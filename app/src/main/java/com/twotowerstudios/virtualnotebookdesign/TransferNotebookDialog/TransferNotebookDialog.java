@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Collection;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
 import com.twotowerstudios.virtualnotebookdesign.R;
@@ -93,7 +94,8 @@ public class TransferNotebookDialog extends Fragment implements AdapterView.OnIt
                                 ArrayList<String> newContentUIDsFromOldCollection= a.getContentUIDs();
                                 newContentUIDsFromOldCollection.remove(notebook.getUID16());
                                 //TODO Finish the notebook transfer logic
-                                a.setContentUIDs());
+                                a.setContentUIDs(newContentUIDsFromOldCollection);
+                                Helpers.writeOneCollectionToFile(a, getContext());
                                 break breakout;
                             }
                         }

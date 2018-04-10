@@ -306,7 +306,7 @@ public class Helpers {
 	public static int getSingleColorAccent(Context context, int color){
 		ArrayList<Integer> colors = getPossibleColors(context);
 		String TAG = "getSingleColorAccent";
-		Log.d(TAG, "colors.size()== "+colors.size());
+		//Log.d(TAG, "colors.size()== "+colors.size());
 		return getColorAccents(context).get(colors.indexOf(color));
 	}
 	public static String generateUniqueId(int length){
@@ -327,18 +327,18 @@ public class Helpers {
 		return result;
 	}
 	public static Notebook getNotebookFromUID(String UID16, Context context){
-		Log.d(TAG, "getNotebookFromUID: UID = "+UID16);
+		//Log.d(TAG, "getNotebookFromUID: UID = "+UID16);
 		if(SharedPrefs.getInt(context, "filestructure") ==1){
 			File directory = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath());
 			for (File a:directory.listFiles()) {
-				Log.d(TAG, "getNotebookFromUID: "+ a.getName());
-				Log.d(TAG, "getNotebookFromUID: "+ a.getName().substring(0,16));
+				//Log.d(TAG, "getNotebookFromUID: "+ a.getName());
+				//Log.d(TAG, "getNotebookFromUID: "+ a.getName().substring(0,16));
 				if(a.getName().length() >= 17 && a.getName().substring(1,17).equals(UID16.substring(1))){
-					Log.d(TAG, "getNotebookFromUID: found notebook match");
+					//Log.d(TAG, "getNotebookFromUID: found notebook match");
 					return gson.fromJson(getStringFromFile(a), Notebook.class);
 				}
 			}
-			Log.d(TAG, "getNotebookFromUID: didn't find the notebook");
+			Log.w(TAG, "getNotebookFromUID: didn't find the notebook");
 
 		}else{
 			ArrayList<Notebook> list = Helpers.getNotebookList(context);
@@ -603,7 +603,7 @@ public class Helpers {
         ArrayList<Notebook> notebooks = new ArrayList<>();
 		Notebook book;
 		for(String a: collection.getContentUIDs()){
-			Log.d(TAG, "getNotebooksFromCollection: ContentUID = "+a);
+			//Log.d(TAG, "getNotebooksFromCollection: ContentUID = "+a);
 			book = getNotebookFromUID(a,context);
             notebooks.add(book);
             Log.d(TAG, "Name: "+book.getName());
@@ -612,7 +612,7 @@ public class Helpers {
     }
     public static Collection getCollectionFromUID(String UID8, Context context){
         for(Collection a: getCollections(context)){
-            if (a.getUID8().substring(1).equals(UID8)){
+            if (a.getUID8().equals(UID8)){
                 return a;
             }
         }

@@ -314,11 +314,12 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
         int id = item.getItemId();
 
      	if(id == R.id.action_import) {
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            intent.setType("*/*");
-            startActivityForResult(intent, REQUEST_CODE);
-            return true;
-        }else if(id== R.id.action_delete){
+			Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+			intent.setType("*/*");
+			startActivityForResult(intent, REQUEST_CODE);
+			return true;
+            /*
+            else if(id== R.id.action_delete){
             File file = new File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath());
 			for(File a: file.listFiles()){
 				if(a.getName().substring(a.getName().length()-4).equals("json")){
@@ -328,6 +329,19 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 					a.renameTo(new File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsoluteFile()+"/j"+notebook.getUID16().substring(1)+ ".json"));
 				}
 			}
+             */
+		}else if(id== R.id.action_delete){
+				File file = new File(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath());
+				for(Notebook a: Helpers.getNotebookList(getApplicationContext())){
+					for(Page b: a.getPages()){
+						for(ChildBase c: b.getContent()){
+							c.getFile().delete();
+						}
+					}
+				}
+				for(File ad: file.listFiles()){
+					ad.delete();
+				}
         }else if(id==R.id.action_dumpjson){
 			String fileString = Helpers.getStringFromName("Notebooks.json", getApplicationContext());
 			int reps = (fileString.length()/4000)+1;
@@ -463,6 +477,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 					}
 				}
 				Helpers.writeNotebookToFile(notebook, getApplicationContext());
+                collections.get(currentCollectionIndex).addUID(notebook.getUID16());
 			}
 			Log.d("NotebookSelection", gson.toJson(notebook));
 			//file.delete();
@@ -478,7 +493,9 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 			{
 				pd.dismiss();
 			}
-			Helpers.addToNotebookList(notebook, getApplicationContext());
+			Helpers.addToNotebookList(notebook, getApplicationContext(), collections.get(currentCollectionIndex).getUID8());
+			Helpers.writeCollectionsToFile(collections, getApplicationContext());
+			//Helpers.addToNotebookList(notebook, getApplicationContext());
 			refreshData(notebook);
 		}
 	}
@@ -490,7 +507,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 	public void refreshData(Notebook newNotebook) {
 		Helpers.addToNotebookList(newNotebook, getApplicationContext());
 		notebookSelectionCardList.clear();
-		notebookSelectionCardList.addAll(Helpers.getNotebookList(getApplicationContext()));
+		notebookSelectionCardList.addAll(Helpers.getNotebooksFromCollection(collections.get(currentCollectionIndex),getApplicationContext()));
 		rvNotebookSelectionAdapter.notifyDataSetChanged();
 		rvNotebookSelection.getLayoutManager().scrollToPosition(notebookSelectionCardList.size());
 		emptyList.setVisibility(View.GONE);
@@ -519,7 +536,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 			isFirstTime = false;
 		} else {
 			notebookSelectionCardList.clear();
-			notebookSelectionCardList.addAll(Helpers.getNotebookList(getApplicationContext()));
+			notebookSelectionCardList.addAll(Helpers.getNotebooksFromCollection(collections.get(currentCollectionIndex), getApplicationContext()));
 			rvNotebookSelectionAdapter.notifyDataSetChanged();
 		}
 		super.onResume();

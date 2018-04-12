@@ -1,8 +1,11 @@
 package com.twotowerstudios.virtualnotebookdesign.TransferNotebookDialog;
 
+import android.app.Dialog;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -25,7 +28,7 @@ import org.parceler.Parcels;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TransferNotebookDialog extends Fragment implements AdapterView.OnItemSelectedListener
+public class TransferNotebookDialog extends DialogFragment implements AdapterView.OnItemSelectedListener
 {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
      ArrayList<Collection> collections;
@@ -80,7 +83,7 @@ public class TransferNotebookDialog extends Fragment implements AdapterView.OnIt
         transfortoolbar = (Toolbar) v.findViewById(R.id.transfertoolbar);
 
         transferSpinner.setOnItemSelectedListener(this);
-        ArrayAdapter<Collection> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, collections);
+        ArrayAdapter<Collection> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, collections);
         transferSpinner.setAdapter(adapter);
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,11 +94,16 @@ public class TransferNotebookDialog extends Fragment implements AdapterView.OnIt
                     for(Collection a: collections){
                         for(String b: a.getContentUIDs()){
                             if(notebook.getUID16().equals(b)){
+                                //Delete notebook from original collection
                                 ArrayList<String> newContentUIDsFromOldCollection= a.getContentUIDs();
                                 newContentUIDsFromOldCollection.remove(notebook.getUID16());
                                 //TODO Finish the notebook transfer logic
                                 a.setContentUIDs(newContentUIDsFromOldCollection);
-                                Helpers.writeOneCollectionToFile(a, getContext());
+                                Helpers.writeOneCollectionToFile(a, getActivity());
+
+                                //Add notebook to new collection
+                                collection.addUID(notebook.getUID16());
+                                Helpers.writeOneCollectionToFile(collection,getActivity());
                                 break breakout;
                             }
                         }
@@ -112,6 +120,7 @@ public class TransferNotebookDialog extends Fragment implements AdapterView.OnIt
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
+
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -128,7 +137,7 @@ public class TransferNotebookDialog extends Fragment implements AdapterView.OnIt
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         Collection item = (Collection) adapterView.getItemAtPosition(i);
         selectedCollection = item;
-        Toast.makeText(getContext(), "Selected "+ item.getName(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Selected "+ item.getName(), Toast.LENGTH_SHORT).show();
     }
 
     @Override

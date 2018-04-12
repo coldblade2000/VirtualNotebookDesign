@@ -38,6 +38,7 @@ import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
 import com.twotowerstudios.virtualnotebookdesign.PageActivityMain.PageActivityMain;
 import com.twotowerstudios.virtualnotebookdesign.R;
+import com.twotowerstudios.virtualnotebookdesign.TransferNotebookDialog.TransferNotebookDialog;
 
 import org.parceler.Parcels;
 
@@ -202,6 +203,17 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 						});
 				builder.show();
 				break;
+			case R.id.transfernotebook:
+				FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+				Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
+				if (prev != null) {
+					ft.remove(prev);
+				}
+				ft.addToBackStack(null);
+				// Create and show the dialog.
+
+				TransferNotebookDialog newFragment = TransferNotebookDialog.newInstance(Helpers.getCollections(getApplicationContext()), notebook);
+				newFragment.show(ft, "dialog");
 			case android.R.id.home:
 				// Launch the correct Activity here
 				finish();
@@ -211,6 +223,7 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 	}
 
     //=========
+
 
 
     class AsyncExporting extends AsyncTask<Notebook, Void, File> {

@@ -8,14 +8,15 @@ import org.parceler.Parcel;
 
 import java.util.ArrayList;
 
+@SuppressWarnings("WeakerAccess")
 @Parcel
 public class Notebook {
-	private String name;
-	private int color,accentColor;
-	private long lastModified;
-	private String UID16;
-	private ArrayList<Page> pages;
-	private String path;
+	String name;
+	int color,accentColor;
+	long lastModified;
+	String UID16;
+	ArrayList<Page> pages;
+	String path;
 
 	public Notebook(String name, int color, Context context){
 		this.name=name;
@@ -65,7 +66,7 @@ public class Notebook {
 	}
 	public void setPages(ArrayList<Page> list){pages=list;
 	}
-	public void addPage(Page page){
+	/*public void addPage(Page page){
 		pages.add(page);
-	}
+	}*/
 }

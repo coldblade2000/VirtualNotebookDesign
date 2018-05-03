@@ -1,12 +1,12 @@
 package com.twotowerstudios.virtualnotebookdesign.TransferNotebookDialog;
 
-import android.app.Dialog;
+
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
+
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,8 +58,8 @@ public class TransferNotebookDialog extends DialogFragment implements AdapterVie
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             //mParam1 = getArguments().getString(ARG_PARAM1);
-            collections = getArguments().getParcelable("list");
-            notebook = getArguments().getParcelable("book");
+            collections = Parcels.unwrap(getArguments().getParcelable("list"));
+            notebook = Parcels.unwrap(getArguments().getParcelable("book"));
             uids = new ArrayList<String>();
             for (int i = 0; i < collections.size(); i++) {
                 uids.add(collections.get(i).getUID8());
@@ -97,7 +97,6 @@ public class TransferNotebookDialog extends DialogFragment implements AdapterVie
                                 //Delete notebook from original collection
                                 ArrayList<String> newContentUIDsFromOldCollection= a.getContentUIDs();
                                 newContentUIDsFromOldCollection.remove(notebook.getUID16());
-                                //TODO Finish the notebook transfer logic
                                 a.setContentUIDs(newContentUIDsFromOldCollection);
                                 Helpers.writeOneCollectionToFile(a, getActivity());
 

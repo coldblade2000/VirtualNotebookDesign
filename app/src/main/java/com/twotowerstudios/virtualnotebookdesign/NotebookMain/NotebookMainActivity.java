@@ -13,6 +13,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
@@ -47,7 +48,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 
-public class NotebookMainActivity extends AppCompatActivity implements NewPageFragment.OnFragmentInteractionListener, NotebookAdapterToAct{
+public class NotebookMainActivity extends AppCompatActivity implements NewPageFragment.OnFragmentInteractionListener,TransferNotebookDialog.OnFragmentInteractionListener, NotebookAdapterToAct{
 
 	Toolbar toolbar;
 	Notebook notebook;
@@ -204,7 +205,12 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 				builder.show();
 				break;
 			case R.id.transfernotebook:
-				FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+				FragmentManager fm = getSupportFragmentManager();
+
+				TransferNotebookDialog newFragment = TransferNotebookDialog.newInstance(Helpers.getCollections(getApplicationContext()), notebook);
+
+				newFragment.show(fm, "dialog");
+				/*FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 				Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
 				if (prev != null) {
 					ft.remove(prev);
@@ -213,16 +219,22 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 				// Create and show the dialog.
 
 				TransferNotebookDialog newFragment = TransferNotebookDialog.newInstance(Helpers.getCollections(getApplicationContext()), notebook);
-				newFragment.show(ft, "dialog");
+				newFragment.show(ft, "dialog");*/
+				break;
 			case android.R.id.home:
 				// Launch the correct Activity here
 				finish();
-
+				break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
 
-    //=========
+	@Override
+	public void onFragmentInteraction(String uri) {
+
+	}
+
+	//=========
 
 
 

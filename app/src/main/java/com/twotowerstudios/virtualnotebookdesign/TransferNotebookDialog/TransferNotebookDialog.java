@@ -88,13 +88,13 @@ public class TransferNotebookDialog extends DialogFragment implements AdapterVie
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Toast.makeText(getContext(), "Submitted?", Toast.LENGTH_SHORT).show();
                 Collection collection = ((Collection) transferSpinner.getSelectedItem());
                 if (mListener != null) {
                     breakout:
                     for(Collection a: collections){
                         for(String b: a.getContentUIDs()){
                             if(notebook.getUID16().equals(b)){
-                                //Delete notebook from original collection
                                 ArrayList<String> newContentUIDsFromOldCollection= a.getContentUIDs();
                                 newContentUIDsFromOldCollection.remove(notebook.getUID16());
                                 a.setContentUIDs(newContentUIDsFromOldCollection);
@@ -109,6 +109,7 @@ public class TransferNotebookDialog extends DialogFragment implements AdapterVie
                     }
                     //mListener.onFragmentInteraction();
                 }
+                dismiss();
             }
         });
         super.onViewCreated(v, savedInstanceState);

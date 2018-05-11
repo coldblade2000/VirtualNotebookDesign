@@ -41,14 +41,16 @@ public class TransferNotebookDialog extends DialogFragment implements AdapterVie
     Spinner transferSpinner;
     Collection selectedCollection;
     Button button, button2;
+    String collectionUID;
     Toolbar transfortoolbar;
     List<String> uids;
 
-    public static TransferNotebookDialog newInstance(ArrayList<Collection> list, Notebook notebook) {
+    public static TransferNotebookDialog newInstance(ArrayList<Collection> list, Notebook notebook, String collectionUID) {
         TransferNotebookDialog fragment = new TransferNotebookDialog();
         Bundle args = new Bundle();
         args.putParcelable("list", Parcels.wrap(list));
         args.putParcelable("book", Parcels.wrap(notebook));
+        args.putString("collectionUID", collectionUID);
         fragment.setArguments(args);
         return fragment;
     }
@@ -60,10 +62,12 @@ public class TransferNotebookDialog extends DialogFragment implements AdapterVie
             //mParam1 = getArguments().getString(ARG_PARAM1);
             collections = Parcels.unwrap(getArguments().getParcelable("list"));
             notebook = Parcels.unwrap(getArguments().getParcelable("book"));
-            uids = new ArrayList<String>();
+            collectionUID = getArguments().getString("collectionUID");
+            uids = new ArrayList<>();
             for (int i = 0; i < collections.size(); i++) {
                 uids.add(collections.get(i).getUID8());
             }
+
         }
     }
 
@@ -85,31 +89,39 @@ public class TransferNotebookDialog extends DialogFragment implements AdapterVie
         transferSpinner.setOnItemSelectedListener(this);
         ArrayAdapter<Collection> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, collections);
         transferSpinner.setAdapter(adapter);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+            }
+        });
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getContext(), "Submitted?", Toast.LENGTH_SHORT).show();
                 Collection collection = ((Collection) transferSpinner.getSelectedItem());
-                if (mListener != null) {
-                    breakout:
-                    for(Collection a: collections){
-                        for(String b: a.getContentUIDs()){
-                            if(notebook.getUID16().equals(b)){
-                                ArrayList<String> newContentUIDsFromOldCollection= a.getContentUIDs();
-                                newContentUIDsFromOldCollection.remove(notebook.getUID16());
-                                a.setContentUIDs(newContentUIDsFromOldCollection);
-                                Helpers.writeOneCollectionToFile(a, getActivity());
+                if(collection.getUID8().equals(collectionUID)){
+                    Toast.makeText(getContext(), "This notebook is already in this collection", Toast.LENGTH_SHORT).show();
+                }else {
+                    if (mListener != null) {
+                        breakout:
+                        for (Collection a : collections) {
+                            for (String b : a.getContentUIDs()) {
+                                if (notebook.getUID16().equals(b)) {
+                                    ArrayList<String> newContentUIDsFromOldCollection = a.getContentUIDs();
+                                    newContentUIDsFromOldCollection.remove(notebook.getUID16());
+                                    a.setContentUIDs(newContentUIDsFromOldCollection);
+                                    Helpers.writeOneCollectionToFile(a, getActivity());
 
-                                //Add notebook to new collection
-                                collection.addUID(notebook.getUID16());
-                                Helpers.writeOneCollectionToFile(collection,getActivity());
-                                break breakout;
+                                    //Add notebook to new collection
+                                    collection.addUID(notebook.getUID16());
+                                    Helpers.writeOneCollectionToFile(collection, getActivity());
+                                    break breakout;
+                                }
                             }
                         }
                     }
-                    //mListener.onFragmentInteraction();
+                    dismiss();
                 }
-                dismiss();
             }
         });
         super.onViewCreated(v, savedInstanceState);

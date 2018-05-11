@@ -1,7 +1,6 @@
 package com.twotowerstudios.virtualnotebookdesign.NotebookMain;
 
 import android.app.ProgressDialog;
-import android.content.ContentProvider;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -54,6 +53,7 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 	Notebook notebook;
 	FloatingActionButton fabnotebookmain;
 	CollapsingToolbarLayout collapsingToolbarLayout;
+	String collectionUID;
 	String parent;
 	String notebookUID16;
 	TextView tvSub;
@@ -153,6 +153,7 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 			tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
 			tabLayout.setupWithViewPager(viewPager);
 		}
+		collectionUID = getIntent().getExtras().getString("collectionUID");
 		parent = getIntent().getExtras().getString("parent");
 		tvSub = (TextView) findViewById(R.id.tvSub);
 		tvSub.setText("Last Modified: "+ DateUtils.getRelativeTimeSpanString(notebook.getLastModified(), Helpers.getCurrentTimeInMillis(), DateUtils.SECOND_IN_MILLIS));
@@ -207,7 +208,7 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 			case R.id.transfernotebook:
 				FragmentManager fm = getSupportFragmentManager();
 
-				TransferNotebookDialog newFragment = TransferNotebookDialog.newInstance(Helpers.getCollections(getApplicationContext()), notebook);
+				TransferNotebookDialog newFragment = TransferNotebookDialog.newInstance(Helpers.getCollections(getApplicationContext()), notebook, collectionUID);
 
 				newFragment.show(fm, "dialog");
 				/*FragmentTransaction ft = getSupportFragmentManager().beginTransaction();

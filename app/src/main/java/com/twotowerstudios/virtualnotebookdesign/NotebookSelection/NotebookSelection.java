@@ -7,7 +7,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -16,6 +15,7 @@ import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -32,7 +32,6 @@ import android.widget.RelativeLayout;
 import com.google.gson.Gson;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
@@ -45,16 +44,15 @@ import com.twotowerstudios.virtualnotebookdesign.Objects.Collection;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
 import com.twotowerstudios.virtualnotebookdesign.R;
+import com.twotowerstudios.virtualnotebookdesign.TransferNotebookDialog.TransferNotebookDialog;
 
 import org.parceler.Parcels;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.CollationElementIterator;
 import java.util.ArrayList;
-import java.util.Scanner;
 
-public class NotebookSelection extends AppCompatActivity implements NotebookSelectionAdapter.SelectionToNotebookInterface, NewCollectionFragment.OnFragmentInteractionListener {
+public class NotebookSelection extends AppCompatActivity implements NotebookSelectionAdapter.SelectionToNotebookSelectionInterface, NewCollectionFragment.OnFragmentInteractionListener {
 	private RelativeLayout emptyList;
     private RecyclerView rvNotebookSelection;
     public RecyclerView.Adapter rvNotebookSelectionAdapter;
@@ -526,15 +524,32 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 	public void openNotebookActivity(int position) {
 		Intent intent = new Intent(this, NotebookMainActivity.class);
 		intent.putExtra("notebook", Parcels.wrap(notebookSelectionCardList.get(position)));
-        intent.putExtra("parent","NotebookSelection");
+		intent.putExtra("parent","NotebookSelection");
+		intent.putExtra("collectionUID",collections.get(currentCollectionIndex).getUID8());
 		startActivity(intent);
 	}
 
-    @Override
+	@Override
+	public void transferNotebook(int position) {
+		FragmentManager fm = getSupportFragmentManager();
+
+		TransferNotebookDialog newFragment = TransferNotebookDialog.newInstance(Helpers.getCollections(getApplicationContext()),
+				notebookSelectionCardList.get(position), collections.get(currentCollectionIndex).getUID8());
+
+		newFragment.show(fm, "dialog");
+	}
+
+	@Override
+	public void renameNotebook(int position) {
+
+	}
+
+	@Override
     protected void onResume() {
 		if (isFirstTime) {
 			isFirstTime = false;
 		} else {
+			collections = Helpers.getCollections(getApplicationContext());
 			notebookSelectionCardList.clear();
 			notebookSelectionCardList.addAll(Helpers.getNotebooksFromCollection(collections.get(currentCollectionIndex), getApplicationContext()));
 			rvNotebookSelectionAdapter.notifyDataSetChanged();

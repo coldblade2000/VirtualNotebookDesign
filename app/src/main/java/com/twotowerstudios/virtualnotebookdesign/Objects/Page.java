@@ -10,7 +10,7 @@ import java.util.ArrayList;
 @Parcel
 public class Page implements Comparable<Page>{
 	public ArrayList<ChildBase> content;
-	private String name;
+	String name;
 	int pageNumber;
 	long lastModifiedMillis;
 	long dateMillis;

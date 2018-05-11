@@ -570,8 +570,12 @@ public class Helpers {
 			}
 		}*/
 		File folder = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath(), "n"+UID16.substring(1));
-		for(File a: folder.listFiles()){
-			a.delete();
+		try{
+			for(File a: folder.listFiles()){
+				a.delete();
+			}
+		}catch (NullPointerException e){
+			e.printStackTrace();
 		}
 		File json = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath(), "j"+UID16.substring(1)+".json");
 		if(json.delete()){
@@ -631,6 +635,6 @@ public class Helpers {
 		if (!hasBeenUpdated){
 			collections.add(collection);
 		}
-
+		writeCollectionsToFile(collections, context);
 	}
 }

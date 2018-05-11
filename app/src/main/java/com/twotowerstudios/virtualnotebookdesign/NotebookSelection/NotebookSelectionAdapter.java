@@ -3,13 +3,11 @@ package com.twotowerstudios.virtualnotebookdesign.NotebookSelection;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.Environment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,12 +17,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
-import com.twotowerstudios.virtualnotebookdesign.Objects.ChildBase;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
-import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
 import com.twotowerstudios.virtualnotebookdesign.R;
 
-import java.io.File;
 import java.util.ArrayList;
 
 
@@ -36,10 +31,12 @@ public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelec
 	Context context;
 	ArrayList<Notebook> notebookList;
 	private Activity mActivity = null;
-	SelectionToNotebookInterface Interface;
+	SelectionToNotebookSelectionInterface Interface;
 
-	public interface SelectionToNotebookInterface{
+	public interface SelectionToNotebookSelectionInterface {
 		void openNotebookActivity(int position);
+		void transferNotebook(int position);
+		void renameNotebook(int position);
 	}
 
 	public static class ViewHolder extends RecyclerView.ViewHolder{
@@ -57,7 +54,7 @@ public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelec
 			card = (CardView) view.findViewById(R.id.notebookSelectionCard);
 		}
 	}
-	public NotebookSelectionAdapter(Context context, ArrayList<Notebook> list, SelectionToNotebookInterface Interface, Activity mActivity){
+	public NotebookSelectionAdapter(Context context, ArrayList<Notebook> list, SelectionToNotebookSelectionInterface Interface, Activity mActivity){
 		this.context = context;
 		this.notebookList = list;
 		this.Interface=Interface;
@@ -88,44 +85,58 @@ public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelec
 		holder.card.setOnLongClickListener(new View.OnLongClickListener() {
 			@Override
 			public boolean onLongClick(View v) {
-				if (notebookList.get(holder.getAdapterPosition()).getNumberOfPages()==0) {
-					//make this delete the pictures
-					new AlertDialog.Builder(mActivity)
-							.setTitle("Do you want to delete this notebook?")
-							.setMessage("Every photo and item will be deleted")
-							.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
+				CharSequence colors[] = new CharSequence[] {"Rename Notebook", "Transfer Notebook", "Delete Notebook"};
+				AlertDialog.Builder alertBuilder = new AlertDialog.Builder(v.getRootView().getContext());
+				alertBuilder.setTitle("Select an action...");
+				alertBuilder.setItems(colors, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface alertDialog, int which) {
+						switch (which){
+							case 0:
 
-									notebookList.remove(holder.getAdapterPosition());
-									Helpers.deleteNotebookByUID(notebookSelection.getUID16(), context);
-									//Helpers.writeListToFile(notebookList, context);
-									//notifyItemRemoved(holder.getAdapterPosition());
-								}
-							})
-							.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
+								break;
+							case 1:
 
-								}
-							}).show();
-				}else{
-					final EditText edittext = new EditText(context);
-					AlertDialog.Builder dialog = new AlertDialog.Builder(mActivity);
-					dialog.setTitle("Do you want to delete this notebook?");
-					if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-						dialog.setMessage(Html.fromHtml("You will have to type out the exact name of the notebook to confirm." + "<br>" + "<b>" + notebookSelection.getName() + "</b>", Html.FROM_HTML_MODE_LEGACY));
-					}else {
-						dialog.setMessage(Html.fromHtml("You will have to type out the exact name of the notebook to confirm. The name is case and space sensitive." + "<br>" + "<b>" + notebookSelection.getName() + "</b>"));
-					}dialog.setView(edittext);
-					dialog.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							if(edittext.getText().toString().trim().equals(notebookSelection.getName().trim())){
+								break;
+							case 2:
+								if (notebookList.get(holder.getAdapterPosition()).getNumberOfPages()==0) {
+									//make this delete the pictures
+									new AlertDialog.Builder(mActivity)
+											.setTitle("Do you want to delete this notebook?")
+											.setMessage("Every photo and item will be deleted")
+											.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+												@Override
+												public void onClick(DialogInterface dialog, int which) {
 
-								Helpers.deleteNotebookByUID(notebookSelection.getUID16(), context);
-								notebookList.remove(holder.getAdapterPosition());
-								notifyItemRemoved(holder.getAdapterPosition());
+													notebookList.remove(holder.getAdapterPosition());
+													Helpers.deleteNotebookByUID(notebookSelection.getUID16(), context);
+													//Helpers.writeListToFile(notebookList, context);
+													//notifyItemRemoved(holder.getAdapterPosition());
+												}
+											})
+											.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+												@Override
+												public void onClick(DialogInterface dialog, int which) {
+
+												}
+											}).show();
+								}else{
+									final EditText edittext = new EditText(context);
+									AlertDialog.Builder dialog = new AlertDialog.Builder(mActivity);
+									dialog.setTitle("Do you want to delete this notebook?");
+									if(android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+										dialog.setMessage(Html.fromHtml("You will have to type out the exact name of the notebook to confirm." + "<br>" + "<b>" + notebookSelection.getName() + "</b>", Html.FROM_HTML_MODE_LEGACY));
+									}else {
+										dialog.setMessage(Html.fromHtml("You will have to type out the exact name of the notebook to confirm. The name is case and space sensitive." + "<br>" + "<b>" + notebookSelection.getName() + "</b>"));
+									}dialog.setView(edittext);
+									dialog.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+										@Override
+										public void onClick(DialogInterface dialog, int which) {
+											if(edittext.getText().toString().trim().equals(notebookSelection.getName().trim())){
+
+												Helpers.deleteNotebookByUID(notebookSelection.getUID16(), context);
+												notebookList.remove(holder.getAdapterPosition());
+												notifyItemRemoved(holder.getAdapterPosition());
 								/*for(Page a: notebookSelection.getPages()){
 									for (ChildBase b: a.getContent()) {
 										if(b.getChildType()==1){
@@ -144,22 +155,28 @@ public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelec
 								notebookList.remove(holder.getAdapterPosition());
 								Helpers.writeListToFile(notebookList, context);
 								notifyItemRemoved(holder.getAdapterPosition());*/
-							}else{
-								Toast.makeText(context, "Notebook not deleted, the name you input was wrong.", Toast.LENGTH_SHORT).show();
-							}
+											}else{
+												Toast.makeText(context, "Notebook not deleted, the name you input was wrong.", Toast.LENGTH_SHORT).show();
+											}
 
 
+										}
+									});
+
+									dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+										@Override
+										public void onClick(DialogInterface dialog, int which) {
+
+										}
+									}).show();
+
+								}
+								break;
 						}
-					});
+					}
+				});
+				alertBuilder.show();
 
-					dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-
-						}
-					}).show();
-
-				}
 				return false;
 			}
 		});

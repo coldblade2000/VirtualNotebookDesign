@@ -60,6 +60,14 @@ public class Collection {
             contentUIDs.add(UID16);
         }
     }
+    public void removeUID(String UID16){
+        contentUIDs.remove(UID16);
+        for (int i = 0; i < contentUIDs.size(); i++) {
+            if(contentUIDs.get(i).equals(UID16)){
+                contentUIDs.remove(i);
+            }
+        }
+    }
     @Override
     public String toString(){
         return name;

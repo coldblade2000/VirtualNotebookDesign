@@ -545,6 +545,14 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 	}
 
 	@Override
+	public void deleteNotebook(int position, String UID16) {
+		Collection collection = collections.get(currentCollectionIndex);
+		collection.removeUID(UID16);
+		Helpers.writeOneCollectionToFile(collection, getApplicationContext());
+		Helpers.deleteNotebookByUID(UID16, getApplicationContext());
+	}
+
+	@Override
     protected void onResume() {
 		if (isFirstTime) {
 			isFirstTime = false;

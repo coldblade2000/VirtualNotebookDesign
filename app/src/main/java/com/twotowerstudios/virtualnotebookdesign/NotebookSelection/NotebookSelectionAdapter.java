@@ -36,6 +36,7 @@ public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelec
 	public interface SelectionToNotebookSelectionInterface {
 		void openNotebookActivity(int position);
 		void transferNotebook(int position);
+		void deleteNotebook(int position, String UID16);
 		void renameNotebook(int position);
 	}
 
@@ -96,7 +97,7 @@ public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelec
 
 								break;
 							case 1:
-
+								Interface.transferNotebook(holder.getAdapterPosition());
 								break;
 							case 2:
 								if (notebookList.get(holder.getAdapterPosition()).getNumberOfPages()==0) {
@@ -107,11 +108,9 @@ public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelec
 											.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
 												@Override
 												public void onClick(DialogInterface dialog, int which) {
-
+													Interface.deleteNotebook(which, notebookList.get(holder.getAdapterPosition()).getUID16());
 													notebookList.remove(holder.getAdapterPosition());
-													Helpers.deleteNotebookByUID(notebookSelection.getUID16(), context);
-													//Helpers.writeListToFile(notebookList, context);
-													//notifyItemRemoved(holder.getAdapterPosition());
+													notifyItemRemoved(holder.getAdapterPosition());
 												}
 											})
 											.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -133,28 +132,9 @@ public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelec
 										@Override
 										public void onClick(DialogInterface dialog, int which) {
 											if(edittext.getText().toString().trim().equals(notebookSelection.getName().trim())){
-
-												Helpers.deleteNotebookByUID(notebookSelection.getUID16(), context);
+												Interface.deleteNotebook(which, notebookList.get(holder.getAdapterPosition()).getUID16());
 												notebookList.remove(holder.getAdapterPosition());
 												notifyItemRemoved(holder.getAdapterPosition());
-								/*for(Page a: notebookSelection.getPages()){
-									for (ChildBase b: a.getContent()) {
-										if(b.getChildType()==1){
-											File fdelete = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)+b.getUri().getPath());
-											if (fdelete.exists()) {
-												if (fdelete.delete()) {
-													Log.d("NotebookSelectionAdptr","file Deleted :" + context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)+b.getUri().getPath());
-												} else {
-													Log.d("NotebookSelectionAdptr", "file not Deleted :" + context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)+b.getUri().getPath());
-												}
-											}
-
-										}
-									}
-								}
-								notebookList.remove(holder.getAdapterPosition());
-								Helpers.writeListToFile(notebookList, context);
-								notifyItemRemoved(holder.getAdapterPosition());*/
 											}else{
 												Toast.makeText(context, "Notebook not deleted, the name you input was wrong.", Toast.LENGTH_SHORT).show();
 											}

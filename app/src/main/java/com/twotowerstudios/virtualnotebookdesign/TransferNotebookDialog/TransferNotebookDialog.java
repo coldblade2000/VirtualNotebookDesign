@@ -3,6 +3,7 @@ package com.twotowerstudios.virtualnotebookdesign.TransferNotebookDialog;
 
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -35,6 +36,9 @@ public class TransferNotebookDialog extends DialogFragment implements AdapterVie
      Notebook notebook;
 
     private OnFragmentInteractionListener mListener;
+    public interface OnFragmentInteractionListener {
+        void onDialogClosed(Collection collection);
+    }
     public TransferNotebookDialog() {
     }
 
@@ -59,7 +63,6 @@ public class TransferNotebookDialog extends DialogFragment implements AdapterVie
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            //mParam1 = getArguments().getString(ARG_PARAM1);
             collections = Parcels.unwrap(getArguments().getParcelable("list"));
             notebook = Parcels.unwrap(getArguments().getParcelable("book"));
             collectionUID = getArguments().getString("collectionUID");
@@ -104,7 +107,7 @@ public class TransferNotebookDialog extends DialogFragment implements AdapterVie
                 }else {
                     if (mListener != null) {
                         breakout:
-                        for (Collection a : collections) {
+                        for (Collection a : collections) { //TODO Remove the for loop and replace with UID lookup
                             for (String b : a.getContentUIDs()) {
                                 if (notebook.getUID16().equals(b)) {
                                     ArrayList<String> newContentUIDsFromOldCollection = a.getContentUIDs();
@@ -115,6 +118,7 @@ public class TransferNotebookDialog extends DialogFragment implements AdapterVie
                                     //Add notebook to new collection
                                     collection.addUID(notebook.getUID16());
                                     Helpers.writeOneCollectionToFile(collection, getActivity());
+                                    mListener.onDialogClosed(collection);
                                     break breakout;
                                 }
                             }
@@ -130,13 +134,13 @@ public class TransferNotebookDialog extends DialogFragment implements AdapterVie
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        /*if (context instanceof OnFragmentInteractionListener) {
+        if (context instanceof OnFragmentInteractionListener) {
             mListener = (OnFragmentInteractionListener) context;
 
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
-        }*/
+        }
     }
 
     @Override
@@ -144,6 +148,8 @@ public class TransferNotebookDialog extends DialogFragment implements AdapterVie
         super.onDetach();
         mListener = null;
     }
+
+
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -157,8 +163,5 @@ public class TransferNotebookDialog extends DialogFragment implements AdapterVie
 
     }
 
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(String uri);
-    }
+
 }

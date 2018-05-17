@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
-            storeFile file('/Users/ftlab/Downloads/debug.keystore')
+            storeFile file('C:/Users/diego/.android/debug.keystore')
             storePassword 'android'
         }
     }

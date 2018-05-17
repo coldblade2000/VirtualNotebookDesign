@@ -52,7 +52,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class NotebookSelection extends AppCompatActivity implements NotebookSelectionAdapter.SelectionToNotebookSelectionInterface, NewCollectionFragment.OnFragmentInteractionListener {
+public class NotebookSelection extends AppCompatActivity implements NotebookSelectionAdapter.SelectionToNotebookSelectionInterface, NewCollectionFragment.OnFragmentInteractionListener, TransferNotebookDialog.OnFragmentInteractionListener {
 	private RelativeLayout emptyList;
     private RecyclerView rvNotebookSelection;
     public RecyclerView.Adapter rvNotebookSelectionAdapter;
@@ -202,21 +202,25 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 					@Override
 					public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
 						currentCollectionIndex = position;
-						Collection clickedCollect = collections.get(position);
-						ArrayList<Notebook> collectionArrayList = new ArrayList<>();
-						for(String a: clickedCollect.getContentUIDs()){
-							collectionArrayList.add(Helpers.getNotebookFromUID(a, getApplicationContext()));
-						}
-						notebookSelectionCardList.clear();
-						notebookSelectionCardList.addAll(collectionArrayList);
-						rvNotebookSelectionAdapter = new NotebookSelectionAdapter(getApplicationContext(),notebookSelectionCardList , NotebookSelection.this, NotebookSelection.this);
-						rvNotebookSelection.setAdapter(rvNotebookSelectionAdapter);
+						changeSelectedCollection(collections.get(position));
 						return true;
 					}
 				})
 				.build();
 
     }
+
+    private void changeSelectedCollection(Collection collection){
+		ArrayList<Notebook> collectionContentList = new ArrayList<>();
+		for(String a: collection.getContentUIDs()){
+			collectionContentList.add(Helpers.getNotebookFromUID(a, getApplicationContext()));
+		}
+		notebookSelectionCardList.clear();
+		notebookSelectionCardList.addAll(collectionContentList);
+		rvNotebookSelectionAdapter.notifyDataSetChanged();
+		/*rvNotebookSelectionAdapter = new NotebookSelectionAdapter(getApplicationContext(),notebookSelectionCardList , NotebookSelection.this, NotebookSelection.this);
+		rvNotebookSelection.setAdapter(rvNotebookSelectionAdapter);*/
+	}
 
 	private void listNotEmpty() {
 		emptyList.setVisibility(View.GONE);
@@ -417,6 +421,19 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 		Helpers.writeCollectionsToFile(collections, getApplicationContext());
 	}
 
+	@Override
+	public void onDialogClosed(Collection collection) { //When the TransferNotebookDialog is closed
+		collections = Helpers.getCollections(getApplicationContext());
+		for (int i = 0; i < collections.size(); i++) {
+			if(collections.get(i).getUID8().equals(collection.getUID8())){
+				currentCollectionIndex = i;
+				break;
+			}
+		}
+		drawer.setSelectionAtPosition(currentCollectionIndex);
+		changeSelectedCollection(collection);
+	}
+
 	class AsyncImporting extends AsyncTask<Uri, Void, Notebook> {
 		ProgressDialog pd;
 
@@ -518,8 +535,6 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 		Helpers.writeCollectionsToFile(collections, getApplicationContext());
 		listNotEmpty();
 	}
-
-
 	@Override
 	public void openNotebookActivity(int position) {
 		Intent intent = new Intent(this, NotebookMainActivity.class);
@@ -532,10 +547,8 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 	@Override
 	public void transferNotebook(int position) {
 		FragmentManager fm = getSupportFragmentManager();
-
 		TransferNotebookDialog newFragment = TransferNotebookDialog.newInstance(Helpers.getCollections(getApplicationContext()),
 				notebookSelectionCardList.get(position), collections.get(currentCollectionIndex).getUID8());
-
 		newFragment.show(fm, "dialog");
 	}
 

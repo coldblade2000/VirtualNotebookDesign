@@ -34,6 +34,7 @@ import com.google.gson.Gson;
 import com.twotowerstudios.virtualnotebookdesign.Misc.Helpers;
 import com.twotowerstudios.virtualnotebookdesign.NotebookMain.Fragments.NewPage.NewPageFragment;
 import com.twotowerstudios.virtualnotebookdesign.Objects.ChildBase;
+import com.twotowerstudios.virtualnotebookdesign.Objects.Collection;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Notebook;
 import com.twotowerstudios.virtualnotebookdesign.Objects.Page;
 import com.twotowerstudios.virtualnotebookdesign.PageActivityMain.PageActivityMain;
@@ -211,16 +212,6 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 				TransferNotebookDialog newFragment = TransferNotebookDialog.newInstance(Helpers.getCollections(getApplicationContext()), notebook, collectionUID);
 
 				newFragment.show(fm, "dialog");
-				/*FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-				Fragment prev = getSupportFragmentManager().findFragmentByTag("dialog");
-				if (prev != null) {
-					ft.remove(prev);
-				}
-				ft.addToBackStack(null);
-				// Create and show the dialog.
-
-				TransferNotebookDialog newFragment = TransferNotebookDialog.newInstance(Helpers.getCollections(getApplicationContext()), notebook);
-				newFragment.show(ft, "dialog");*/
 				break;
 			case android.R.id.home:
 				// Launch the correct Activity here
@@ -231,7 +222,7 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 	}
 
 	@Override
-	public void onFragmentInteraction(String uri) {
+	public void onDialogClosed(Collection collection) {
 
 	}
 

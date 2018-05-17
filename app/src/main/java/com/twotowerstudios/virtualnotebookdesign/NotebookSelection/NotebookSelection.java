@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -274,7 +275,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 		ArrayList<IDrawerItem> drawerArray = new ArrayList<>();
 		for (Collection a:collections) {
 			final Drawable icon = getResources().getDrawable(R.drawable.ic_folder_black_24dp);
-			//icon.setColorFilter(ContextCompat.getColor(getApplicationContext(), a.getColor()), PorterDuff.Mode.MULTIPLY);
+			icon.setColorFilter(ContextCompat.getColor(getApplicationContext(), a.getColor()), PorterDuff.Mode.MULTIPLY);
 			drawerArray.add(new PrimaryDrawerItem().withName(a.getName()).withIcon(icon));
 		}
 		return drawerArray;
@@ -421,6 +422,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 	public void onFragmentInteraction(Collection collection) { //Where a colllection is added to the notebookSelection activity
 		collections.add(collection);
 		final Drawable icon = getResources().getDrawable(R.drawable.ic_folder_black_24dp);
+		icon.setColorFilter(ContextCompat.getColor(getApplicationContext(), collection.getColor()), PorterDuff.Mode.MULTIPLY);
 		drawer.addItem(new PrimaryDrawerItem().withName(collection.getName()).withIcon(icon));
 		Helpers.writeCollectionsToFile(collections, getApplicationContext());
 	}

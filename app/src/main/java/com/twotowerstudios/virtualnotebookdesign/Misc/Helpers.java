@@ -288,7 +288,7 @@ public class Helpers {
         colors.add(ContextCompat.getColor(context, R.color.md_deep_orange_500));
         colors.add(ContextCompat.getColor(context, R.color.md_brown_500));
         colors.add(ContextCompat.getColor(context, R.color.md_grey_500));
-
+        colors.add(ContextCompat.getColor(context, R.color.md_black_1000));
         return colors;
     }
 
@@ -312,6 +312,7 @@ public class Helpers {
         colors.add(ContextCompat.getColor(context, R.color.md_deep_orange_A200));
         colors.add(ContextCompat.getColor(context, R.color.md_indigo_A200));
         colors.add(ContextCompat.getColor(context, R.color.md_pink_A200));
+        colors.add(ContextCompat.getColor(context, R.color.md_grey_200));
 
         return colors;
     }

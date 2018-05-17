@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -42,10 +43,6 @@ import java.util.Random;
  * create an instance of this fragment.
  */
 public class NewCollectionFragment extends DialogFragment implements ColorPickAdapter.FromAdapterInterface{
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
     RecyclerView rvNewCollection;
     int activeColorIndex, activeColor;
@@ -55,9 +52,6 @@ public class NewCollectionFragment extends DialogFragment implements ColorPickAd
     Switch swColors;
     EditText etNewCollection;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
@@ -70,7 +64,6 @@ public class NewCollectionFragment extends DialogFragment implements ColorPickAd
      * this fragment using the provided parameters.
      * @return A new instance of fragment NewCollectionFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static NewCollectionFragment newInstance(ArrayList<Collection> list) {
         NewCollectionFragment fragment = new NewCollectionFragment();
         Bundle args = new Bundle();
@@ -114,7 +107,6 @@ public class NewCollectionFragment extends DialogFragment implements ColorPickAd
         return inflater.inflate(R.layout.fragment_new_collection, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
     public void successfulSubmit(Collection collection) {
         if (mListener != null) {
             mListener.onFragmentInteraction(collection);
@@ -124,15 +116,8 @@ public class NewCollectionFragment extends DialogFragment implements ColorPickAd
     @Override
     public void onViewCreated(View v, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(v, savedInstanceState);
-        rvNewCollection = (RecyclerView) v.findViewById(R.id.rvNewCollection);
-        final GridLayoutManager rvNotebookManager = new GridLayoutManager(getContext(),6);
-        rvNewCollection.setLayoutManager(rvNotebookManager);
-        ColorPickAdapter adapter= new ColorPickAdapter(getContext(), Helpers.getPossibleColors(getContext()), activeColorIndex, this);
-        rvNewCollection.setVisibility(View.GONE);
-        colors = Helpers.getPossibleColors(getContext());
-        activeColorIndex =new Random().nextInt(colors.size());
-        activeColor = colors.get(activeColorIndex);
-        swColors = (Switch) v.findViewById(R.id.switch1);
+
+
 
         etNewCollection = (EditText) v.findViewById(R.id.etNewCollection);
         toolbar = (Toolbar) v.findViewById(R.id.newcollectiontoolbar);
@@ -172,6 +157,36 @@ public class NewCollectionFragment extends DialogFragment implements ColorPickAd
 
                 }
                 return false;
+            }
+        });
+
+        //Using the color picker adapter
+        rvNewCollection = (RecyclerView) v.findViewById(R.id.rvNewCollection);
+        rvNewCollection.setVisibility(View.GONE);
+        swColors = (Switch) v.findViewById(R.id.switch2);
+        colors = Helpers.getPossibleColors(getContext());
+        activeColorIndex =colors.size()-1;
+        activeColor = colors.get(activeColorIndex);
+        rvNewCollection = (RecyclerView) v.findViewById(R.id.rvNewCollection);
+        final GridLayoutManager rvCollectionManager = new GridLayoutManager(getContext(),6);
+        rvNewCollection.setLayoutManager(rvCollectionManager);
+        ColorPickAdapter adapter= new ColorPickAdapter(getContext(), Helpers.getPossibleColors(getContext()), activeColorIndex, this);
+        rvNewCollection.setVisibility(View.GONE);
+        toolbar.setBackgroundColor(activeColor);
+        if(Helpers.isColorDark(activeColor)){
+            toolbar.setTitleTextColor(getResources().getColor(R.color.md_dark_primary_text));
+        }else{
+            toolbar.setTitleTextColor(getResources().getColor(R.color.md_light_primary_text));
+        }
+        rvNewCollection.setAdapter(adapter);
+        swColors.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener(){
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b){
+                    rvNewCollection.setVisibility(View.VISIBLE);
+                }else{
+                    rvNewCollection.setVisibility(View.GONE);
+                }
             }
         });
     }
@@ -219,7 +234,6 @@ public class NewCollectionFragment extends DialogFragment implements ColorPickAd
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
         void onFragmentInteraction(Collection collection);
     }
 }

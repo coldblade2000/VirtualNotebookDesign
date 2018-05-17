@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'androiddebugkey'
             keyPassword 'android'
-            storeFile file('C:/Users/diego/.android/debug.keystore')
+            storeFile file('debug.keystore')
             storePassword 'android'
         }
     }
@@ -25,7 +25,7 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-        debug {
+        debugMac {
             signingConfig signingConfigs.config
         }
     }

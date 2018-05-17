@@ -106,23 +106,24 @@ public class TransferNotebookDialog extends DialogFragment implements AdapterVie
                     Toast.makeText(getContext(), "This notebook is already in this collection", Toast.LENGTH_SHORT).show();
                 }else {
                     if (mListener != null) {
-                        breakout:
-                        for (Collection a : collections) { //TODO Remove the for loop and replace with UID lookup
-                            for (String b : a.getContentUIDs()) {
-                                if (notebook.getUID16().equals(b)) {
-                                    ArrayList<String> newContentUIDsFromOldCollection = a.getContentUIDs();
-                                    newContentUIDsFromOldCollection.remove(notebook.getUID16());
-                                    a.setContentUIDs(newContentUIDsFromOldCollection);
-                                    Helpers.writeOneCollectionToFile(a, getActivity());
+                        //breakout:
 
-                                    //Add notebook to new collection
-                                    collection.addUID(notebook.getUID16());
-                                    Helpers.writeOneCollectionToFile(collection, getActivity());
-                                    mListener.onDialogClosed(collection);
-                                    break breakout;
-                                }
+                        Collection oldCollection = Helpers.getCollectionFromUID(collectionUID,getContext());
+                        for(String b : oldCollection.getContentUIDs()){
+                            if (notebook.getUID16().equals(b)) {
+                                ArrayList<String> newContentUIDsFromOldCollection = oldCollection.getContentUIDs();
+                                newContentUIDsFromOldCollection.remove(notebook.getUID16());
+                                oldCollection.setContentUIDs(newContentUIDsFromOldCollection);
+                                Helpers.writeOneCollectionToFile(oldCollection, getActivity());
+
+                                //Add notebook to new collection
+                                collection.addUID(notebook.getUID16());
+                                Helpers.writeOneCollectionToFile(collection, getActivity());
+                                mListener.onDialogClosed(collection);
+                                break;
                             }
                         }
+
                     }
                     dismiss();
                 }

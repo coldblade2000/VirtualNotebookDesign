@@ -7,6 +7,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -27,7 +28,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.mikepenz.materialdrawer.Drawer;
@@ -553,8 +557,36 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 	}
 
 	@Override
-	public void renameNotebook(int position) {
-
+	public void renameNotebook(final int position) {
+		final AlertDialog.Builder alert = new AlertDialog.Builder(this);
+		alert.setMessage("Enter the new title you want for the notebook \""+notebookSelectionCardList.get(position).getName()+'"');
+		alert.setTitle("Rename Notebook");
+		EditText editText = new EditText(getApplicationContext());
+		final int margin = (int) (24 * Resources.getSystem().getDisplayMetrics().density);
+		//TODO Fix edittext margins
+		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+		lp.setMargins(margin, 0 , margin, 0);
+		editText.setLayoutParams(lp);
+		alert.setView(editText);
+		final String text = editText.getText().toString().trim();
+		alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				Notebook notebook1 = notebookSelectionCardList.get(position);
+				notebook1.setName(text);
+				Helpers.writeNotebookToFile(notebook1, getApplicationContext());
+				if(notebookSelectionCardList.get(position).getUID16().equals(notebook1.getUID16())){
+					notebookSelectionCardList.set(position,notebook1);
+				}else{
+					Log.e("renameNotebook", "onClick: Something went wrong when adding the notebook. UID in notebookselectioncardlist = "+ notebookSelectionCardList.get(position).getUID16());
+					Log.e("renameNotebook", "onClick: UID in notebook1 = "+ notebook1.getUID16());
+					Toast.makeText(NotebookSelection.this, "Something went wrong...", Toast.LENGTH_SHORT).show();
+				}
+				rvNotebookSelectionAdapter.notifyItemChanged(position);
+			}
+		});
+		alert.setNegativeButton("Cancel", null);
+		alert.show();
 	}
 
 	@Override

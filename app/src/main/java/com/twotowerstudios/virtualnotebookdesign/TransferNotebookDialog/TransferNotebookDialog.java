@@ -154,9 +154,8 @@ public class TransferNotebookDialog extends DialogFragment implements AdapterVie
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        Collection item = (Collection) adapterView.getItemAtPosition(i);
-        selectedCollection = item;
-        Toast.makeText(getActivity(), "Selected "+ item.getName(), Toast.LENGTH_SHORT).show();
+        selectedCollection = (Collection) adapterView.getItemAtPosition(i);
+        //Toast.makeText(getActivity(), "Selected "+ item.getName(), Toast.LENGTH_SHORT).show();
     }
 
     @Override

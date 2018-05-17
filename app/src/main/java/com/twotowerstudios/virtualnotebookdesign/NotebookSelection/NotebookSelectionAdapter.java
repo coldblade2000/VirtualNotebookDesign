@@ -94,7 +94,7 @@ public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelec
 					public void onClick(DialogInterface alertDialog, int which) {
 						switch (which){
 							case 0:
-
+                                Interface.renameNotebook(holder.getAdapterPosition());
 								break;
 							case 1:
 								Interface.transferNotebook(holder.getAdapterPosition());

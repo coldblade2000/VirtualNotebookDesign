@@ -95,7 +95,7 @@ public class Helpers {
     public static void writeStringToFile(String input, String name, Context context) {
         try {
             //outputStream = context.openFileOutput(name, Context.MODE_PRIVATE);
-            FileOutputStream outputStream = new FileOutputStream(context.getFilesDir().getAbsolutePath() + "/" + name);
+            FileOutputStream outputStream = new FileOutputStream(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS) + "/" + name);
             outputStream.write(input.getBytes());
             outputStream.close();
         } catch (Exception e) {
@@ -115,7 +115,7 @@ public class Helpers {
     }
 
     public static String getStringFromName(String filename, Context context) {
-        File file = new File(context.getFilesDir().getAbsolutePath() + "/" + filename);
+        File file = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS) + "/" + filename);
         BufferedReader input = null;
         try {
             //input = new BufferedReader(new InputStreamReader(context.openFileInput(filename)));

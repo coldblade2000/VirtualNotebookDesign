@@ -83,11 +83,6 @@ public class NewCollectionFragment extends DialogFragment implements ColorPickAd
     @Override
     public void onResume(){
         super.onResume();
-		/*DisplayMetrics displaymetrics = new DisplayMetrics();
-		getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
-		int height = displaymetrics.heightPixels;
-		int width = displaymetrics.widthPixels;
-		getDialog().getWindow().setLayout((int)(width*0.9),(int)(height*0.8));*/
         DisplayMetrics displaymetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
         int height = displaymetrics.heightPixels;

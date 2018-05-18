@@ -274,9 +274,9 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 	private ArrayList<IDrawerItem> populateDrawer(){
 		ArrayList<IDrawerItem> drawerArray = new ArrayList<>();
 		for (Collection a:collections) {
-			final Drawable icon = getResources().getDrawable(R.drawable.ic_folder_black_24dp);
-			icon.setColorFilter(ContextCompat.getColor(getApplicationContext(), a.getColor()), PorterDuff.Mode.MULTIPLY);
-			drawerArray.add(new PrimaryDrawerItem().withName(a.getName()).withIcon(icon));
+			Drawable icon = getResources().getDrawable(R.drawable.ic_folder_white_24dp);
+			//icon.setColorFilter(a.getColor(), PorterDuff.Mode.MULTIPLY);
+			drawerArray.add(new PrimaryDrawerItem().withName(a.getName()).withIcon(icon).withIconColor(a.getColor()));
 		}
 		return drawerArray;
 	}
@@ -421,9 +421,9 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 	@Override
 	public void onFragmentInteraction(Collection collection) { //Where a colllection is added to the notebookSelection activity
 		collections.add(collection);
-		final Drawable icon = getResources().getDrawable(R.drawable.ic_folder_black_24dp);
-		icon.setColorFilter(ContextCompat.getColor(getApplicationContext(), collection.getColor()), PorterDuff.Mode.MULTIPLY);
-		drawer.addItem(new PrimaryDrawerItem().withName(collection.getName()).withIcon(icon));
+		Drawable icon = getResources().getDrawable(R.drawable.ic_folder_white_24dp);
+		//icon.setColorFilter(collection.getColor(), PorterDuff.Mode.MULTIPLY);
+		drawer.addItem(new PrimaryDrawerItem().withName(collection.getName()).withIcon(icon).withIconColor(collection.getColor()));
 		Helpers.writeCollectionsToFile(collections, getApplicationContext());
 	}
 

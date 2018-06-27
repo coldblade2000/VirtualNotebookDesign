@@ -264,8 +264,11 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 		final String filename = "i" + Helpers.generateUniqueId(16);
 		if (requestCode == GALLERYPIC && resultCode == RESULT_OK && data != null) {
 			Uri selectedImageUri = data.getData();
-			File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + notebookUID16 + "/"
-					+ filename + selectedImageUri.toString().substring(selectedImageUri.toString().lastIndexOf(".")));
+			/*File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + notebookUID16 + "/"
+					+ filename + selectedImageUri.getPath().substring(selectedImageUri.toString().lastIndexOf(".")));
+			*/
+			File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+ "/"+ notebookUID16 + "/"+ filename
+			+ ".jpg");
 			Bitmap bitmap = null;
 			try {
 				bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
@@ -276,6 +279,7 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 			FileOutputStream outStream = null;
 			try {
 				outStream = new FileOutputStream(file);
+				bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
 				outStream.flush();
 				outStream.close();
 			} catch (Exception e) {
@@ -285,18 +289,18 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 
 				try {
 					if (bitmap.getWidth() > bitmap.getHeight()) {
-						file = new Compressor(this)
+							file = new Compressor(this)
 								.setMaxWidth(1920)
 								.setMaxHeight(1080)
 								.setQuality(75)
-								.setCompressFormat(Bitmap.CompressFormat.WEBP)
+								.setCompressFormat(Bitmap.CompressFormat.JPEG)
 								.compressToFile(file);
 					} else {
 						file = new Compressor(this)
 								.setMaxWidth(1080)
 								.setMaxHeight(1920)
 								.setQuality(75)
-								.setCompressFormat(Bitmap.CompressFormat.WEBP)
+								.setCompressFormat(Bitmap.CompressFormat.JPEG)
 								.compressToFile(file);
 					}
 				} catch (IOException e) {

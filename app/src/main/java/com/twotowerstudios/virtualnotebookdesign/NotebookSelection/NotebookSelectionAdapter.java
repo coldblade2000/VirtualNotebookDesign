@@ -71,7 +71,8 @@ public class NotebookSelectionAdapter extends RecyclerView.Adapter<NotebookSelec
 	@Override
 	public void onBindViewHolder(final ViewHolder holder, int position){
 		final Notebook notebookSelection = notebookList.get(position);
-		final int position2 = position;holder.tvCardNameSel.setText(""+notebookSelection.getName());
+		final int position2 = position;
+		holder.tvCardNameSel.setText(""+notebookSelection.getName());
 		holder.tvCardSub.setText("Last modified: "+
 				DateUtils.getRelativeTimeSpanString(notebookSelection.getLastModified(), Helpers.getCurrentTimeInMillis(), DateUtils.SECOND_IN_MILLIS));
 		holder.tvPageCount.setText("" +notebookSelection.getNumberOfPages() + " Pages");

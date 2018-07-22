@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -243,7 +244,16 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 				//contents.add(newImage);
 				pageAdapter.notifyItemInserted(contents.size() - 1);
 		} else if (tag.equals("gallery")) {
-			File nomedia = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+ notebookUID16+ "/" + ".nomedia");
+			File directory = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+notebookUID16+"/");
+			if (!directory.exists()) {
+				String TAG = "PageActivityMain";
+				if (directory.mkdirs()) {
+					Log.d(TAG, "Successfully created the parent dir:" + directory.getName());
+				} else {
+					Log.d(TAG, "Failed to create the parent dir:" + directory.getName());
+				}
+			}
+			File nomedia = new File(directory, ".nomedia");
 			if (!nomedia.exists()) {
 				try {
 					nomedia.createNewFile();
@@ -272,13 +282,17 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 			Bitmap bitmap = null;
 			try {
 				bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
-			} catch (IOException e) {
+                ExifInterface originalExif = new ExifInterface(file.getAbsolutePath());
+                int orientation = originalExif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+
+            } catch (IOException e) {
 				e.printStackTrace();
 			}
 
-			FileOutputStream outStream = null;
+			FileOutputStream outStream = null; //TODO Use EXIF Interface to save rotation
 			try {
 				outStream = new FileOutputStream(file);
+
 				bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
 				outStream.flush();
 				outStream.close();
@@ -303,10 +317,14 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 								.setCompressFormat(Bitmap.CompressFormat.JPEG)
 								.compressToFile(file);
 					}
+                    ExifInterface newExif = new ExifInterface(file.getAbsolutePath());
+                    newExif.setAttribute(ExifInterface.TAG_ORIENTATION, String.valueOf(ExifInterface.ORIENTATION_ROTATE_90));
+                    newExif.saveAttributes();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
+
 			ChildBase newImage = new ChildBase("", filename, page.getParentUID(), page.getUID(), Uri.fromFile(file), getApplicationContext());
 			contents.add(newImage);
 			page.setContent(contents);

@@ -140,8 +140,8 @@ public class NewCollectionFragment extends DialogFragment implements ColorPickAd
                         Log.d("NewCollectFrag","Collection list was empty, adding collection: "+etNewCollection);
                     }
                     if (!collectionExists){
-                        Toast.makeText(getContext(),"Created notebook called: \""+nameReal+"\"", Toast.LENGTH_SHORT).show();
-                        Log.d("NewNotebookFrag","Created notebook called:"+nameReal);
+                        Toast.makeText(getContext(),"Created collection called: \""+nameReal+"\"", Toast.LENGTH_SHORT).show();
+                        Log.d("NewCollectionFrag","Created collection called:"+nameReal);
                         Collection collection = new Collection(nameReal,new ArrayList<String>(), colors.get(activeColorIndex));
                         //((NotebookSelection)getActivity()).refreshData(new Notebook(nameReal,colors.get(activeColorIndex), Helpers.getSingleColorAccent(getContext(), activeColor)));
                         collection.setColor(colors.get(activeColorIndex));

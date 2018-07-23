@@ -5,7 +5,7 @@ import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.media.ExifInterface;
+import android.support.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -38,6 +38,7 @@ import org.parceler.Parcels;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import id.zelory.compressor.Compressor;
@@ -265,6 +266,7 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 			intent.setType("image/*");
 			intent.setAction(Intent.ACTION_GET_CONTENT);
 			intent.putExtra("title", title);
+			intent.putExtra("compression", compression);
 			startActivityForResult(Intent.createChooser(intent,
 					"Select Picture"), GALLERYPIC);
 
@@ -280,14 +282,20 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 			File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+ "/"+ notebookUID16 + "/"+ filename
 			+ ".jpg");
 			Bitmap bitmap = null;
-			try {
-				bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
-                ExifInterface originalExif = new ExifInterface(file.getAbsolutePath());
-                int orientation = originalExif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
 
-            } catch (IOException e) {
+			int orientation = ExifInterface.ORIENTATION_UNDEFINED;
+			assert selectedImageUri != null;
+			try (InputStream inp = getApplicationContext().getContentResolver().openInputStream(selectedImageUri)) {
+				bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
+				ExifInterface originalExif = null;
+				if (inp != null) {
+					originalExif = new ExifInterface(inp);
+				}
+				orientation = originalExif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+            } catch (Exception e) {
 				e.printStackTrace();
 			}
+
 
 			FileOutputStream outStream = null; //TODO Use EXIF Interface to save rotation
 			try {
@@ -317,13 +325,20 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 								.setCompressFormat(Bitmap.CompressFormat.JPEG)
 								.compressToFile(file);
 					}
-                    ExifInterface newExif = new ExifInterface(file.getAbsolutePath());
-                    newExif.setAttribute(ExifInterface.TAG_ORIENTATION, String.valueOf(ExifInterface.ORIENTATION_ROTATE_90));
-                    newExif.saveAttributes();
+
 				} catch (IOException e) {
 					e.printStackTrace();
+                    Log.e("PageActivityMain", file.getAbsolutePath() );
 				}
 			}
+            ExifInterface newExif = null;
+            try {
+                newExif = new ExifInterface(file.getAbsolutePath());
+                newExif.setAttribute(ExifInterface.TAG_ORIENTATION, String.valueOf(orientation));
+                newExif.saveAttributes();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
 			ChildBase newImage = new ChildBase("", filename, page.getParentUID(), page.getUID(), Uri.fromFile(file), getApplicationContext());
 			contents.add(newImage);

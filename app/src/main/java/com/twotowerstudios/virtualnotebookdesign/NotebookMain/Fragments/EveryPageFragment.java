@@ -30,6 +30,7 @@ public class EveryPageFragment extends Fragment{
 	NotebookAdapterToAct interf;
 	String UID;
 	int color;
+	String collectionUID;
 
 	public EveryPageFragment() {
 		// Required empty public constructor
@@ -41,6 +42,8 @@ public class EveryPageFragment extends Fragment{
 		pageList = Parcels.unwrap(getArguments().getParcelable("list"));
 		color=getArguments().getInt("color");
 		UID = getArguments().getString("UID");
+		collectionUID = getArguments().getString("collection");
+
 	}
 
 	@Override
@@ -58,16 +61,17 @@ public class EveryPageFragment extends Fragment{
 		Collections.sort(pageList);
 		TextView tvFavoritesEmpty = (TextView) view.findViewById(R.id.tvFavoritesEmpty);
 		tvFavoritesEmpty.setVisibility(View.GONE);
-		rvEveryPage.setAdapter(new NotebookPageAdapter(getContext(), pageList, interf, color,false, UID));
+		rvEveryPage.setAdapter(new NotebookPageAdapter(getContext(), pageList, interf, color,false, UID, collectionUID));
 	}
 
-	public static EveryPageFragment newInstance(int page, String title, ArrayList<Page> pageList, int color, NotebookAdapterToAct interf, String UID) {
+	public static EveryPageFragment newInstance(int page, String title, ArrayList<Page> pageList, int color, NotebookAdapterToAct interf, String UID, String collectionUID) {
 		EveryPageFragment fragment = new EveryPageFragment();
 		fragment.interf=interf;
 		Bundle args = new Bundle();
 		args.putInt("page", page);
 		args.putInt("color", color);
 		args.putString("title", title);
+		args.putString("collection", collectionUID);
 		args.putString("UID", UID);
 		args.putParcelable("list", Parcels.wrap(pageList));
 		fragment.setArguments(args);

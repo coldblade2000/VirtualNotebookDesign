@@ -282,7 +282,9 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 			File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+ "/"+ notebookUID16 + "/"+ filename
 			+ ".jpg");
 			Bitmap bitmap = null;
-
+            /**
+             * Exif loading and handling
+             * */
 			int orientation = ExifInterface.ORIENTATION_UNDEFINED;
 			assert selectedImageUri != null;
 			try (InputStream inp = getApplicationContext().getContentResolver().openInputStream(selectedImageUri)) {
@@ -297,7 +299,7 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 			}
 
 
-			FileOutputStream outStream = null; //TODO Use EXIF Interface to save rotation
+			FileOutputStream outStream = null;
 			try {
 				outStream = new FileOutputStream(file);
 

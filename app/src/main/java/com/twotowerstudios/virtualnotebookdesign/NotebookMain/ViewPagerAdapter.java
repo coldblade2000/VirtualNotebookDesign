@@ -16,24 +16,25 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 	private ArrayList<Page> pageList;
 	private int color;
 	private NotebookAdapterToAct interf;
-	private String UID16;
+	private String UID16, collectionUID;
 	private final String titles[] = {"All Pages", "Favorites"};
 
 
-	public ViewPagerAdapter(FragmentManager fm, ArrayList<Page> list, int color, NotebookAdapterToAct interf, String UID16) {
+	public ViewPagerAdapter(FragmentManager fm, ArrayList<Page> list, int color, NotebookAdapterToAct interf, String UID16, String collectionUID) {
 		super(fm);
 		pageList = list;
 		this.color=color;
 		this.interf = interf;
 		this.UID16 = UID16;
+		this.collectionUID = collectionUID;
 	}
 	@Override
 	public Fragment getItem(int position) {
 		switch (position) {
 			case 0:
-				return EveryPageFragment.newInstance(0, titles[0], pageList,color, interf, UID16);
+				return EveryPageFragment.newInstance(0, titles[0], pageList,color, interf, UID16,collectionUID);
 			case 1:
-				return FavoritesFragment.newInstance(1, titles[1], pageList,color, interf, UID16);
+				return FavoritesFragment.newInstance(1, titles[1], pageList,color, interf, UID16,collectionUID);
 			default:
 				return null;
 		}

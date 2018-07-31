@@ -34,11 +34,13 @@ public class FavoritesFragment extends Fragment{
 	int color;
 	private String UID;
 	TextView tvFavoritesEmpty;
+	String collectionUID;
 
-    public FavoritesFragment() {
+
+	public FavoritesFragment() {
         // Required empty public constructor
     }
-    public static FavoritesFragment newInstance(int page, String title, ArrayList<Page> pageList, int color, NotebookAdapterToAct interf, String UID) {
+    public static FavoritesFragment newInstance(int page, String title, ArrayList<Page> pageList, int color, NotebookAdapterToAct interf, String UID, String collectionUID) {
         FavoritesFragment fragment = new FavoritesFragment();
 		fragment.interf=interf;
         Bundle args = new Bundle();
@@ -46,6 +48,7 @@ public class FavoritesFragment extends Fragment{
 		args.putInt("color", color);
         args.putString("title", title);
 		args.putString("UID", UID);
+		args.putString("collection", collectionUID);
 		args.putParcelable("list", Parcels.wrap(pageList));
         fragment.setArguments(args);
         return fragment;
@@ -56,6 +59,7 @@ public class FavoritesFragment extends Fragment{
 		ArrayList<Page> fullList = Parcels.unwrap(getArguments().getParcelable("list"));
 		color=getArguments().getInt("color");
 		UID = getArguments().getString("UID");
+		collectionUID = getArguments().getString("collection");
 		for(Page p: fullList) {
 			if(p.isFavorite()){
 				favPageList.add(p);
@@ -90,7 +94,7 @@ public class FavoritesFragment extends Fragment{
 		rvFavorite = (RecyclerView) view.findViewById(R.id.rvFavorites);
 		LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
 		rvFavorite.setLayoutManager(linearLayoutManager);
-		rvFavorite.setAdapter(new NotebookPageAdapter(getContext(), favPageList, interf,color, true, UID));
+		rvFavorite.setAdapter(new NotebookPageAdapter(getContext(), favPageList, interf,color, true, UID, collectionUID));
 		tvFavoritesEmpty = (TextView) view.findViewById(R.id.tvFavoritesEmpty);
 		if(!favPageList.isEmpty()){
 			tvFavoritesEmpty.setVisibility(View.GONE);

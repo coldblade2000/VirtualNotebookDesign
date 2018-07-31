@@ -52,6 +52,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.0'
     implementation 'org.parceler:parceler-api:1.1.6'
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view:3.6.0'
+    implementation "com.android.support:exifinterface:27.1.1"
     implementation 'com.commonsware.cwac:cam2:0.7.4'
     implementation 'id.zelory:compressor:2.1.0'
     testImplementation 'junit:junit:4.12'

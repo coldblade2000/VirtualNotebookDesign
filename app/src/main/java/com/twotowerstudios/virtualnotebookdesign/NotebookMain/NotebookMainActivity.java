@@ -94,6 +94,9 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notebook_main);
 		isFirstTime=true;
+		if( collectionUID==null){
+			collectionUID = getIntent().getExtras().getString("collectionUID");
+		}
 		if (notebook==null) {
 			Log.d("NotebookMainActivity", "notebook == null");
 			if (getIntent().getStringExtra("parent").equals("NotebookSelection")
@@ -149,12 +152,11 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 			notEmptyNotebook.setVisibility(View.VISIBLE);
 			viewPager = (ViewPager) findViewById(R.id.viewpager);
 
-			viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(),pageList,Helpers.getSingleColorAccent(this,notebook.getColor()),this, notebookUID16));
+			viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(),pageList,Helpers.getSingleColorAccent(this,notebook.getColor()),this, notebookUID16, collectionUID));
 
 			tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
 			tabLayout.setupWithViewPager(viewPager);
 		}
-		collectionUID = getIntent().getExtras().getString("collectionUID");
 		parent = getIntent().getExtras().getString("parent");
 		tvSub = (TextView) findViewById(R.id.tvSub);
 		tvSub.setText("Last Modified: "+ DateUtils.getRelativeTimeSpanString(notebook.getLastModified(), Helpers.getCurrentTimeInMillis(), DateUtils.SECOND_IN_MILLIS));
@@ -302,7 +304,7 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 		}else{
 			pageList.clear();
 			pageList.addAll(Helpers.getNotebookFromUID(notebookUID16, getApplicationContext()).getPages());
-			viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), pageList, Helpers.getSingleColorAccent(this,notebook.getColor()), this, notebookUID16));
+			viewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), pageList, Helpers.getSingleColorAccent(this,notebook.getColor()), this, notebookUID16, collectionUID));
 			tabLayout.setupWithViewPager(viewPager);
 		}
 	}
@@ -327,7 +329,7 @@ public class NotebookMainActivity extends AppCompatActivity implements NewPageFr
 		emptyNotebook.setVisibility(View.GONE);
 		notEmptyNotebook.setVisibility(View.VISIBLE);
 		viewPager = (ViewPager) findViewById(R.id.viewpager);
-		viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(),pageList, notebook.getColor(), this, notebookUID16);
+		viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(),pageList, notebook.getColor(), this, notebookUID16, collectionUID);
 		viewPager.setAdapter(viewPagerAdapter);
 
 		tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);

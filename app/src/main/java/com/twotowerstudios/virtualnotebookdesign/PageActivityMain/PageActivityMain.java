@@ -25,6 +25,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.commonsware.cwac.cam2.CameraActivity;
 import com.commonsware.cwac.cam2.ZoomStyle;
@@ -225,9 +226,10 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 	@Override
 	public void returnDecision(String tag, final String title, boolean compression) {
 		final String newImageName = "i" + Helpers.generateUniqueId(16);
+		Toast.makeText(this, "Compression: "+compression, Toast.LENGTH_SHORT).show();
 		if (tag.equals("camera")) {
 			locationpermission();
-				File photo = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+ notebookUID16+ "/"+ newImageName + ".png");
+				File photo = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+ notebookUID16+ "/"+ newImageName + ".jpg");
 				Intent takePicture = new CameraActivity.IntentBuilder(PageActivityMain.this)
 						.debug()
 						.requestPermissions()
@@ -235,7 +237,7 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 						.to(photo)
 						.confirmationQuality(0.8f)
 						.build()
-						.putExtra("path", getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + notebookUID16+"/"+ newImageName + ".png")
+						.putExtra("path", getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + notebookUID16+"/"+ newImageName + ".jpg")
 						.putExtra("compression", compression);
 				startActivityForResult(takePicture, CAMERAPIC);
 				ChildBase newImage = new ChildBase("" + title, newImageName, page.getParentUID(), page.getUID(),
@@ -316,14 +318,14 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 							file = new Compressor(this)
 								.setMaxWidth(1920)
 								.setMaxHeight(1080)
-								.setQuality(75)
+								.setQuality(50)
 								.setCompressFormat(Bitmap.CompressFormat.JPEG)
 								.compressToFile(file);
 					} else {
 						file = new Compressor(this)
 								.setMaxWidth(1080)
 								.setMaxHeight(1920)
-								.setQuality(75)
+								.setQuality(50)
 								.setCompressFormat(Bitmap.CompressFormat.JPEG)
 								.compressToFile(file);
 					}

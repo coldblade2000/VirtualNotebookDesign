@@ -26,6 +26,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -103,7 +104,7 @@ public class Helpers {
         }
     }
 
-    private static void writeStringToFile(String input, File file) {
+    public static void writeStringToFile(String input, File file) {
         try {
             //outputStream = context.openFileOutput(name, Context.MODE_PRIVATE);
             FileOutputStream outputStream = new FileOutputStream(file);
@@ -120,6 +121,24 @@ public class Helpers {
         try {
             //input = new BufferedReader(new InputStreamReader(context.openFileInput(filename)));
             input = new BufferedReader(new FileReader(file));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        String line;
+        StringBuilder buffer = new StringBuilder();
+        try {
+            while ((line = input.readLine()) != null) {
+                buffer.append(line + "\n");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return buffer.toString();
+    }
+    public static String getStringFromFileOld(String filename, Context context) {
+        BufferedReader input = null;
+        try {
+            input = new BufferedReader(new InputStreamReader(context.openFileInput(filename)));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -160,7 +179,7 @@ public class Helpers {
         if (SharedPrefs.getInt(context, "filestructure") == -1) {
             Log.d("getnotebooklist", "Using Legacy getnoteboolist");
             ArrayList<Notebook> notebookList;
-            String fileString = getStringFromName("Notebooks.json", context);
+            String fileString = getStringFromFileOld("Notebooks.json", context);
             int reps = (fileString.length() / 4000) + 1;
             for (int i = 0; i < reps; i++) {
                 if ((i + 1) * 4000 > fileString.length()) {
@@ -239,7 +258,9 @@ public class Helpers {
     }
 
     public static void addToNotebookList(Notebook notebook, Context context, String collectionUID) {
-        ArrayList<Notebook> list = getNotebooksFromCollection(getCollectionFromUID(collectionUID, context), context);
+        Collection collection = getCollectionFromUID(collectionUID, context);
+
+        ArrayList<Notebook> list = getNotebooksFromCollection(collection, context);
         boolean bookalreadyexists = false;
         try {
             for (Notebook a : list) {
@@ -263,9 +284,14 @@ public class Helpers {
         }
         if (!bookalreadyexists) {
             list.add(notebook);
+            ArrayList<String> uids = new ArrayList<>();
+            for(Notebook a:list){
+                uids.add(a.getUID16());
+            }
+            collection.setContentUIDs(uids);
+            writeOneCollectionToFile(collection, context);
         }
-        //TODO dont write to notebook list
-        writeListToFile(list, context);
+
     }
 
     public static ArrayList<Integer> getPossibleColors(Context context) {
@@ -319,7 +345,6 @@ public class Helpers {
 
     public static int getSingleColorAccent(Context context, int color) {
         ArrayList<Integer> colors = getPossibleColors(context);
-        String TAG = "getSingleColorAccent";
         //Log.d(TAG, "colors.size()== "+colors.size());
         return getColorAccents(context).get(colors.indexOf(color));
     }
@@ -508,10 +533,10 @@ public class Helpers {
         }
     }
 
-    public void changeFileStructure(Context context) {
+    /*public void changeFileStructure(Context context) {
         ArrayList<Notebook> notebooklist = getNotebookList(context);
         for (Notebook a : notebooklist) {
-            File newFolderDoc = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + a.getUID16() + "/");
+            File newFolderDoc = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath() + "/" + a.getUID16() + "/");
             if (!newFolderDoc.isDirectory()) {
                 newFolderDoc.mkdir();
             }
@@ -537,7 +562,7 @@ public class Helpers {
             writeStringToFile(notebookjson, notebookjsonfolder);
         }
         SharedPrefs.setInt(context, "filestructure", 2);
-    }
+    }*/
 
     public static void deleteNotebookByUID(String UID16, Context context) {
         Notebook notebook = getNotebookFromUID(UID16, context);

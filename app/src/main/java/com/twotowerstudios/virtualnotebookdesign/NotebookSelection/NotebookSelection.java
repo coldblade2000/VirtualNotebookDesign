@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -54,8 +55,11 @@ import com.twotowerstudios.virtualnotebookdesign.TransferNotebookDialog.Transfer
 import org.parceler.Parcels;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+
+import kotlinx.coroutines.experimental.Child;
 
 public class NotebookSelection extends AppCompatActivity implements NotebookSelectionAdapter.SelectionToNotebookSelectionInterface, NewCollectionFragment.OnFragmentInteractionListener, TransferNotebookDialog.OnFragmentInteractionListener {
 	private RelativeLayout emptyList;
@@ -85,9 +89,37 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 				e.printStackTrace();
 			}
 		}
-		if(Helpers.getStringFromName("Notebooks.json", getApplicationContext()).equals("")){
-			File file = new File(getFilesDir(),"Notebooks.json");
-			Log.d("NotebookSelection", file.getPath());
+		if(!Helpers.getStringFromName("Notebooks.json", getApplicationContext()).equals("") && SharedPrefs.getInt(getApplicationContext(),"filestructure")!=1){
+			ArrayList<Notebook> notebooklist = Helpers.getNotebookList(getApplicationContext());
+
+			for (int i = 0; i < notebooklist.size(); i++) {
+				Notebook notebook = notebooklist.get(i);
+				File newFolderPIC = new File(getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + notebook.getUID16() + "/");
+				if (!newFolderPIC.isDirectory()) {
+					newFolderPIC.mkdir();
+				}
+				ArrayList<Page> pages = notebook.getPages();
+				for (int j=0; j<pages.size();j++) {
+					Page page = pages.get(j);
+					ArrayList<ChildBase> content = pages.get(j).getContent();
+					for (int k = 0; k< content.size();k++) {
+						if (content.get(k).getChildType() == 1) {
+							ChildBase childBase = content.get(k);
+							File image = childBase.getFile();
+							File dest = new File(newFolderPIC.getAbsolutePath()+"/"+image.getName());
+							if (image.renameTo(dest)) {
+								childBase.setPath(dest.getAbsolutePath());
+							}
+							content.set(k, childBase);
+						}
+					}
+					page.setContent(content);
+					pages.set(j,page);
+				}
+				notebook.setPages(pages);
+				Helpers.writeNotebookToFile(notebook, getApplicationContext());
+			}
+			SharedPrefs.setInt(getApplicationContext(), "filestructure", 1);
 		}
 		if (ContextCompat.checkSelfPermission(getApplicationContext(),
 				Manifest.permission.WRITE_EXTERNAL_STORAGE)

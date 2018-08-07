@@ -55,6 +55,7 @@ dependencies {
     implementation "com.android.support:exifinterface:27.1.1"
     implementation 'com.commonsware.cwac:cam2:0.7.4'
     implementation 'id.zelory:compressor:2.1.0'
+    implementation 'io.fotoapparat.fotoapparat:library:2.3.1'
     testImplementation 'junit:junit:4.12'
     annotationProcessor 'org.parceler:parceler:1.1.6'
 }

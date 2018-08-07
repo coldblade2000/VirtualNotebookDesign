@@ -140,7 +140,8 @@ public class NotebookPageAdapter extends RecyclerView.Adapter<NotebookPageAdapte
 									pageList.remove(holder.getAdapterPosition());
 									Notebook notebook = Helpers.getNotebookFromUID(notebookUID, context);
 									notebook.setPages(pageList);
-									Helpers.addToNotebookList(notebook, context, collectionUID);
+//									Helpers.addToNotebookList(notebook, context, collectionUID);
+									Helpers.writeNotebookToFile(notebook, context);
 									notifyItemRemoved(holder.getAdapterPosition());
                                 }else{
                                     Toast.makeText(context, "Page not deleted, the number you input was wrong.", Toast.LENGTH_SHORT).show();

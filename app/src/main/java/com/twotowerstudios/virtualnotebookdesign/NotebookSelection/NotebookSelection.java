@@ -89,7 +89,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 				e.printStackTrace();
 			}
 		}
-		if(!Helpers.getStringFromName("Notebooks.json", getApplicationContext()).equals("") && SharedPrefs.getInt(getApplicationContext(),"filestructure")!=1){
+		if(SharedPrefs.getInt(getApplicationContext(),"filestructure")!=1){
 			ArrayList<Notebook> notebooklist = Helpers.getNotebookList(getApplicationContext());
 
 			for (int i = 0; i < notebooklist.size(); i++) {
@@ -119,7 +119,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 				notebook.setPages(pages);
 				Helpers.writeNotebookToFile(notebook, getApplicationContext());
 			}
-			SharedPrefs.setInt(getApplicationContext(), "filestructure", 1);
+			//SharedPrefs.setInt(getApplicationContext(), "filestructure", 1);
 		}
 		if (ContextCompat.checkSelfPermission(getApplicationContext(),
 				Manifest.permission.WRITE_EXTERNAL_STORAGE)

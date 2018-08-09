@@ -136,6 +136,9 @@ public class Helpers {
         return buffer.toString();
     }
     public static String getStringFromFileOld(String filename, Context context) {
+        Log.i(TAG, "getStringFromFileOld: "+context.getFilesDir().getAbsolutePath());
+        File file = new File(filename);
+        Log.i(TAG, "getStringFromFileOld: "+file.getAbsolutePath());
         BufferedReader input = null;
         try {
             input = new BufferedReader(new InputStreamReader(context.openFileInput(filename)));

@@ -59,7 +59,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import kotlinx.coroutines.experimental.Child;
 
 public class NotebookSelection extends AppCompatActivity implements NotebookSelectionAdapter.SelectionToNotebookSelectionInterface, NewCollectionFragment.OnFragmentInteractionListener, TransferNotebookDialog.OnFragmentInteractionListener {
 	private RelativeLayout emptyList;
@@ -160,24 +159,25 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 						}
 					}).show();
 		}*/
-		if(Helpers.getCollections(getApplicationContext())==null){
+		if(Helpers.getCollections(getApplicationContext())==null){ //Creates an empty default collection if there aren't any yet
 			ArrayList<String> UIDs = new ArrayList<>();
-			for (Notebook a: Helpers.getNotebookList(getApplicationContext())){
+			for (Notebook a: Helpers.getNotebookList(getApplicationContext())){ //Uses the old, deprecated getNotebookList() method as it
+				// has to find every possible notebook
 				UIDs.add(a.getUID16());
 			}
 			final Collection defaultCollection = new Collection("Default Collection",UIDs,ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
 			ArrayList<Collection> defaultCollectionList = new ArrayList<>();
 			defaultCollectionList.add(defaultCollection);
-			Helpers.writeCollectionsToFile(defaultCollectionList, getApplicationContext());
-			//TODO Check the default Collection initializer
+			Helpers.writeCollectionsToFile(defaultCollectionList, getApplicationContext()); //Writes collections to Collections.json
 		}
 		//===============================================================================================================
 
-        SharedPrefs.setInt(this, "filestructure", 1);
-        collections = Helpers.getCollections(getApplicationContext());
+        SharedPrefs.setInt(this, "filestructure", 1);  //Declares that the app uses the new file structure
+        collections = Helpers.getCollections(getApplicationContext()); //Gets all collections from Collections.json
         assert collections != null;
-        for (Collection a: collections){
-            if(SharedPrefs.getString(this, "lastUID8").equals(a.getUID8())){
+        for (Collection a: collections){ //Iterates through the collections
+            if(SharedPrefs.getString(this, "lastUID8").equals(a.getUID8())){ //Checks the previously opened collection from the
+												//last session and opens it
                 notebookSelectionCardList = Helpers.getNotebooksFromCollection(a, getApplicationContext());
 				currentCollectionIndex = collections.indexOf(a);
 				break;

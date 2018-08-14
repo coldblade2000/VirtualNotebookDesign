@@ -603,11 +603,11 @@ public class Helpers {
     }
 
     public static ArrayList<Collection> getCollections(Context context) {
-        File file = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath());
-        for (File a : file.listFiles()) {
+        File file = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath()); //Open the documents directory
+        for (File a : file.listFiles()) { //Searches for Collections.json file
             if ((a.getName().equals("Collections.json"))) {
-                return gson.fromJson(getStringFromFile(a), new TypeToken<ArrayList<Collection>>() {
-                }.getType());
+                return gson.fromJson(getStringFromFile(a), new TypeToken<ArrayList<Collection>>() {}.getType());
+                //When found, it parses the json with the GSON library and returns the ArrayList of collections
             }
         }
         return null;

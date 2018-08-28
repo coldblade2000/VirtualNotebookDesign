@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.support.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -24,6 +25,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.commonsware.cwac.cam2.CameraActivity;
 import com.commonsware.cwac.cam2.ZoomStyle;
@@ -37,6 +39,7 @@ import org.parceler.Parcels;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import id.zelory.compressor.Compressor;
@@ -223,9 +226,10 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 	@Override
 	public void returnDecision(String tag, final String title, boolean compression) {
 		final String newImageName = "i" + Helpers.generateUniqueId(16);
+		Toast.makeText(this, "Compression: "+compression, Toast.LENGTH_SHORT).show();
 		if (tag.equals("camera")) {
 			locationpermission();
-				File photo = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+ notebookUID16+ "/"+ newImageName + ".png");
+				File photo = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+ notebookUID16+ "/"+ newImageName + ".jpg");
 				Intent takePicture = new CameraActivity.IntentBuilder(PageActivityMain.this)
 						.debug()
 						.requestPermissions()
@@ -233,7 +237,7 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 						.to(photo)
 						.confirmationQuality(0.8f)
 						.build()
-						.putExtra("path", getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + notebookUID16+"/"+ newImageName + ".png")
+						.putExtra("path", getExternalFilesDir(Environment.DIRECTORY_PICTURES) + "/" + notebookUID16+"/"+ newImageName + ".jpg")
 						.putExtra("compression", compression);
 				startActivityForResult(takePicture, CAMERAPIC);
 				ChildBase newImage = new ChildBase("" + title, newImageName, page.getParentUID(), page.getUID(),
@@ -243,7 +247,16 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 				//contents.add(newImage);
 				pageAdapter.notifyItemInserted(contents.size() - 1);
 		} else if (tag.equals("gallery")) {
-			File nomedia = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+ notebookUID16+ "/" + ".nomedia");
+			File directory = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+"/"+notebookUID16+"/");
+			if (!directory.exists()) {
+				String TAG = "PageActivityMain";
+				if (directory.mkdirs()) {
+					Log.d(TAG, "Successfully created the parent dir:" + directory.getName());
+				} else {
+					Log.d(TAG, "Failed to create the parent dir:" + directory.getName());
+				}
+			}
+			File nomedia = new File(directory, ".nomedia");
 			if (!nomedia.exists()) {
 				try {
 					nomedia.createNewFile();
@@ -255,6 +268,7 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 			intent.setType("image/*");
 			intent.setAction(Intent.ACTION_GET_CONTENT);
 			intent.putExtra("title", title);
+			intent.putExtra("compression", compression);
 			startActivityForResult(Intent.createChooser(intent,
 					"Select Picture"), GALLERYPIC);
 
@@ -264,18 +278,34 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 		final String filename = "i" + Helpers.generateUniqueId(16);
 		if (requestCode == GALLERYPIC && resultCode == RESULT_OK && data != null) {
 			Uri selectedImageUri = data.getData();
-			File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + notebookUID16 + "/"
-					+ filename + selectedImageUri.toString().substring(selectedImageUri.toString().lastIndexOf(".")));
+			/*File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + notebookUID16 + "/"
+					+ filename + selectedImageUri.getPath().substring(selectedImageUri.toString().lastIndexOf(".")));
+			*/
+			File file = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()+ "/"+ notebookUID16 + "/"+ filename
+			+ ".jpg");
 			Bitmap bitmap = null;
-			try {
+            /**
+             * Exif loading and handling
+             * */
+			int orientation = ExifInterface.ORIENTATION_UNDEFINED;
+			assert selectedImageUri != null;
+			try (InputStream inp = getApplicationContext().getContentResolver().openInputStream(selectedImageUri)) {
 				bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), selectedImageUri);
-			} catch (IOException e) {
+				ExifInterface originalExif = null;
+				if (inp != null) {
+					originalExif = new ExifInterface(inp);
+				}
+				orientation = originalExif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED);
+            } catch (Exception e) {
 				e.printStackTrace();
 			}
+
 
 			FileOutputStream outStream = null;
 			try {
 				outStream = new FileOutputStream(file);
+
+				bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
 				outStream.flush();
 				outStream.close();
 			} catch (Exception e) {
@@ -285,24 +315,35 @@ public class PageActivityMain extends AppCompatActivity implements PageActivityA
 
 				try {
 					if (bitmap.getWidth() > bitmap.getHeight()) {
-						file = new Compressor(this)
+							file = new Compressor(this)
 								.setMaxWidth(1920)
 								.setMaxHeight(1080)
-								.setQuality(75)
-								.setCompressFormat(Bitmap.CompressFormat.WEBP)
+								.setQuality(50)
+								.setCompressFormat(Bitmap.CompressFormat.JPEG)
 								.compressToFile(file);
 					} else {
 						file = new Compressor(this)
 								.setMaxWidth(1080)
 								.setMaxHeight(1920)
-								.setQuality(75)
-								.setCompressFormat(Bitmap.CompressFormat.WEBP)
+								.setQuality(50)
+								.setCompressFormat(Bitmap.CompressFormat.JPEG)
 								.compressToFile(file);
 					}
+
 				} catch (IOException e) {
 					e.printStackTrace();
+                    Log.e("PageActivityMain", file.getAbsolutePath() );
 				}
 			}
+            ExifInterface newExif = null;
+            try {
+                newExif = new ExifInterface(file.getAbsolutePath());
+                newExif.setAttribute(ExifInterface.TAG_ORIENTATION, String.valueOf(orientation));
+                newExif.saveAttributes();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
 			ChildBase newImage = new ChildBase("", filename, page.getParentUID(), page.getUID(), Uri.fromFile(file), getApplicationContext());
 			contents.add(newImage);
 			page.setContent(contents);

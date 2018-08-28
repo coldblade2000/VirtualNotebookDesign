@@ -90,7 +90,8 @@ public class TransferNotebookDialog extends DialogFragment implements AdapterVie
         transfortoolbar = (Toolbar) v.findViewById(R.id.transfertoolbar);
 
         transferSpinner.setOnItemSelectedListener(this);
-        ArrayAdapter<Collection> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, collections);
+        ArrayAdapter<Collection> adapter = new ArrayAdapter<>(getActivity(), R.layout.support_simple_spinner_dropdown_item, collections);
+        //adapter.setDropDownViewResource(R.layout.list_item);
         transferSpinner.setAdapter(adapter);
         button.setOnClickListener(new View.OnClickListener() {
             @Override

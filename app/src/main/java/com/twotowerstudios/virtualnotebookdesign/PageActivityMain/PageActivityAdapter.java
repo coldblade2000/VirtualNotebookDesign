@@ -41,7 +41,7 @@ public class PageActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 		private TextView tvChild;
 		private TextView tvChildTextTitle;
 
-		public ViewHolderText(View v) {
+		ViewHolderText(View v) {
 			super(v);
 			tvChild = (TextView) v.findViewById(R.id.tvChild);
 			tvChildTextTitle = (TextView) v.findViewById(R.id.tvChildTextTitle);
@@ -52,7 +52,7 @@ public class PageActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 		private ImageView ivChildImage;
 		private TextView tvChildImage;
 
-		public ViewHolderImage(View v) {
+		ViewHolderImage(View v) {
 			super(v);
 			ivChildImage = (ImageView) v.findViewById(R.id.ivChildImage);
 			tvChildImage = (TextView) v.findViewById(R.id.tvChildImage);

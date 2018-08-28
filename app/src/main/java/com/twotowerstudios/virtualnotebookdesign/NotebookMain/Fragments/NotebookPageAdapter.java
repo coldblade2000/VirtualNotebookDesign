@@ -43,6 +43,7 @@ public class NotebookPageAdapter extends RecyclerView.Adapter<NotebookPageAdapte
 	private Page page;
 	private boolean onlyFavorites;
 	private String notebookUID;
+	private String collectionUID;
 
 	class ViewHolder extends RecyclerView.ViewHolder {
 		TextView tvFavPage;
@@ -65,11 +66,12 @@ public class NotebookPageAdapter extends RecyclerView.Adapter<NotebookPageAdapte
 
 
 	public NotebookPageAdapter(){}
-	public NotebookPageAdapter(Context context, ArrayList<Page> list, NotebookAdapterToAct interf, int color,boolean onlyFavorites, String notebookUID){
+	public NotebookPageAdapter(Context context, ArrayList<Page> list, NotebookAdapterToAct interf, int color,boolean onlyFavorites, String notebookUID, String collectionUID){
 		this.onlyFavorites = onlyFavorites;
 		this.context = context;
 		this.interf=interf;
 		this.color=color;
+		this.collectionUID = collectionUID;
 		pageList = list;
 		this.notebookUID = notebookUID;
 	}
@@ -125,7 +127,7 @@ public class NotebookPageAdapter extends RecyclerView.Adapter<NotebookPageAdapte
 								if(Integer.parseInt(edittext.getText().toString())==randint){
 									for (ChildBase b: page.getContent()) {
 										if(b.getChildType()==1){
-											File fdelete = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)+b.getUri().getPath());
+											File fdelete = new File(b.getPath());
 											if (fdelete.exists()) {
 												if (fdelete.delete()) {
 													Log.d("NotebookSelectionAdptr","file Deleted :" + context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)+"/"+notebookUID+"/"+b.getUri().getPath());
@@ -138,7 +140,8 @@ public class NotebookPageAdapter extends RecyclerView.Adapter<NotebookPageAdapte
 									pageList.remove(holder.getAdapterPosition());
 									Notebook notebook = Helpers.getNotebookFromUID(notebookUID, context);
 									notebook.setPages(pageList);
-									Helpers.addToNotebookList(notebook, context);
+//									Helpers.addToNotebookList(notebook, context, collectionUID);
+									Helpers.writeNotebookToFile(notebook, context);
 									notifyItemRemoved(holder.getAdapterPosition());
                                 }else{
                                     Toast.makeText(context, "Page not deleted, the number you input was wrong.", Toast.LENGTH_SHORT).show();

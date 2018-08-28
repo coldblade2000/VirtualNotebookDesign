@@ -111,8 +111,6 @@ public class NewNotebookFragment extends DialogFragment implements ColorPickAdap
 		rvNewNotebook.setVisibility(View.GONE);
 		toolbar.setBackgroundColor(activeColor);
 		rvNewNotebook.setAdapter(adapter);
-		Log.d("onViewCreated", ""+rvNewNotebook.getWidth());
-
 		swColors.setOnCheckedChangeListener(new Switch.OnCheckedChangeListener(){
 			@Override
 			public void onCheckedChanged(CompoundButton compoundButton, boolean b) {

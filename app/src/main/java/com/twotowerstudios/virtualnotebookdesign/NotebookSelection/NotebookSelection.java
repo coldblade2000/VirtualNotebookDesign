@@ -8,6 +8,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -53,8 +55,10 @@ import com.twotowerstudios.virtualnotebookdesign.TransferNotebookDialog.Transfer
 import org.parceler.Parcels;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+
 
 public class NotebookSelection extends AppCompatActivity implements NotebookSelectionAdapter.SelectionToNotebookSelectionInterface, NewCollectionFragment.OnFragmentInteractionListener, TransferNotebookDialog.OnFragmentInteractionListener {
 	private RelativeLayout emptyList;
@@ -84,11 +88,50 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 				e.printStackTrace();
 			}
 		}
-		if(Helpers.getStringFromName("Notebooks.json", getApplicationContext()).equals("")){
-			File file = new File(getFilesDir(),"Notebooks.json");
-			Log.d("NotebookSelection", file.getPath());
+		if(SharedPrefs.getInt(getApplicationContext(),"filestructure")!=1){
+			ArrayList<Notebook> notebooklist = Helpers.getNotebookList(getApplicationContext());
+
+			for (int i = 0; i < notebooklist.size(); i++) {
+				Notebook notebook = notebooklist.get(i);
+				File newFolderPIC = new File(getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + notebook.getUID16() + "/");
+				if (!newFolderPIC.isDirectory()) {
+					newFolderPIC.mkdir();
+				}
+				ArrayList<Page> pages = notebook.getPages();
+				for (int j=0; j<pages.size();j++) {
+					Page page = pages.get(j);
+					ArrayList<ChildBase> content = pages.get(j).getContent();
+					for (int k = 0; k< content.size();k++) {
+						if (content.get(k).getChildType() == 1) {
+							ChildBase childBase = content.get(k);
+							File image = childBase.getFile();
+							File dest = new File(newFolderPIC.getAbsolutePath()+"/"+image.getName());
+							if (image.renameTo(dest)) {
+								childBase.setPath(dest.getAbsolutePath());
+							}
+							content.set(k, childBase);
+						}
+					}
+					page.setContent(content);
+					pages.set(j,page);
+				}
+				notebook.setPages(pages);
+				Helpers.writeNotebookToFile(notebook, getApplicationContext());
+			}
+			//SharedPrefs.setInt(getApplicationContext(), "filestructure", 1);
 		}
-		if(!SharedPrefs.getBoolean(getApplicationContext(), "StorageLocDiagShown")){
+		if (ContextCompat.checkSelfPermission(getApplicationContext(),
+				Manifest.permission.WRITE_EXTERNAL_STORAGE)
+				!= PackageManager.PERMISSION_GRANTED) {
+			if (ActivityCompat.shouldShowRequestPermissionRationale(NotebookSelection.this,
+					Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+			} else {
+				ActivityCompat.requestPermissions(NotebookSelection.this,
+						new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+						MY_PERMISSIONS_REQUEST_READ_CONTACTS);
+			}
+		}
+		/*if(!SharedPrefs.getBoolean(getApplicationContext(), "StorageLocDiagShown")){
 			SharedPrefs.setBoolean(getApplicationContext(), "StorageLocDiagShown", true);
 			new AlertDialog.Builder(this)
 					.setTitle("Do you want to use your SD card to store photos?")
@@ -115,25 +158,26 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 
 						}
 					}).show();
-		}
-		if(Helpers.getCollections(getApplicationContext())==null){
+		}*/
+		if(Helpers.getCollections(getApplicationContext())==null){ //Creates an empty default collection if there aren't any yet
 			ArrayList<String> UIDs = new ArrayList<>();
-			for (Notebook a: Helpers.getNotebookList(getApplicationContext())){
+			for (Notebook a: Helpers.getNotebookList(getApplicationContext())){ //Uses the old, deprecated getNotebookList() method as it
+				// has to find every possible notebook
 				UIDs.add(a.getUID16());
 			}
-			final Collection defaultCollection = new Collection("Default Collection",UIDs,ContextCompat.getColor(getApplicationContext(), R.color.primary));
+			final Collection defaultCollection = new Collection("Default Collection",UIDs,ContextCompat.getColor(getApplicationContext(), R.color.md_black_1000));
 			ArrayList<Collection> defaultCollectionList = new ArrayList<>();
 			defaultCollectionList.add(defaultCollection);
-			Helpers.writeCollectionsToFile(defaultCollectionList, getApplicationContext());
-			//TODO Check the default Collection initializer
+			Helpers.writeCollectionsToFile(defaultCollectionList, getApplicationContext()); //Writes collections to Collections.json
 		}
 		//===============================================================================================================
 
-        SharedPrefs.setInt(this, "filestructure", 1);
-        collections = Helpers.getCollections(getApplicationContext());
+        SharedPrefs.setInt(this, "filestructure", 1);  //Declares that the app uses the new file structure
+        collections = Helpers.getCollections(getApplicationContext()); //Gets all collections from Collections.json
         assert collections != null;
-        for (Collection a: collections){
-            if(SharedPrefs.getString(this, "lastUID8").equals(a.getUID8())){
+        for (Collection a: collections){ //Iterates through the collections
+            if(SharedPrefs.getString(this, "lastUID8").equals(a.getUID8())){ //Checks the previously opened collection from the
+												//last session and opens it
                 notebookSelectionCardList = Helpers.getNotebooksFromCollection(a, getApplicationContext());
 				currentCollectionIndex = collections.indexOf(a);
 				break;
@@ -273,9 +317,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 	private ArrayList<IDrawerItem> populateDrawer(){
 		ArrayList<IDrawerItem> drawerArray = new ArrayList<>();
 		for (Collection a:collections) {
-			final Drawable icon = getResources().getDrawable(R.drawable.ic_folder_black_24dp);
-			//icon.setColorFilter(ContextCompat.getColor(getApplicationContext(), a.getColor()), PorterDuff.Mode.MULTIPLY);
-			drawerArray.add(new PrimaryDrawerItem().withName(a.getName()).withIcon(icon));
+			drawerArray.add(new PrimaryDrawerItem().withName(a.getName()).withIcon(R.drawable.ic_folder_white_24dp).withIconColor(a.getColor()).withIconTintingEnabled(true));
 		}
 		return drawerArray;
 	}
@@ -349,7 +391,7 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 					ad.delete();
 				}
         }else if(id==R.id.action_dumpjson){
-			String fileString = Helpers.getStringFromName("Notebooks.json", getApplicationContext());
+			String fileString = Helpers.getStringFromName("Collections.json", getApplicationContext());
 			int reps = (fileString.length()/4000)+1;
 			for (int i = 0; i < reps; i++) {
 				if((i+1)*4000>fileString.length()) {
@@ -420,8 +462,8 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 	@Override
 	public void onFragmentInteraction(Collection collection) { //Where a colllection is added to the notebookSelection activity
 		collections.add(collection);
-		final Drawable icon = getResources().getDrawable(R.drawable.ic_folder_black_24dp);
-		drawer.addItem(new PrimaryDrawerItem().withName(collection.getName()).withIcon(icon));
+		//icon.setColorFilter(collection.getColor(), PorterDuff.Mode.MULTIPLY);
+		drawer.addItem(new PrimaryDrawerItem().withName(collection.getName()).withIcon(R.drawable.ic_folder_white_24dp).withIconColor(collection.getColor()).withIconTintingEnabled(true));
 		Helpers.writeCollectionsToFile(collections, getApplicationContext());
 	}
 

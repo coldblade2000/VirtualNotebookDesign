@@ -8,9 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -88,35 +85,39 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 				e.printStackTrace();
 			}
 		}
-		if(SharedPrefs.getInt(getApplicationContext(),"filestructure")!=1){
+		if(SharedPrefs.getInt(getApplicationContext(),"filestructure")!=1){ //Checks if the filestructure is the old one or the new one
+			// Gets an arraylist of all notebooks using the deprecated getNotebookList method that loads from Notebooks.json
 			ArrayList<Notebook> notebooklist = Helpers.getNotebookList(getApplicationContext());
-
-			for (int i = 0; i < notebooklist.size(); i++) {
-				Notebook notebook = notebooklist.get(i);
-				File newFolderPIC = new File(getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + notebook.getUID16() + "/");
+			for (int i = 0; i < notebooklist.size(); i++) { // Goes through all the notebooks with an iterative for loop
+				Notebook notebook = notebooklist.get(i); // Loads the notebook from the respective index
+				File newFolderPIC = new File(getApplicationContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath()
+						+ "/" + notebook.getUID16() + "/"); // Makes a File reference to the new pictures folder for the notebook
 				if (!newFolderPIC.isDirectory()) {
-					newFolderPIC.mkdir();
+					newFolderPIC.mkdir(); // Creates the filder if it doesnt exist
 				}
-				ArrayList<Page> pages = notebook.getPages();
+				ArrayList<Page> pages = notebook.getPages(); // Gets a list of the notebook's pages and iterates through them
 				for (int j=0; j<pages.size();j++) {
 					Page page = pages.get(j);
-					ArrayList<ChildBase> content = pages.get(j).getContent();
+					ArrayList<ChildBase> content = pages.get(j).getContent(); // Gets a list of each page's content and iterates through it
 					for (int k = 0; k< content.size();k++) {
-						if (content.get(k).getChildType() == 1) {
+						if (content.get(k).getChildType() == 1) { // checks if the child type is an image
 							ChildBase childBase = content.get(k);
-							File image = childBase.getFile();
+							File image = childBase.getFile(); // gets the file object for the child object's image
+							// creates a File reference for the new place the image should go to
 							File dest = new File(newFolderPIC.getAbsolutePath()+"/"+image.getName());
 							if (image.renameTo(dest)) {
 								childBase.setPath(dest.getAbsolutePath());
+								childBase.setUri(Uri.fromFile(dest));      //If the image is successfully transferred,
+																		   // update the path reference inside the child object
 							}
-							content.set(k, childBase);
+							content.set(k, childBase); //Overwrites the child inside the content list with the new and updated one
 						}
 					}
 					page.setContent(content);
-					pages.set(j,page);
+					pages.set(j,page); //Updates the content and the pages
 				}
-				notebook.setPages(pages);
-				Helpers.writeNotebookToFile(notebook, getApplicationContext());
+				notebook.setPages(pages); //Sets the new set of pages for the notebook
+				Helpers.writeNotebookToFile(notebook, getApplicationContext()); //Writes the notebook to file
 			}
 			//SharedPrefs.setInt(getApplicationContext(), "filestructure", 1);
 		}
@@ -603,19 +604,18 @@ public class NotebookSelection extends AppCompatActivity implements NotebookSele
 		final AlertDialog.Builder alert = new AlertDialog.Builder(this);
 		alert.setMessage("Enter the new title you want for the notebook \""+notebookSelectionCardList.get(position).getName()+'"');
 		alert.setTitle("Rename Notebook");
-		EditText editText = new EditText(getApplicationContext());
+		final EditText editText = new EditText(getApplicationContext());
 		final int margin = (int) (24 * Resources.getSystem().getDisplayMetrics().density);
 		//TODO Fix edittext margins
 		LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 		lp.setMargins(margin, 0 , margin, 0);
 		editText.setLayoutParams(lp);
 		alert.setView(editText);
-		final String text = editText.getText().toString().trim();
 		alert.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				Notebook notebook1 = notebookSelectionCardList.get(position);
-				notebook1.setName(text);
+				notebook1.setName(editText.getText().toString().trim());
 				Helpers.writeNotebookToFile(notebook1, getApplicationContext());
 				if(notebookSelectionCardList.get(position).getUID16().equals(notebook1.getUID16())){
 					notebookSelectionCardList.set(position,notebook1);

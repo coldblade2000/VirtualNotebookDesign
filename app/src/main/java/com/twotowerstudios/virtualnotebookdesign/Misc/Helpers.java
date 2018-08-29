@@ -135,10 +135,11 @@ public class Helpers {
         }
         return buffer.toString();
     }
+
     public static String getStringFromFileOld(String filename, Context context) {
-        Log.i(TAG, "getStringFromFileOld: "+context.getFilesDir().getAbsolutePath());
+        Log.i(TAG, "getStringFromFileOld: " + context.getFilesDir().getAbsolutePath());
         File file = new File(filename);
-        Log.i(TAG, "getStringFromFileOld: "+file.getAbsolutePath());
+        Log.i(TAG, "getStringFromFileOld: " + file.getAbsolutePath());
         BufferedReader input = null;
         try {
             input = new BufferedReader(new InputStreamReader(context.openFileInput(filename)));
@@ -201,22 +202,23 @@ public class Helpers {
                 notebookList = new ArrayList<>();
             }
             return notebookList;
-        } else {
-            Log.d("getnotebooklist", "Using new getnoteboolist");
+        }/** else {
+         Log.d("getnotebooklist", "Using new getnoteboolist");
 
-            File folder = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath());
-            File[] filelist = folder.listFiles();
-            ArrayList<Notebook> notebookList = new ArrayList<>();
-            for (File f : filelist) {
-                if (f.getName().substring(0, 1).equals("j") && !f.isDirectory()) {
-                    String json = getStringFromFile(f);
-                    Log.v("JSON helper", json);
-                    Notebook notebook = gson.fromJson(json, Notebook.class);
-                    notebookList.add(notebook);
-                }
-            }
-            return notebookList;
-        }
+         File folder = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath());
+         File[] filelist = folder.listFiles();
+         ArrayList<Notebook> notebookList = new ArrayList<>();
+         for (File f : filelist) {
+         if (f.getName().substring(0, 1).equals("j") && !f.isDirectory()) {
+         String json = getStringFromFile(f);
+         Log.v("JSON helper", json);
+         Notebook notebook = gson.fromJson(json, Notebook.class);
+         notebookList.add(notebook);
+         }
+         }
+         return notebookList;
+         }*/
+        return new ArrayList<>();
     }
 
     public static void writeListToFile(ArrayList<Notebook> notebookList, Context context) {
@@ -288,7 +290,7 @@ public class Helpers {
         if (!bookalreadyexists) {
             list.add(notebook);
             ArrayList<String> uids = new ArrayList<>();
-            for(Notebook a:list){
+            for (Notebook a : list) {
                 uids.add(a.getUID16());
             }
             collection.setContentUIDs(uids);
@@ -451,35 +453,37 @@ public class Helpers {
     }
 
     public static File zipFileArray(ArrayList<File> filepaths, String filename, @Nullable Bundle bundle, Context context) {
-        int BUFFER = 2048;
+        //The bundle contains the UID of the notebook and the notebook object in JSON form
+        int BUFFER = 2048; //Size of buffer
         File f = null;
-        //f = File.createTempFile(filename,".zip");
-        //f = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/"+filename+".zip");
-        f = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), filename + ".nb");
-        f.deleteOnExit();
-        Log.d("Helpers", "zipFileArray: " + f.getAbsolutePath());
+        f = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), filename + ".nb"); //Makes a new temp file
+        f.deleteOnExit(); //Marks the file as a file that should get deleted later
         try {
             BufferedInputStream origin = null; // Initialize the input and output streams
             FileOutputStream dest = new FileOutputStream(f);
             ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(dest));
-            byte data[] = new byte[BUFFER]; //initializes a buffer for the output stream in order to not run out of memory and lowe the strain on the phone
-            if (bundle != null) {
-                File file = new File(context.getFilesDir().getAbsolutePath() + "/" + "ncd" + bundle.getString("UID16", "ERROR").substring(1) + ".json");
+            byte data[] = new byte[BUFFER]; //initializes a buffer for the output stream in order to not
+            // run out of memory and lowers the strain on the phone
+            if (bundle != null) { //Checks to see if the bundle was properly loaded
+                File file = new File(context.getFilesDir().getAbsolutePath() + "/" + "ncd" + bundle.getString("UID16",
+                        "ERROR").substring(1) + ".json");
                 file.deleteOnExit();
-                writeStringToFile(bundle.getString("notebookJson"), file);
+                writeStringToFile(bundle.getString("notebookJson"), file); //Creates a .json file that acts as a header for
+                // the zip file
                 Log.d(TAG, file.getAbsolutePath());
-                filepaths.add(0, file);
+                filepaths.add(0, file); //Adds the json file to the list of files that will be compressed
             }
             for (int i = 0; i < filepaths.size(); i++) { //iterating for every filename
                 Log.v("Compress", "Adding: " + filepaths.get(i));
                 FileInputStream fi = new FileInputStream(filepaths.get(i));//read the file from the current filepath
                 origin = new BufferedInputStream(fi, BUFFER);//makes the fileinputstream have a buffer
-                ZipEntry entry = new ZipEntry(filepaths.get(i).getName()
+                ZipEntry entry = new ZipEntry(filepaths.get(i).getName() //Adds a new ZipEntry for every file in the list of files
+                        // to be compressed
                         .substring(filepaths.get(i).getName().lastIndexOf("/") + 1));
-                out.putNextEntry(entry); //pure fuckery
+                out.putNextEntry(entry); //Put this ZipEntry onto the ZipOutputStream
                 int count;
                 while ((count = origin.read(data, 0, BUFFER)) != -1) {
-                    out.write(data, 0, count);
+                    out.write(data, 0, count); //Writes the current Zip entry to the .nb file
                 }
                 out.closeEntry();
                 fi.close();
@@ -487,7 +491,7 @@ public class Helpers {
             }
             out.finish();
             out.close();
-            dest.close();
+            dest.close(); //Closed all the streams
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -496,8 +500,7 @@ public class Helpers {
     }
 
     public static void unzip(Uri uri, Context context, String _targetLocation) {
-        //create target location folder if not exist
-        //dirChecker(_targetLocatioan);
+        //create target location folder if it doesn't exist
         File f = new File(_targetLocation);
         if (!f.isDirectory()) {
             f.mkdirs();
@@ -506,10 +509,9 @@ public class Helpers {
             InputStream inputStream = context.getContentResolver().openInputStream(uri);
             ZipInputStream zin = new ZipInputStream(inputStream);
             ZipEntry ze;
-
+            //Initializes an inputstream and a ZipInputStream
+            //Reads the entries from the ZipInputStream
             while ((ze = zin.getNextEntry()) != null) {
-                Log.d(TAG, "Starting zip entry: " + ze.getName());
-
                 //create dir if required while unzipping
                 if (ze.isDirectory()) {
                     File file = new File(ze.getName());
@@ -517,17 +519,20 @@ public class Helpers {
                         file.mkdirs();
                     }
                 } else {
+                    //Creates output streams with buffers
                     BufferedInputStream bufferedInputStream = new BufferedInputStream(zin);
                     FileOutputStream fout = new FileOutputStream(_targetLocation + "/" + ze.getName());
                     BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fout);
+                    //New empty buffer with a size of 1048576 bytes, ~1MB
                     byte[] arr = new byte[1024 * 1024];
                     int available;
+                    //Writes the values from the inputstream until there's no more
                     while ((available = bufferedInputStream.read(arr)) > 0) {
                         bufferedOutputStream.write(arr, 0, available);
                     }
                     bufferedOutputStream.close();
                     zin.closeEntry();
-                    fout.close();
+                    fout.close();//Closes the streams
                 }
             }
             zin.close();
@@ -535,37 +540,6 @@ public class Helpers {
             e.printStackTrace();
         }
     }
-
-    /*public void changeFileStructure(Context context) {
-        ArrayList<Notebook> notebooklist = getNotebookList(context);
-        for (Notebook a : notebooklist) {
-            File newFolderDoc = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath() + "/" + a.getUID16() + "/");
-            if (!newFolderDoc.isDirectory()) {
-                newFolderDoc.mkdir();
-            }
-            File newFolderPIC = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + a.getUID16() + "/");
-            if (!newFolderPIC.isDirectory()) {
-                newFolderPIC.mkdir();
-            }
-            ArrayList<File> fileList = new ArrayList<>();
-            for (Page b : a.getPages()) {
-                for (ChildBase c : b.getContent()) {
-                    if (c.getChildType() == 1) {
-                        File image = c.getFile();
-                        File dest = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getAbsolutePath() + "/" + a.getUID16() + "/" + image.getName());
-                        Log.d("changeFileStructure", "Moving " + image.getAbsolutePath() + "to " + dest.getAbsolutePath());
-                        if (image.renameTo(dest)) {
-                            c.setPath(dest.getAbsolutePath());
-                        }
-                    }
-                }
-            }
-            String notebookjson = gson.toJson(a);
-            File notebookjsonfolder = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath(), a.getUID16() + ".json");
-            writeStringToFile(notebookjson, notebookjsonfolder);
-        }
-        SharedPrefs.setInt(context, "filestructure", 2);
-    }*/
 
     public static void deleteNotebookByUID(String UID16, Context context) {
         Notebook notebook = getNotebookFromUID(UID16, context);
@@ -606,7 +580,8 @@ public class Helpers {
         File file = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath()); //Open the documents directory
         for (File a : file.listFiles()) { //Searches for Collections.json file
             if ((a.getName().equals("Collections.json"))) {
-                return gson.fromJson(getStringFromFile(a), new TypeToken<ArrayList<Collection>>() {}.getType());
+                return gson.fromJson(getStringFromFile(a), new TypeToken<ArrayList<Collection>>() {
+                }.getType());
                 //When found, it parses the json with the GSON library and returns the ArrayList of collections
             }
         }
